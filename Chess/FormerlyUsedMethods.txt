@@ -1,0 +1,246 @@
+
+FORMER wPAWNMOVES METHOD:
+
+string wPawnMoves(moveParams, string lastMove) { //7 9 15 17
+
+#define testPoint ((PawnMoves>>i) & 1) == 1 //checks if a point (defined by i in the bitboard) is occupied
+#define ts std::to_string
+
+	string moves{};
+
+
+
+	//capturing outside 8th rank
+
+	bb PawnMoves = (WP >> 7) & black & ~rank8 & ~fileA; //capturing to right
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 + 1) + ts(i % 8 - 1) + ts(i / 8) + ts(i % 8);
+	}
+
+	PawnMoves = (WP >> 9) & black & ~rank8 & ~fileH; //capturing to the left
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 + 1) + ts(i % 8 + 1) + ts(i / 8) + ts(i % 8);
+	}
+
+	//moving up 1 square
+
+	PawnMoves = (WP >> 8) & ~rank8 & emptySquare;
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 + 1) + ts(i % 8) + ts(i / 8) + ts(i % 8);
+	}
+	
+	//moving up 2 squares
+
+	PawnMoves = ((WP >> 16) & rank4 & emptySquare) & ((WP >> 8) & ~rank8 & emptySquare) >> 8;
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 + 2) + ts(i % 8) + ts(i / 8) + ts(i % 8);
+	}
+	
+	//capturing and moving onto 8th rank (promotion);
+
+	PawnMoves = (WP >> 7) & rank8 & black; //right
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) {
+			moves += pawnPromo(ts(i / 8 + 1) + ts(i % 8 - 1) + ts(i / 8) + ts(i % 8));
+		}
+	}
+
+	PawnMoves = (WP >> 9) & rank8 & black; //left
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) {
+			moves += pawnPromo(ts(i / 8 + 1) + ts(i % 8 + 1) + ts(i / 8) + ts(i % 8));
+		}
+	}
+
+	//moving onto the 8th rank as normal
+
+	PawnMoves = (WP >> 8) & rank8 & emptySquare;
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) {
+			moves += pawnPromo(ts(i / 8 + 1) + ts(i % 8) + ts(i / 8) + ts(i % 8));
+		}
+	}
+
+	//IMPLEMENT EN PASSANT BELOW
+	
+	if (lastMove.size()) {
+		if (lastMove[0] == 'p') {
+			try {
+				int rowF = lastMove[1]-'0';
+				int colF = lastMove[2]-'0';
+				int rowT = lastMove[3]-'0';
+				int colT = lastMove[4]-'0';
+
+				if (rowF == 1 && rowT == 3) {
+
+					bb pos = pow(2, 24 + colT); //24 is rowT*8
+
+					PawnMoves = pos << 1 & ~fileH & WP; //1 left and 1 up
+
+					for (int i = 0; i < 64; i++) {
+						if (testPoint) {
+							moves += " " + (ts(i / 8) + ts(i % 8) + ts(i / 8 - 1) + ts(i % 8 - 1));
+						}
+					}
+
+					PawnMoves = pos >> 1 & ~fileA & WP; //1 right and 1 up
+
+					for (int i = 0; i < 64; i++) {
+						if (testPoint) {
+							moves += " " + (ts(i / 8) + ts(i % 8) + ts(i / 8 - 1) + ts(i % 8 + 1));
+						}
+					}
+
+				}
+			
+			}
+			catch (...) {
+				
+			}
+		}
+	}
+
+	//IMPLEMENT EN PASSANT ABOVE
+
+#undef testPoint
+#undef ts
+
+	return moves;
+
+}
+
+FORMER wKnightMoves METHOD:
+
+string wKnightMoves(moveParams) { //shift 6, 10, 15, or 17 in either direc                      
+	
+
+
+	string moves{};
+	
+	bb knightMoves =  WN >> 6 & ~fileA & ~fileB & ~white; //2 right, 1 up
+
+#define testPoint ((knightMoves>>i) & 1) == 1 //checks if a point (defined by i in the bitboard) is occupied
+
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) {
+			moves += " " + ts(i / 8 + 1) + ts(i % 8 - 2) + ts(i / 8) + ts(i % 8);
+		}
+
+	}
+	
+	knightMoves = WN >> 10 & ~fileG & ~fileH & ~white; //2 left, 1 up
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 + 1) + ts(i % 8 + 2) + ts(i / 8) + ts(i % 8);
+	}
+
+	knightMoves = WN >> 15 & ~fileA & ~white; //1 right, 2 up
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 + 2) + ts(i % 8 - 1) + ts(i / 8) + ts(i % 8);
+	}
+
+	knightMoves = WN >> 17 & ~fileH & ~white; //1 left, 2 up
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 + 2) + ts(i % 8 + 1) + ts(i / 8) + ts(i % 8);
+	}
+
+	knightMoves = WN << 6 & ~fileH & ~fileG & ~white; //2 left, 1 down
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 - 1) + ts(i % 8 + 2) + ts(i / 8) + ts(i % 8);
+	}
+
+	knightMoves = WN << 10 & ~fileA & ~fileB & ~white; //2 right, 1 down
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 - 1) + ts(i % 8 - 2) + ts(i / 8) + ts(i % 8);
+	}
+
+	knightMoves = WN << 15 & ~fileH & ~white; //1 left, 2 down
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 - 2) + ts(i % 8 + 1) + ts(i / 8) + ts(i % 8);
+	}
+
+	knightMoves = WN << 17 & ~fileA & ~white; //1 right, 2 down
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 - 2) + ts(i % 8 - 1) + ts(i / 8) + ts(i % 8);
+	}
+
+#undef testPoint
+
+	return moves;
+}
+
+FORMER wKingsMoves METHOD:
+
+
+string wKingMoves(moveParams) {
+
+	string moves{};
+
+	bb kingMoves = WK >> 7 & ~white & ~fileA; //1 up, 1 right
+
+#define testPoint ((kingMoves>>i) & 1) == 1 //checks if a point (defined by i in the bitboard) is occupied
+#define ts std::to_string
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 + 1) + ts(i % 8 - 1) + ts(i / 8) + ts(i % 8);
+	}
+
+	kingMoves = WK >> 8 & ~white; //1 up
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 + 1) + ts(i % 8) + ts(i / 8) + ts(i % 8);
+	}
+
+	kingMoves = WK >> 9 & ~white & ~fileH; //1 up, 1 left
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 + 1) + ts(i % 8 + 1) + ts(i / 8) + ts(i % 8);
+	}
+
+	kingMoves = WK >> 1 & ~white & ~fileH; //1 left
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8) + ts(i % 8 + 1) + ts(i / 8) + ts(i % 8);
+	}
+
+	kingMoves = WK << 1 & ~white & ~fileA; //1 right
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8) + ts(i % 8 - 1) + ts(i / 8) + ts(i % 8);
+	}
+
+	kingMoves = WK << 7 & ~white & ~fileH; //1 left 1 down
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 - 1) + ts(i % 8 + 1) + ts(i / 8) + ts(i % 8);
+	}
+
+	kingMoves = WK << 8 & ~white; //1 down
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 - 1) + ts(i % 8) + ts(i / 8) + ts(i % 8);
+	}
+
+	kingMoves = WK << 9 & ~white & ~fileA; //1 down 1 right
+
+	for (int i = 0; i < 64; i++) {
+		if (testPoint) moves += " " + ts(i / 8 - 1) + ts(i % 8 - 1) + ts(i / 8) + ts(i % 8);
+	}
+
+	return moves;
+
+}
