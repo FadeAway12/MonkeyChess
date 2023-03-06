@@ -29,6 +29,11 @@ constListOfBoardParamsAndOthers const bb& WP, const bb& WR, const bb& WN, const 
 
 */
 
+bool whiteShortCastle{ true }; //checks if white king or kingside rook has moved
+bool whiteLongCastle{ true }; //checks if white king or queenside rook has moved
+bool blackShortCastle{ true }; //checks if black king or kingside rook move
+bool blackLongCastle{ true }; //checks if black king or queenside rook moved
+
 bb WP;
 bb WR;
 bb WN;
