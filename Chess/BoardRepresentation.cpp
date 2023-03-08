@@ -91,18 +91,15 @@ char board[8][8] = { //used for convenient viewing of the board's representation
 
 
 char board[8][8] = {
-
-	//0    1    2    3    4    5    6    7
-	{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, //0
-	{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, //1
-	{' ', ' ', ' ', ' ', ' ',' ', ' ', ' '},  //2
-	{' ', ' ', ' ', ' ', ' ','Q', ' ', ' '},  //3
-	{' ', ' ', ' ', ' ', ' ',' ', ' ', ' '},  //4
-	{' ', ' ', ' ', ' ', ' ',' ', ' ', ' '} , //5
-	{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, //6
-	{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}  //7
- 
-	//p1434 and p1636
+	//0   1   2   3   4   5   6   7
+	{' ',' ',' ',' ',' ',' ',' ',' '}, //0
+	{' ',' ',' ',' ',' ',' ',' ',' '}, //1
+	{' ',' ',' ','N',' ','N',' ',' '},  //2
+	{' ',' ',' ',' ','b',' ',' ',' '},  //3
+	{' ',' ',' ','N',' ','N',' ',' '},  //4
+	{' ',' ',' ',' ',' ',' ',' ',' '} , //5
+	{' ',' ',' ',' ',' ',' ',' ',' '}, //6
+	{' ',' ',' ',' ',' ',' ',' ',' '}  //7
 };
 
 
@@ -218,7 +215,7 @@ string rawToString(string s, char board[8][8]) {
 
 		char piece = board[rowF-'0'][colF-'0'];
 
-		if (piece == 'P') final = final + alph2[(int)colT - '0'] + rowT + " ";
+		if (piece == 'P' or piece == 'p') final = final + alph2[(int)colT - '0'] + rowT + " ";
 		else final = final + piece + alph2[colT - '0'] + rowT + " ";
 		 
 		
@@ -235,9 +232,6 @@ int main() {
 
 	printBoard();
 
-	string s = getWLegalMoves(listOfBoardParamsAndOthers, "");
-
-	cout << rawToString(s, board);
-
+	cout << rawToString(getBLegalMoves(listOfBoardParamsAndOthers, "hi", 1, 1), board);
 
 }

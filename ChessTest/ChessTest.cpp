@@ -47,7 +47,7 @@ namespace ChessTest
 				num++;
 				bool hasMatch{ false };
 				for (string m : moves) {
-					if (m == move) hasMatch = true;
+					if (m == move) { hasMatch = true; break; };
 				}
 				Assert::IsTrue(hasMatch);
 			}
@@ -79,7 +79,7 @@ namespace ChessTest
 				num++;
 				bool hasMatch{ false };
 				for (string m : moves) {
-					if (m == move) hasMatch = true;
+					if (m == move) { hasMatch = true; break; };
 				}
 				Assert::IsTrue(hasMatch);
 			}
@@ -111,7 +111,7 @@ namespace ChessTest
 				num++;
 				bool hasMatch{ false };
 				for (string m : moves) {
-					if (m == move) hasMatch = true;
+					if (m == move) { hasMatch = true; break; };
 				}
 				Assert::IsTrue(hasMatch);
 			}
@@ -143,7 +143,7 @@ namespace ChessTest
 				num++;
 				bool hasMatch{ false };
 				for (string m : moves) {
-					if (m == move) hasMatch = true;
+					if (m == move) { hasMatch = true; break; };
 				}
 				Assert::IsTrue(hasMatch);
 			}
@@ -175,7 +175,7 @@ namespace ChessTest
 				num++;
 				bool hasMatch{ false };
 				for (string m : moves) {
-					if (m == move) hasMatch = true;
+					if (m == move) { hasMatch = true; break; };
 				}
 				Assert::IsTrue(hasMatch);
 			}
@@ -209,7 +209,7 @@ namespace ChessTest
 				num++;
 				bool hasMatch{ false };
 				for (string m : moves) {
-					if (m == move) hasMatch = true;
+					if (m == move) { hasMatch = true; break; };
 				}
 				Assert::IsTrue(hasMatch);
 			}
@@ -241,7 +241,7 @@ namespace ChessTest
 				num++;
 				bool hasMatch{ false };
 				for (string m : moves) {
-					if (m == move) hasMatch = true;
+					if (m == move) { hasMatch = true; break; };
 				}
 				Assert::IsTrue(hasMatch);
 			}
@@ -273,7 +273,7 @@ namespace ChessTest
 				num++;
 				bool hasMatch{ false };
 				for (string m : moves) {
-					if (m == move) hasMatch = true;
+					if (m == move) { hasMatch = true; break; };
 				}
 				Assert::IsTrue(hasMatch);
 			}
@@ -305,7 +305,7 @@ namespace ChessTest
 				num++;
 				bool hasMatch{ false };
 				for (string m : moves) {
-					if (m == move) hasMatch = true;
+					if (m == move) { hasMatch = true; break; };
 				}
 				Assert::IsTrue(hasMatch);
 			}
@@ -339,7 +339,7 @@ namespace ChessTest
 				num++;
 				bool hasMatch{ false };
 				for (string m : moves) {
-					if (m == move) hasMatch = true;
+					if (m == move) { hasMatch = true; break; };
 				}
 				Assert::IsTrue(hasMatch);
 			}
@@ -371,7 +371,7 @@ namespace ChessTest
 				num++;
 				bool hasMatch{ false };
 				for (string m : moves) {
-					if (m == move) hasMatch = true;
+					if (m == move) { hasMatch = true; break; };
 				}
 				Assert::IsTrue(hasMatch);
 			}
@@ -403,7 +403,7 @@ namespace ChessTest
 				num++;
 				bool hasMatch{ false };
 				for (string m : moves) {
-					if (m == move) hasMatch = true;
+					if (m == move) { hasMatch = true; break; };
 				}
 				Assert::IsTrue(hasMatch);
 			}
@@ -442,5 +442,340 @@ namespace ChessTest
 			}
 			Assert::AreEqual(num, (int)moves.size());
 		}
+		TEST_METHOD(Knight5) {
+			char board[8][8] = {
+				//0   1   2   3   4   5   6   7
+				{'N',' ',' ',' ',' ',' ',' ','N'}, //0
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //1
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //2
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //3
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //4
+				{' ',' ',' ',' ',' ',' ',' ',' '} , //5
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //6
+				{'N',' ',' ',' ',' ',' ',' ','N'}  //7
+			};
+
+			vector<string> moves{ "7051" ,"7062", "0012", "0021", "0715", "0726", "7756", "7765"};
+
+			arrayToBitBoard(board, listOfBitBoards);
+
+			istringstream is{ wKnightMoves(listOfBoardParamsAndOthers) };
+
+			string move;
+			int num{};
+
+			while (is >> move) {
+				num++;
+				bool hasMatch{ false };
+				for (string m : moves) {
+					if (m == move) { hasMatch = true; break; }
+				}
+				Assert::IsTrue(hasMatch);
+
+			}
+			Assert::AreEqual(num, (int)moves.size());
+		}
+	};
+	TEST_CLASS(WRookTest) {
+		TEST_METHOD(Rook1) {
+			char board[8][8] = {
+				//0   1   2   3   4   5   6   7
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //0
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //1
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //2
+				{' ',' ',' ',' ','R',' ',' ',' '},  //3
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //4
+				{' ',' ',' ',' ',' ',' ',' ',' '} , //5
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //6
+				{' ',' ',' ',' ',' ',' ',' ',' '}  //7
+			};
+
+			vector<string> moves{ "3424", "3414", "3404", "3444", "3454", "3464", "3474",
+			"3435", "3436", "3437", "3433", "3432", "3431", "3430"};
+
+			arrayToBitBoard(board, listOfBitBoards);
+
+			istringstream is{ wRookMoves(listOfBoardParamsAndOthers) };
+
+			string move;
+			int num{};
+
+			while (is >> move) {
+				num++;
+				bool hasMatch{ false };
+				for (string m : moves) {
+					if (m == move) { hasMatch = true; break; };
+				}
+				Assert::IsTrue(hasMatch);
+			}
+			Assert::AreEqual(num, (int)moves.size());
+		}
+		TEST_METHOD(Rook2) {
+			char board[8][8] = {
+				//0   1   2   3   4   5   6   7
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //0
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //1
+				{' ',' ',' ',' ','N',' ',' ',' '},  //2
+				{' ',' ',' ','n','R',' ',' ','N'},  //3
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //4
+				{' ',' ',' ',' ','n',' ',' ',' '} , //5
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //6
+				{' ',' ',' ',' ',' ',' ',' ',' '}  //7
+			};
+
+			vector<string> moves{ "3433", "3435", "3436", "3444", "3454"};
+
+			arrayToBitBoard(board, listOfBitBoards);
+
+			istringstream is{ wRookMoves(listOfBoardParamsAndOthers) };
+
+			string move;
+			int num{};
+
+			while (is >> move) {
+				num++;
+				bool hasMatch{ false };
+				for (string m : moves) {
+					if (m == move) { hasMatch = true; break; };
+				}
+				Assert::IsTrue(hasMatch);
+			}
+			Assert::AreEqual(num, (int)moves.size());
+		}
+		TEST_METHOD(Rook3) {
+			char board[8][8] = {
+				//0   1   2   3   4   5   6   7
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //0
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //1
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //2
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //3
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //4
+				{' ',' ',' ',' ',' ',' ',' ',' '} , //5
+				{'P','P','P','P','P','P','P','P'}, //6
+				{'R','N','B','Q','K','B','N','R'}  //7
+			};
+
+			vector<string> moves{ };
+
+			arrayToBitBoard(board, listOfBitBoards);
+
+			istringstream is{ wRookMoves(listOfBoardParamsAndOthers) };
+
+			string move;
+			int num{};
+
+			while (is >> move) {
+				num++;
+				bool hasMatch{ false };
+				for (string m : moves) {
+					if (m == move) { hasMatch = true; break; };
+				}
+				Assert::IsTrue(hasMatch);
+			}
+			Assert::AreEqual(num, (int)moves.size());
+		}
+	};
+	TEST_CLASS(WBishopTest) {
+		TEST_METHOD(Bishop1) {
+			char board[8][8] = {
+				//0   1   2   3   4   5   6   7
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //0
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //1
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //2
+				{' ',' ',' ',' ','B',' ',' ',' '},  //3
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //4
+				{' ',' ',' ',' ',' ',' ',' ',' '} , //5
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //6
+				{' ',' ',' ',' ',' ',' ',' ',' '}  //7
+			};
+
+			vector<string> moves{ "3425", "3416", "3407", "3423", "3412", "3401",
+			"3445", "3456", "3467", "3443", "3452", "3461", "3470"};
+
+			arrayToBitBoard(board, listOfBitBoards);
+
+			istringstream is{ wBishopMoves(listOfBoardParamsAndOthers) };
+
+			string move;
+			int num{};
+
+			while (is >> move) {
+				num++;
+				bool hasMatch{ false };
+				for (string m : moves) {
+					if (m == move) { hasMatch = true; break; };
+				}
+				Assert::IsTrue(hasMatch);
+			}
+			Assert::AreEqual(num, (int)moves.size());
+		}
+		TEST_METHOD(Bishop2) {
+			char board[8][8] = {
+				//0   1   2   3   4   5   6   7
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //0
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //1
+				{' ',' ',' ',' ',' ','N',' ',' '},  //2
+				{' ',' ',' ',' ','B',' ',' ',' '},  //3
+				{' ',' ',' ',' ',' ','n',' ',' '},  //4
+				{' ',' ',' ',' ',' ',' ',' ',' '} , //5
+				{' ','q',' ',' ',' ',' ',' ',' '}, //6
+				{' ',' ',' ',' ',' ',' ',' ',' '}  //7
+			};
+
+			vector<string> moves{ "3423", "3412", "3401", "3445", "3443", "3452", "3461"};
+
+			arrayToBitBoard(board, listOfBitBoards);
+
+			istringstream is{ wBishopMoves(listOfBoardParamsAndOthers) };
+
+			string move;
+			int num{};
+
+			while (is >> move) {
+				num++;
+				bool hasMatch{ false };
+				for (string m : moves) {
+					if (m == move) { hasMatch = true; break; };
+				}
+				Assert::IsTrue(hasMatch);
+			}
+			Assert::AreEqual(num, (int)moves.size());
+		}
+		TEST_METHOD(Bishop3) {
+			char board[8][8] = {
+				//0   1   2   3   4   5   6   7
+				{' ',' ',' ',' ',' ',' ',' ','B'}, //0
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //1
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //2
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //3
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //4
+				{' ',' ',' ',' ',' ',' ',' ',' '} , //5
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //6
+				{' ',' ',' ',' ',' ',' ',' ',' '}  //7
+			};
+
+			vector<string> moves{ "0716", "0725", "0734", "0743", "0752", "0761", "0770"};
+
+			arrayToBitBoard(board, listOfBitBoards);
+
+			istringstream is{ wBishopMoves(listOfBoardParamsAndOthers) };
+
+			string move;
+			int num{};
+
+			while (is >> move) {
+				num++;
+				bool hasMatch{ false };
+				for (string m : moves) {
+					if (m == move) { hasMatch = true; break; };
+				}
+				Assert::IsTrue(hasMatch);
+			}
+			Assert::AreEqual(num, (int)moves.size());
+		}
+		TEST_METHOD(Bishop4) {
+			char board[8][8] = {
+				//0   1   2   3   4   5   6   7
+				{'B',' ',' ',' ',' ',' ',' ',' '}, //0
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //1
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //2
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //3
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //4
+				{' ',' ',' ',' ',' ',' ',' ',' '} , //5
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //6
+				{' ',' ',' ',' ',' ',' ',' ',' '}  //7
+			};
+
+			vector<string> moves{ "0011", "0022", "0033", "0044", "0055", "0066", "0077"};
+
+			arrayToBitBoard(board, listOfBitBoards);
+
+			istringstream is{ wBishopMoves(listOfBoardParamsAndOthers) };
+
+			string move;
+			int num{};
+
+			while (is >> move) {
+				num++;
+				bool hasMatch{ false };
+				for (string m : moves) {
+					if (m == move) { hasMatch = true; break; };
+				}
+				Assert::IsTrue(hasMatch);
+			}
+			Assert::AreEqual(num, (int)moves.size());
+		}
+	};
+	TEST_CLASS(WQueenTest) {
+		TEST_METHOD(Queen1) {
+			char board[8][8] = {
+				//0   1   2   3   4   5   6   7
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //0
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //1
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //2
+				{' ',' ',' ',' ','Q',' ',' ',' '},  //3
+				{' ',' ',' ',' ',' ',' ',' ',' '},  //4
+				{' ',' ',' ',' ',' ',' ',' ',' '} , //5
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //6
+				{' ',' ',' ',' ',' ',' ',' ',' '}  //7
+			};
+
+			vector<string> moves{ "3424", "3414", "3404", "3444", "3454", "3464", "3474",
+			"3435", "3436", "3437", "3433", "3432", "3431", "3430",
+			"3425", "3416", "3407", "3423", "3412", "3401",
+			"3445", "3456", "3467", "3443", "3452", "3461", "3470" };
+
+			arrayToBitBoard(board, listOfBitBoards);
+
+			istringstream is{ wQueenMoves(listOfBoardParamsAndOthers) };
+
+			string move;
+			int num{};
+
+			while (is >> move) {
+				num++;
+				bool hasMatch{ false };
+				for (string m : moves) {
+					if (m == move) { hasMatch = true; break; };
+				}
+				Assert::IsTrue(hasMatch);
+			}
+			Assert::AreEqual(num, (int)moves.size());
+		}
+		TEST_METHOD(Queen2) {
+			char board[8][8] = {
+				//0   1   2   3   4   5   6   7
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //0
+				{' ',' ',' ',' ','R',' ',' ',' '}, //1
+				{' ',' ',' ','q',' ',' ',' ',' '},  //2
+				{' ',' ',' ','N','Q',' ','n',' '},  //3
+				{' ',' ',' ',' ','N','N',' ',' '},  //4
+				{' ',' ','n',' ',' ',' ',' ',' '} , //5
+				{' ',' ',' ',' ',' ',' ',' ',' '}, //6
+				{' ',' ',' ',' ',' ',' ',' ',' '}  //7
+			};
+
+			vector<string> moves{ "3424", "3425", "3416", "3407", "3435", "3436", "3443", "3452", "3423"};
+
+			arrayToBitBoard(board, listOfBitBoards);
+
+			istringstream is{ wQueenMoves(listOfBoardParamsAndOthers) };
+
+			string move;
+			int num{};
+
+			while (is >> move) {
+				num++;
+				bool hasMatch{ false };
+				for (string m : moves) {
+					if (m == move) { hasMatch = true; break; };
+				}
+				Assert::IsTrue(hasMatch);
+			}
+			Assert::AreEqual(num, (int)moves.size());
+		}
+	};
+	TEST_CLASS(WKingTest) {
+
 	};
 }
