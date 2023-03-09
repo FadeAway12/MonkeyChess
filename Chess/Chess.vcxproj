@@ -128,10 +128,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BoardRepresentation.cpp" />
+    <ClCompile Include="LegalMoveHelpers.cpp" />
     <ClCompile Include="LegalMoves.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoardRepresentation.h" />
+    <ClInclude Include="LegalMoveHelpers.h" />
     <ClInclude Include="LegalMoves.h" />
   </ItemGroup>
   <ItemGroup>

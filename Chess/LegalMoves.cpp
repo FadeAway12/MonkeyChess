@@ -2,6 +2,8 @@
 
 #include "LegalMoves.h"
 
+#include "LegalMoveHelpers.h"
+
 #include <iostream>
 
 #include <vector>
@@ -25,18 +27,32 @@ string getWLegalMoves(moveParams, string lastMove, bool canLC, bool canSC) {
 
 	setOtherBBs(listOfBoardParamsAndOthers);
 
+	bb* blackAttack = new bb{ attackedByBlack(listOfBoardParamsAndOthers) }; //initliaze to black attack
+
+	bool inCheck(*blackAttack & WK);
+
 	string moves = wPawnMoves(listOfBoardParamsAndOthers, lastMove) + " " + wKnightMoves(listOfBoardParamsAndOthers) + " " + 
-		wKingMoves(listOfBoardParamsAndOthers) + " " + wRookMoves(listOfBoardParamsAndOthers) + " " + 
+		wKingMoves(listOfBoardParamsAndOthers, blackAttack) + " " + wRookMoves(listOfBoardParamsAndOthers) + " " + 
 		wBishopMoves(listOfBoardParamsAndOthers) + " " + wQueenMoves(listOfBoardParamsAndOthers);
+
+	addCastlingMovesWhite(listOfBoardParamsAndOthers, blackAttack, moves, canSC, canLC, inCheck);
 
 	return moves;
 }
 
 string getBLegalMoves(moveParams, string lastMove, bool canLC, bool canSC) {
 	
+	setOtherBBs(listOfBoardParamsAndOthers);
+
+	bb* whiteAttack = new bb{attackedByWhite(listOfBoardParamsAndOthers) };
+
+	bool inCheck(*whiteAttack & BK);
+
 	string moves = bPawnMoves(listOfBoardParamsAndOthers, lastMove) + " " + bKnightMoves(listOfBoardParamsAndOthers) + " " +
-		bKingMoves(listOfBoardParamsAndOthers) + " " + bRookMoves(listOfBoardParamsAndOthers) + " " +
+		bKingMoves(listOfBoardParamsAndOthers, whiteAttack) + " " + bRookMoves(listOfBoardParamsAndOthers) + " " +
 		bBishopMoves(listOfBoardParamsAndOthers) + " " + bQueenMoves(listOfBoardParamsAndOthers);
+
+	addCastlingMovesWhite(listOfBoardParamsAndOthers, whiteAttack, moves, canSC, canLC, inCheck);
 
 	return moves;
 }
@@ -116,14 +132,6 @@ string wPawnMoves(moveParams, string lastMove) {
 
 }
 
-string pawnPromo(string s) {
-	return " " + s + "Q " + s + "N " + s + "B " + s + "R ";
-}
-
-string pawnPromoB(string s) {
-	return " " + s + "q " + s + "n " + s + "b " + s + "r ";
-}
-
 string wKnightMoves(moveParams) {
 
 #define ts std::to_string
@@ -169,25 +177,25 @@ string wKnightMoves(moveParams) {
 	return moves;
 }
 
-string wKingMoves(moveParams) {
+string wKingMoves(moveParams, bb* unsafe) {
 
 	string moves{};
 
-	bb kingUR{ WK >> 7 & ~white & ~fileA };
+	bb kingUR{ WK >> 7 & ~white & ~fileA & ~*unsafe};
 
-	bb kingU { WK >> 8 & ~white };
+	bb kingU { WK >> 8 & ~white & ~*unsafe };
 
-	bb kingUL{ WK >> 9 & ~white & ~fileH };
+	bb kingUL{ WK >> 9 & ~white & ~fileH & ~*unsafe };
 
-	bb kingL { WK >> 1 & ~white & ~fileH };
+	bb kingL { WK >> 1 & ~white & ~fileH & ~*unsafe };
 
-	bb kingR { WK << 1 & ~white & ~fileA };
+	bb kingR { WK << 1 & ~white & ~fileA & ~*unsafe };
 
-	bb kingDL{ WK << 7 & ~white & ~fileH };
+	bb kingDL{ WK << 7 & ~white & ~fileH & ~*unsafe };
 
-	bb kingD { WK << 8 & ~white };
+	bb kingD { WK << 8 & ~white & ~*unsafe };
 
-	bb kingDR{ WK << 9 & ~white & ~fileA };
+	bb kingDR{ WK << 9 & ~white & ~fileA & ~*unsafe };
 
 	for (int i = 0; i < 64; i++) {
 
@@ -256,8 +264,6 @@ string wRookMoves(moveParams) {
 
 				WRR = WRR << 1 & ~white & ~fileA & ~((WRR & black) << 1);
 			}
-
-			cout << count << endl;
 
 			bb WRD = pos << 8 & ~white & ~((pos & black) << 8);
 
@@ -556,21 +562,21 @@ string bKnightMoves(moveParams) {
 
 	string moves{};
 
-	bb knightMovesRU{ WN >> 6 & ~fileA & ~fileB & ~white }; //2 right, 1 up
+	bb knightMovesRU{ BN >> 6 & ~fileA & ~fileB & ~black }; //2 right, 1 up
 
-	bb knightMovesLU{ WN >> 10 & ~fileG & ~fileH & ~white };
+	bb knightMovesLU{ BN >> 10 & ~fileG & ~fileH & ~black };
 
-	bb knightMovesUR{ WN >> 15 & ~fileA & ~white };
+	bb knightMovesUR{ BN >> 15 & ~fileA & ~black };
 
-	bb knightMovesUL{ WN >> 17 & ~fileH & ~white };
+	bb knightMovesUL{ BN >> 17 & ~fileH & ~black };
 
-	bb knightMovesLD{ WN << 6 & ~fileH & ~fileG & ~white };
+	bb knightMovesLD{ BN << 6 & ~fileH & ~fileG & ~black };
 
-	bb knightMovesRD{ WN << 10 & ~fileA & ~fileB & ~white };
+	bb knightMovesRD{ BN << 10 & ~fileA & ~fileB & ~black };
 
-	bb knightMovesDL{ WN << 15 & ~fileH & ~white };
+	bb knightMovesDL{ BN << 15 & ~fileH & ~black };
 
-	bb knightMovesDR{ WN << 17 & ~fileA & ~white };
+	bb knightMovesDR{ BN << 17 & ~fileA & ~black };
 
 	for (int i = 0; i < 64; i++) {
 
@@ -595,25 +601,25 @@ string bKnightMoves(moveParams) {
 	return moves;
 }
 
-string bKingMoves(moveParams) {
+string bKingMoves(moveParams, bb* unsafe) {
 
 	string moves{};
 
-	bb kingUR{ BK >> 7 & ~black & ~fileA };
+	bb kingUR{ BK >> 7 & ~black & ~fileA & ~*unsafe};
 
-	bb kingU{ BK >> 8 & ~black };
+	bb kingU{ BK >> 8 & ~black & ~*unsafe };
 
-	bb kingUL{ BK >> 9 & ~black & ~fileH };
+	bb kingUL{ BK >> 9 & ~black & ~fileH & ~*unsafe };
 
-	bb kingL{ BK >> 1 & ~black & ~fileH };
+	bb kingL{ BK >> 1 & ~black & ~fileH & ~*unsafe };
 
-	bb kingR{ BK << 1 & ~black & ~fileA };
+	bb kingR{ BK << 1 & ~black & ~fileA & ~*unsafe };
 
-	bb kingDL{ BK << 7 & ~black & ~fileH };
+	bb kingDL{ BK << 7 & ~black & ~fileH & ~*unsafe };
 
-	bb kingD{ BK << 8 & ~black };
+	bb kingD{ BK << 8 & ~black & ~*unsafe };
 
-	bb kingDR{ BK << 9 & ~black & ~fileA };
+	bb kingDR{ BK << 9 & ~black & ~fileA & ~*unsafe };
 
 	for (int i = 0; i < 64; i++) {
 

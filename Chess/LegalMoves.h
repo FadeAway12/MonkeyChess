@@ -14,7 +14,7 @@ extern std::string wPawnMoves(moveParams, std::string lastMove);
 
 extern std::string wKnightMoves(moveParams);
 
-extern std::string wKingMoves(moveParams);
+extern std::string wKingMoves(moveParams, bb* unsafe);
 
 extern std::string wRookMoves(moveParams);
 
@@ -26,7 +26,7 @@ extern std::string bPawnMoves(moveParams, std::string lastMove);
 
 extern std::string bKnightMoves(moveParams);
 
-extern std::string bKingMoves(moveParams);
+extern std::string bKingMoves(moveParams, bb*);
 
 extern std::string bRookMoves(moveParams);
 

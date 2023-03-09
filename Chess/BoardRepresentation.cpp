@@ -4,6 +4,7 @@
 
 #include "BoardRepresentation.h"
 #include "LegalMoves.h"
+#include "LegalMoveHelpers.h"
 
 using namespace std;
 
@@ -89,17 +90,16 @@ char board[8][8] = { //used for convenient viewing of the board's representation
 
 //Test board
 
-
 char board[8][8] = {
 	//0   1   2   3   4   5   6   7
-	{' ',' ',' ',' ',' ',' ',' ',' '}, //0
+	{' ','q',' ',' ',' ',' ',' ',' '}, //0
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //1
-	{' ',' ',' ','N',' ','N',' ',' '},  //2
-	{' ',' ',' ',' ','b',' ',' ',' '},  //3
-	{' ',' ',' ','N',' ','N',' ',' '},  //4
+	{' ',' ',' ',' ',' ',' ',' ',' '},  //2
+	{' ',' ',' ',' ',' ',' ',' ',' '},  //3
+	{' ',' ',' ',' ',' ',' ',' ',' '},  //4
 	{' ',' ',' ',' ',' ',' ',' ',' '} , //5
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //6
-	{' ',' ',' ',' ',' ',' ',' ',' '}  //7
+	{'R',' ',' ',' ','K',' ',' ','R'}  //7
 };
 
 
@@ -205,6 +205,9 @@ string rawToString(string s, char board[8][8]) {
 		
 		string move;
 		is >> move;
+		
+		if (move == "O-O" || move == "O-O-O") { final += " " + move; continue; }
+
 		if (move.size() < 4) continue;
 		
 		char rowF = move[0];
@@ -230,8 +233,12 @@ int main() {
 
 	bitboardToArray();
 
+	functionTime();
+
+	string s = getWLegalMoves(listOfBoardParamsAndOthers, "", true, true);
+
 	printBoard();
 
-	cout << rawToString(getBLegalMoves(listOfBoardParamsAndOthers, "hi", 1, 1), board);
+	cout << rawToString(s, board);
 
 }
