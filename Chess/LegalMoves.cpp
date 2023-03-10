@@ -13,6 +13,8 @@
 //<< means shifted RIGHT AND DOWN visually
 //>> means shifted LEFT AND UP visually
 
+constexpr bb allSpots{ 18'446'744'073'709'551'615 };
+
 using namespace std;
 
 string lastMove; //formatted as piece, rowF, colF, rowT, colT
@@ -31,9 +33,28 @@ string getWLegalMoves(moveParams, string lastMove, bool canLC, bool canSC) {
 
 	bool inCheck(*blackAttack & WK);
 
-	string moves = wPawnMoves(listOfBoardParamsAndOthers, lastMove) + " " + wKnightMoves(listOfBoardParamsAndOthers) + " " + 
-		wKingMoves(listOfBoardParamsAndOthers, blackAttack) + " " + wRookMoves(listOfBoardParamsAndOthers) + " " + 
-		wBishopMoves(listOfBoardParamsAndOthers) + " " + wQueenMoves(listOfBoardParamsAndOthers);
+	bb* check = new bb[2]{ 0, 0 };
+
+	vector<bb> pinned = findPinnedPiecesWhite(listOfBoardParamsAndOthers);
+
+	
+	if (inCheck) {
+
+		check = findCheckerWhite(listOfBoardParamsAndOthers);
+		
+		if (check[1] != 0) { //in a double check, only the king can move, so we only search possible king moves
+			return wKingMoves(listOfBoardParamsAndOthers, blackAttack, check, pinned);
+		}
+
+	}
+
+	string moves = 
+		wPawnMoves(listOfBoardParamsAndOthers, lastMove, check, pinned) + " " + 
+		wKnightMoves(listOfBoardParamsAndOthers, check, pinned) + " " +
+		wKingMoves(listOfBoardParamsAndOthers, blackAttack, check, pinned) + " " + 
+		wRookMoves(listOfBoardParamsAndOthers, check, pinned) + " " +
+		wBishopMoves(listOfBoardParamsAndOthers, check, pinned) + " " + 
+		wQueenMoves(listOfBoardParamsAndOthers, check, pinned);
 
 	addCastlingMovesWhite(listOfBoardParamsAndOthers, blackAttack, moves, canSC, canLC, inCheck);
 
@@ -57,10 +78,18 @@ string getBLegalMoves(moveParams, string lastMove, bool canLC, bool canSC) {
 	return moves;
 }
 
-string wPawnMoves(moveParams, string lastMove) {
+string wPawnMoves(moveParams, string lastMove, bb* checkers, vector<bb> pinned) {
 
 	string moves{};
-	
+
+	bb pinnedLine{ allSpots }; //pinnedline by default is set to occupy all locations on the bitboard because if
+	//it is not pinned, we and it with the move to see where it can move to. if there is a pinned line, it will make sure
+	//it can only move to a place where the pin is maintained.
+
+	for (int i = 0; i < pinned.size(); i++) {
+		if (WP & pinned[i]) pinnedLine = pinned[i];
+	}
+
 	bb pawnUR { (WP >> 7) & black & ~rank8 & ~fileA }; //capturing to the right
 
 	bb pawnUL { (WP >> 9) & black & ~rank8 & ~fileH }; //capturing to the left
@@ -108,23 +137,23 @@ string wPawnMoves(moveParams, string lastMove) {
 
 	for (int i = 0; i < 64; i++) {
 		
-		if (((pawnUR >> i) & 1) == 1) moves += " " + ts(i / 8 + 1) + ts(i % 8 - 1) + ts(i / 8) + ts(i % 8);
+		if (((pawnUR >> i) & 1) == 1 && pinnedLine & WP >> 7) moves += " " + ts(i / 8 + 1) + ts(i % 8 - 1) + ts(i / 8) + ts(i % 8);
 
-		if (((pawnUL >> i) & 1) == 1) moves += " " + ts(i / 8 + 1) + ts(i % 8 + 1) + ts(i / 8) + ts(i % 8);
+		if (((pawnUL >> i) & 1) == 1 && pinnedLine & WP >> 9) moves += " " + ts(i / 8 + 1) + ts(i % 8 + 1) + ts(i / 8) + ts(i % 8);
 
-		if (((pawnU >> i) & 1) == 1) moves += " " + ts(i / 8 + 1) + ts(i % 8) + ts(i / 8) + ts(i % 8);
+		if (((pawnU >> i) & 1) == 1 && pinnedLine & WP >> 8) moves += " " + ts(i / 8 + 1) + ts(i % 8) + ts(i / 8) + ts(i % 8);
 
-		if (((pawnDJ >> i) & 1) == 1) moves += " " + ts(i / 8 + 2) + ts(i % 8) + ts(i / 8) + ts(i % 8);
+		if (((pawnDJ >> i) & 1) == 1 && pinnedLine & WP >> 16) moves += " " + ts(i / 8 + 2) + ts(i % 8) + ts(i / 8) + ts(i % 8);
 
-		if (((pawnPCR >> i) & 1) == 1) moves+= pawnPromo(ts(i / 8 + 1) + ts(i % 8 - 1) + ts(i / 8) + ts(i % 8));
+		if (((pawnPCR >> i) & 1) == 1 && pinnedLine & WP >> 7) moves+= pawnPromo(ts(i / 8 + 1) + ts(i % 8 - 1) + ts(i / 8) + ts(i % 8));
 
-		if (((pawnPCL >> i) & 1) == 1) moves+= pawnPromo(ts(i / 8 + 1) + ts(i % 8 + 1) + ts(i / 8) + ts(i % 8));
+		if (((pawnPCL >> i) & 1) == 1 && pinnedLine & WP >> 9) moves+= pawnPromo(ts(i / 8 + 1) + ts(i % 8 + 1) + ts(i / 8) + ts(i % 8));
 
-		if (((pawnPU >> i) & 1) == 1) moves+= pawnPromo(ts(i / 8 + 1) + ts(i % 8) + ts(i / 8) + ts(i % 8));
+		if (((pawnPU >> i) & 1) == 1 && pinnedLine & WP >> 8) moves+= pawnPromo(ts(i / 8 + 1) + ts(i % 8) + ts(i / 8) + ts(i % 8));
 
-		if (((enpL >> i) & 1) == 1) moves += " " + (ts(i / 8) + ts(i % 8) + ts(i / 8 - 1) + ts(i % 8 - 1));
+		if (((enpL >> i) & 1) == 1 && pinnedLine & WP >> 9) moves += " " + (ts(i / 8) + ts(i % 8) + ts(i / 8 - 1) + ts(i % 8 - 1));
 
-		if (((enpR >> i) & 1) == 1) moves += " " + (ts(i / 8) + ts(i % 8) + ts(i / 8 - 1) + ts(i % 8 + 1));
+		if (((enpR >> i) & 1) == 1 && pinnedLine & WP >> 7) moves += " " + (ts(i / 8) + ts(i % 8) + ts(i / 8 - 1) + ts(i % 8 + 1));
 
 	} //goes through and adds moves//goes through and add moves
 
@@ -132,11 +161,17 @@ string wPawnMoves(moveParams, string lastMove) {
 
 }
 
-string wKnightMoves(moveParams) {
+string wKnightMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 #define ts std::to_string
 
 	string moves{};
+
+	bb pinnedLine{ allSpots };
+
+	for (int i = 0; i < pinned.size(); i++) {
+		if (WN & pinned[i]) pinnedLine = pinned[i];
+	}
 
 	bb knightMovesRU{ WN >> 6 & ~fileA & ~fileB & ~white }; //2 right, 1 up
 
@@ -177,7 +212,7 @@ string wKnightMoves(moveParams) {
 	return moves;
 }
 
-string wKingMoves(moveParams, bb* unsafe) {
+string wKingMoves(moveParams, bb* unsafe, bb* checkers, vector<bb> pinned) {
 
 	string moves{};
 
@@ -221,7 +256,7 @@ string wKingMoves(moveParams, bb* unsafe) {
 
 }
 
-string wRookMoves(moveParams) {
+string wRookMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 	string moves{};
 
@@ -285,7 +320,7 @@ string wRookMoves(moveParams) {
 
 }
 
-string wBishopMoves(moveParams) {
+string wBishopMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 	string moves{};
 
@@ -363,7 +398,7 @@ string wBishopMoves(moveParams) {
 
 }
 
-string wQueenMoves(moveParams) {
+string wQueenMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 	string moves{};
 	for (int i = 0; i < 64; i++) {

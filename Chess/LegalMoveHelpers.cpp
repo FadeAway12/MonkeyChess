@@ -11,6 +11,9 @@
 using namespace std;
 using namespace chrono;
 
+//<< means shifted RIGHT AND DOWN visually
+//>> means shifted LEFT AND UP visually
+
 bb attackedByWhite(moveParams) {
 
 	//attacked by pawn
@@ -425,9 +428,206 @@ bb attackedByBlack(moveParams) {
 
 
 bb* findCheckerWhite(moveParams) { //finds black piece(s) checking white king
-	bb* checkers = new bb[2];
+
+	bb* checkers = new bb[2]; //max amount of checkers is 2. you MUST move king in a double check
+	checkers[0] = 0;
+	checkers[1] = 0; //if the 2nd cheker is 0, it is not a double check
+
+	int i{};
+
+	bb U = WK;
+	while (U != (U | U>>8)) { //goes through to find a potential checker above the king
+		U |= U >> 8;
+		U = ~WK & U;           //nots the king (needed as pieces check if they can block the king by anding the checker line)
+		if (U & (BR | BQ)) {
+			checkers[i] = U;
+			++i;
+			break;
+		}
+		if (U & ~emptySquare & ~(BR | BQ)) { //if it finds a non-checker piece, break.
+			break;
+		}
+	}
+
+	bb R = WK;
+	while (R != (R | R << 1)) {
+		R |= R << 1;
+		R = ~WK & R;
+		if (R & (BR | BQ)) {
+			checkers[i] = R;
+			++i;
+			break;
+		}
+		if (R & ~emptySquare & ~(BR | BQ)) {
+			break;
+		}
+	}
+
+	if (i == 2) return checkers; //you cant have more than 2 checkers, so if the checkers number is 1 it just quits
+
+	bb D = WK;
+	while (D != (D | D << 8)) {
+		D |= D << 8;
+		D = ~WK & D;
+		if (D & (BR | BQ)) {
+			checkers[i] = D;
+			++i;
+			break;
+		}
+		if (D & ~emptySquare & ~(BR | BQ)) {
+			break;
+		}
+	}
+
+	if (i == 2) return checkers;
+
+	bb E = WK;
+	while (E != (E | E >> 1)) {
+		E |= E >> 1;
+		E = ~WK & E;
+		if (E & (BR | BQ)) {
+			checkers[i] = E;
+			++i;
+			break;
+		}
+		if (E & ~emptySquare & ~(BR | BQ)) {
+			break;
+		}
+	}
+
+	if (i == 2) return checkers;
+
+	bb UR = WK;
+	while (UR != (UR | UR >> 7)) {
+		UR |= UR >> 7;
+		UR = ~WK & UR;
+		if (UR & (BB | BQ)) {
+			checkers[i] = UR;
+			++i;
+			break;
+		}
+		if (UR & ~emptySquare & ~(BB | BQ)) {
+			break;
+		}
+	}
+
+	if (i == 2) return checkers;
+
+	bb DR = WK;
+	while (DR != (DR | DR << 9)) {
+		DR |= DR << 9;
+		DR = ~WK & DR;
+		if (DR & (BB | BQ)) {
+			checkers[i] = DR;
+			++i;
+			break;
+		}
+		if (DR & ~emptySquare & ~(BB | BQ)) {
+			break;
+		}
+	}
+
+	if (i == 2) return checkers;
+
+	bb DL = WK;
+	while (DL != (DL | DL << 7)) {
+		DL |= DL << 7;
+		if (DL & (BB | BQ)) {
+			checkers[i] = DR;
+			++i;
+			break;
+		}
+		if (DR & ~emptySquare & ~(BB | BQ)) {
+			break;
+		}
+	}
+
+	if (i == 2) return checkers;
 	
+	bb UL = WK;
+	while (UL != (UL | UL >> 9)) {
+		UL |= UL >> 9;
+		UL = ~WK & UL;
+		if (UL & (BB | BQ)) {
+			checkers[i] = UL;
+			++i;
+			break;
+		}
+		if (UL & ~emptySquare & ~(BB | BQ)) {
+			break;
+		}
+	}
+
+	if (i == 2) return checkers;
+
+	if (WK >> 9 & BP) { //checks for pawns using a simple if statement
+		checkers[i] = WK >> 9;
+	}
+
+	if (i == 2) return checkers;
+
+	if (WK >> 7 & BP) {
+		checkers[i] = WK >> 7;
+	}
+
+	if (i == 2) return checkers;
+
+	//manually checks all possible knight checks
+
+
+
+	if (WK >> 6 & BN & ~fileA & ~fileB) checkers[i] = WK >> 6;
+
+	if (i == 2) return checkers;
+
+	if (WK >> 10 & BN & ~fileG & ~fileH) checkers[i] = WK >> 10;
+
+	if (i == 2) return checkers;
+
+	if (WK >> 15 & BN & ~fileA) checkers[i] = WK >> 15;
+
+	if (i == 2) return checkers;
+
+	if (WK >> 17 & BN & ~fileH) checkers[i] = WK >> 17;
+
+	if (i == 2) return checkers;
+
+	if (WK << 6 & BN & ~fileH & ~fileG) checkers[i] = WK << 6;
+
+	if (i == 2) return checkers;
+
+	if (WK << 10 & ~fileA & ~fileB & BN) checkers[i] = WK << 10;
+
+	if (i == 2) return checkers;
+
+	if (WK << 15 & ~fileH & BN) checkers[i] = WK << 15;
+
+	if (i == 2) return checkers;
+
+	if (WK << 17 & ~fileA & BN) checkers[i] = WK << 17;
+
 	return checkers;
+}
+
+vector<bb> findPinnedPiecesWhite(moveParams) {
+
+	vector<bb> pinned;
+
+	int count{};
+
+	bb U = WK;
+	while (U != (U | U >> 8) && count<=1) { //goes through to find a potential checker above the king
+		
+		if ((U >> 8 & ~U) & white) ++count;
+		
+		U |= U >> 8;
+		U = ~WK & U;           //nots the king (needed as pieces check if they can block the king by anding the checker line)
+		if (count == 2) break;
+		if (U & (BR | BQ) && count) pinned.push_back(U);
+		else if (U & black & ~(BR | BQ)) break;
+	}
+	
+	return pinned;
 }
 
 void addCastlingMovesWhite(moveParams, bb* attackedB, string& moves, bool SC, bool LC, bool inCheck) {
@@ -441,9 +641,7 @@ void addCastlingMovesWhite(moveParams, bb* attackedB, string& moves, bool SC, bo
 	constexpr bb queenBis(0b0000010000000000000000000000000000000000000000000000000000000000);
 	constexpr bb queenKni(0b0000001000000000000000000000000000000000000000000000000000000000);
 	constexpr bb queenRook(0b0000000100000000000000000000000000000000000000000000000000000000);
-
 	
-
 	if (inCheck) return;
 
 	if (SC && WK & kingPos && emptySquare & kingBis && emptySquare & kingKni && WR & kingRook) {
@@ -462,8 +660,8 @@ void addCastlingMovesWhite(moveParams, bb* attackedB, string& moves, bool SC, bo
 
 void addCastlingMovesBlack(moveParams, bb* attackedW, string& moves, bool SC, bool LC, bool inCheck) {
 
-	constexpr bb kingPos{ (int)16 }; //2^59. pow isnt constexpr so cant use
-	constexpr bb kingBis{ (int)32}; //2^58
+	constexpr bb kingPos{ (int)16 }; //2^4. pow isnt constexpr so cant use
+	constexpr bb kingBis{ (int)32}; //2^3
 	constexpr bb kingKni{ (int)64};
 	constexpr bb kingRook{ (int)128};
 
