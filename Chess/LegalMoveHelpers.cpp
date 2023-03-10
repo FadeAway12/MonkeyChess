@@ -423,6 +423,13 @@ bb attackedByBlack(moveParams) {
 	return attacked;
 }
 
+
+bb* findCheckerWhite(moveParams) { //finds black piece(s) checking white king
+	bb* checkers = new bb[2];
+	
+	return checkers;
+}
+
 void addCastlingMovesWhite(moveParams, bb* attackedB, string& moves, bool SC, bool LC, bool inCheck) {
 
 	constexpr bb kingPos(0b0001000000000000000000000000000000000000000000000000000000000000); //2^60. pow isnt constexpr so cant use
