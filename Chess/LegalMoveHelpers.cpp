@@ -248,122 +248,122 @@ bb attackedByBlack(moveParams) {
 	for (int i = 0; i < 64; i++) {
 		if (((BR >> i) & 1) == 1) {
 			bb pos = pow(2, i); //creates a bitboard of an individual white rook
-			bb BRU = pos >> 8 & ~black & ~((pos & white) >> 8);
+			bb BRU = pos >> 8 & ~black & ~((pos & white & ~WK) >> 8);
 
 			while (BRU) {
 
 				attacked |= BRU;
 
-				BRU = BRU >> 8 & ~black & ~((BRU & white) >> 8);
+				BRU = BRU >> 8 & ~black & ~((BRU & white & ~WK) >> 8);
 			}
 
-			bb BRL = pos >> 1 & ~black & ~fileH & ~((pos & white) >> 1);
+			bb BRL = pos >> 1 & ~black & ~fileH & ~((pos & white & ~WK) >> 1);
 
 			while (BRL) {
 
 				attacked |= BRL;
 
-				BRL = BRL >> 1 & ~black & ~fileH & ~((BRL & white) >> 1);
+				BRL = BRL >> 1 & ~black & ~fileH & ~((BRL & white & ~WK) >> 1);
 			}
 
-			bb BRR = pos << 1 & ~black & ~fileA & ~((pos & white) << 1);
+			bb BRR = pos << 1 & ~black & ~fileA & ~((pos & white & ~WK) << 1);
 
 			while (BRR) {
 
 				attacked |= BRR;
 
-				BRR = BRR << 1 & ~black & ~fileA & ~((BRR & white) << 1);
+				BRR = BRR << 1 & ~black & ~fileA & ~((BRR & white & ~WK) << 1);
 			}
 
-			bb BRD = pos << 8 & ~black & ~((pos & white) << 8);
+			bb BRD = pos << 8 & ~black & ~((pos & white & ~WK) << 8);
 
 			while (BRD) {
 
 				attacked |= BRD;
 
-				BRD = BRD << 8 & ~black & ~((BRD & white) << 8);
+				BRD = BRD << 8 & ~black & ~((BRD & white & ~WK) << 8);
 			}
 
 		}
 		else if (((BB >> i) & 1) == 1) {
 			bb pos = pow(2, i);
 
-			bb BBUR = pos >> 7 & ~fileA & ~black & ~((pos & white) >> 7);
+			bb BBUR = pos >> 7 & ~fileA & ~black & ~((pos & white & ~WK) >> 7);
 
 			while (BBUR) {
 
 				attacked |= BBUR;
 
-				BBUR = BBUR >> 7 & ~fileA & ~black & ~((BBUR & white) >> 7);
+				BBUR = BBUR >> 7 & ~fileA & ~black & ~((BBUR & white & ~WK) >> 7);
 
 			}
 
-			bb BBUL = pos >> 9 & ~fileH & ~black & ~((pos & white) >> 9);
+			bb BBUL = pos >> 9 & ~fileH & ~black & ~((pos & white & ~WK) >> 9);
 
 			while (BBUL) {
 
 				attacked |= BBUL;
 
-				BBUL = BBUL >> 9 & ~fileH & ~black & ~((BBUL & white) >> 9);
+				BBUL = BBUL >> 9 & ~fileH & ~black & ~((BBUL & white & ~WK) >> 9);
 
 			}
 
-			bb BBDL = pos << 7 & ~fileH & ~black & ~((pos & white) << 7);
+			bb BBDL = pos << 7 & ~fileH & ~black & ~((pos & white & ~WK) << 7);
 
 			while (BBDL) {
 
 
 				attacked |= BBDL;
 
-				BBDL = BBDL << 7 & ~fileH & ~black & ~((BBDL & white) << 7);
+				BBDL = BBDL << 7 & ~fileH & ~black & ~((BBDL & white & ~WK) << 7);
 
 			}
 
-			bb BBDR = pos << 9 & ~fileA & ~black & ~((pos & white) << 9);
+			bb BBDR = pos << 9 & ~fileA & ~black & ~((pos & white & ~WK) << 9);
 
 			while (BBDR) {
 
 
 				attacked |= BBDR;
 
-				BBDR = BBDR << 9 & ~fileA & ~black & ~((BBDR & white) << 9);
+				BBDR = BBDR << 9 & ~fileA & ~black & ~((BBDR & white & ~WK) << 9);
 
 			}
 		}
 		else if (((BQ >> i) & 1) == 1) {
 			bb pos = pow(2, i); //creates a bitboard of an individual white rook
-			bb QU = pos >> 8 & ~black & ~((pos & white) >> 8);
+			bb QU = pos >> 8 & ~black & ~((pos & white & ~WK) >> 8);
 
 			while (QU) {
 
 				attacked |= QU;
 
-				QU = QU >> 8 & ~black & ~((QU & white) >> 8);
+				QU = QU >> 8 & ~black & ~((QU & white & ~WK) >> 8);
 			}
 
 
 
-			bb QL = pos >> 1 & ~black & ~fileH & ~((pos & white) >> 1);
+			bb QL = pos >> 1 & ~black & ~fileH & ~((pos & white & ~WK) >> 1);
 
 			while (QL) {
 
 				attacked |= QL;
 
-				QL = QL >> 1 & ~black & ~fileH & ~((QL & white) >> 1);
+				QL = QL >> 1 & ~black & ~fileH & ~((QL & white & ~WK) >> 1);
 			}
 
 
 
-			bb QR = pos << 1 & ~black & ~fileA & ~((pos & white) << 1);
+			bb QR = pos << 1 & ~black & ~fileA & ~((pos & white & ~WK) << 1);
 
 			while (QR) {
 
 				attacked |= QR;
 
-				QR = QR << 1 & ~black & ~fileA & ~((QR & white) << 1);
+				QR = QR << 1 & ~black & ~fileA & ~((QR & white & ~WK) << 1);
 			}
 
-			bb QD = pos << 8 & ~black & ~((pos & white) << 8);
+			bb QD = pos << 8 & ~black & ~((pos & white & ~WK) << 8);
 
 
 
@@ -371,10 +371,10 @@ bb attackedByBlack(moveParams) {
 
 				attacked |= QD;
 
-				QD = QD << 8 & ~black & ~((QD & white) << 8);
+				QD = QD << 8 & ~black & ~((QD & white & ~WK) << 8);
 			}
 
-			bb QUR = pos >> 7 & ~fileA & ~black & ~((pos & white) >> 7);
+			bb QUR = pos >> 7 & ~fileA & ~black & ~((pos & white & ~WK) >> 7);
 
 
 
@@ -382,44 +382,44 @@ bb attackedByBlack(moveParams) {
 
 				attacked |= QUR;
 
-				QUR = QUR >> 7 & ~fileA & ~black & ~((QUR & white) >> 7);
+				QUR = QUR >> 7 & ~fileA & ~black & ~((QUR & white & ~WK) >> 7);
 
 			}
 
 
 
-			bb QUL = pos >> 9 & ~fileH & ~black & ~((pos & white) >> 9);
+			bb QUL = pos >> 9 & ~fileH & ~black & ~((pos & white & ~WK) >> 9);
 
 			while (QUL) {
 
 				attacked |= QUL;
 
-				QUL = QUL >> 9 & ~fileH & ~black & ~((QUL & white) >> 9);
+				QUL = QUL >> 9 & ~fileH & ~black & ~((QUL & white & ~WK) >> 9);
 
 			}
 
 
 
-			bb QDL = pos << 7 & ~fileH & ~black & ~((pos & white) << 7);
+			bb QDL = pos << 7 & ~fileH & ~black & ~((pos & white & ~WK) << 7);
 
 			while (QDL) {
 
 				attacked |= QDL;
 
-				QDL = QDL << 7 & ~fileH & ~black & ~((QDL & white) << 7);
+				QDL = QDL << 7 & ~fileH & ~black & ~((QDL & white & ~WK) << 7);
 
 			}
 
 
 
-			bb QDR = pos << 9 & ~fileA & ~black & ~((pos & white) << 9);
+			bb QDR = pos << 9 & ~fileA & ~black & ~((pos & white & ~WK) << 9);
 
 			while (QDR) {
 
 
 				attacked |= QDR;
 
-				QDR = QDR << 9 & ~fileA & ~black & ~((QDR & white) << 9);
+				QDR = QDR << 9 & ~fileA & ~black & ~((QDR & white & ~WK) << 9);
 			}
 		}
 	}
