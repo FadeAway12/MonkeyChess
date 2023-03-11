@@ -244,3 +244,187 @@ string wKingMoves(moveParams) {
 	return moves;
 
 }
+
+FIND CHECKER WHITE:
+
+bb* findCheckerWhite(moveParams) { //finds black piece(s) checking white king
+
+	bb* checkers = new bb[2]; //max amount of checkers is 2. you MUST move king in a double check
+	checkers[0] = 0;
+	checkers[1] = 0; //if the 2nd cheker is 0, it is not a double check
+
+	int i{};
+
+	bb U = WK;
+	while (U != (U | U>>8)) { //goes through to find a potential checker above the king
+		U |= U >> 8;
+		U = ~WK & U;           //nots the king (needed as pieces check if they can block the king by anding the checker line)
+		if (U & (BR | BQ)) {
+			checkers[i] = U;
+			++i;
+			break;
+		}
+		if (U & ~emptySquare & ~(BR | BQ)) { //if it finds a non-checker piece, break.
+			break;
+		}
+	}
+
+	bb R = WK;
+	while (R != (R | R << 1) && (!(R & fileA) || R == WK)) { //check over this later
+		R |= R << 1;
+		R = ~WK & R;
+		if (R & (BR | BQ)) {
+			checkers[i] = R;
+			++i;
+			break;
+		}
+		if (R & ~emptySquare & ~(BR | BQ)) {
+			break;
+		}
+	}
+
+	if (i == 2) return checkers; //you cant have more than 2 checkers, so if the checkers number is 1 it just quits
+
+	bb D = WK;
+	while (D != (D | D << 8)) {
+		D |= D << 8;
+		D = ~WK & D;
+		if (D & (BR | BQ)) {
+			checkers[i] = D;
+			++i;
+			break;
+		}
+		if (D & ~emptySquare & ~(BR | BQ)) {
+			break;
+		}
+	}
+
+	if (i == 2) return checkers;
+
+	bb L = WK;
+	while (L != (L | L >> 1) && (!(L & fileH) || L == WK)) { //check over this later
+		L |= L >> 1;
+		L = ~WK & L;
+		if (L & (BR | BQ)) {
+			checkers[i] = L;
+			++i;
+			break;
+		}
+		if (L & ~emptySquare & ~(BR | BQ)) {
+			break;
+		}
+	}
+
+	if (i == 2) return checkers;
+
+	bb UR = WK;
+	while (UR != (UR | UR >> 7) && (!(UR & fileA) || UR == WK)) { //check over this later
+		UR |= UR >> 7;
+		UR = ~WK & UR;
+		if (UR & (BB | BQ)) {
+			checkers[i] = UR;
+			++i;
+			break;
+		}
+		if (UR & ~emptySquare & ~(BB | BQ)) {
+			break;
+		}
+	}
+
+	if (i == 2) return checkers;
+
+	bb DR = WK;
+	while (DR != (DR | DR << 9) && (!(DR & fileA) || DR == WK)) { //check over this later
+		DR |= DR << 9;
+		DR = ~WK & DR;
+		if (DR & (BB | BQ)) {
+			checkers[i] = DR;
+			++i;
+			break;
+		}
+		if (DR & ~emptySquare & ~(BB | BQ)) {
+			break;
+		}
+	}
+
+	if (i == 2) return checkers;
+
+	bb DL = WK;
+	while (DL != (DL | DL << 7) && (!(DL & fileH) || DL == WK)) { //check over this later
+		DL |= DL << 7;
+		if (DL & (BB | BQ)) {
+			checkers[i] = DR;
+			++i;
+			break;
+		}
+		if (DR & ~emptySquare & ~(BB | BQ)) {
+			break;
+		}
+	}
+
+	if (i == 2) return checkers;
+	
+	bb UL = WK;
+	while (UL != (UL | UL >> 9) && (!(UL & fileH) || UL == WK)) { //check over this later
+		UL |= UL >> 9;
+		UL = ~WK & UL;
+		if (UL & (BB | BQ)) {
+			checkers[i] = UL;
+			++i;
+			break;
+		}
+		if (UL & ~emptySquare & ~(BB | BQ)) {
+			break;
+		}
+	}
+
+	if (i == 2) return checkers;
+
+	if (WK >> 9 & BP) { //checks for pawns using a simple if statement
+		checkers[i] = WK >> 9;
+	}
+
+	if (i == 2) return checkers;
+
+	if (WK >> 7 & BP) {
+		checkers[i] = WK >> 7;
+	}
+
+	if (i == 2) return checkers;
+
+	//manually checks all possible knight checks
+
+
+
+	if (WK >> 6 & BN & ~fileA & ~fileB) checkers[i] = WK >> 6;
+
+	if (i == 2) return checkers;
+
+	if (WK >> 10 & BN & ~fileG & ~fileH) checkers[i] = WK >> 10;
+
+	if (i == 2) return checkers;
+
+	if (WK >> 15 & BN & ~fileA) checkers[i] = WK >> 15;
+
+	if (i == 2) return checkers;
+
+	if (WK >> 17 & BN & ~fileH) checkers[i] = WK >> 17;
+
+	if (i == 2) return checkers;
+
+	if (WK << 6 & BN & ~fileH & ~fileG) checkers[i] = WK << 6;
+
+	if (i == 2) return checkers;
+
+	if (WK << 10 & ~fileA & ~fileB & BN) checkers[i] = WK << 10;
+
+	if (i == 2) return checkers;
+
+	if (WK << 15 & ~fileH & BN) checkers[i] = WK << 15;
+
+	if (i == 2) return checkers;
+
+	if (WK << 17 & ~fileA & BN) checkers[i] = WK << 17;
+
+	return checkers;
+}
