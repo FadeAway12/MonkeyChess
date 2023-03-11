@@ -93,13 +93,13 @@ char board[8][8] = { //used for convenient viewing of the board's representation
 char board[8][8] = {
 	//0   1   2   3   4   5   6   7
 	{' ',' ',' ',' ','r',' ',' ',' '}, //0
-	{' ',' ',' ',' ',' ',' ',' ',' '}, //1x
-	{' ',' ',' ',' ',' ','p',' ',' '},  //2
-	{' ',' ',' ','P','P',' ',' ',' '},  //3
+	{' ',' ',' ',' ',' ',' ',' ',' '}, //1
+	{' ',' ',' ',' ',' ',' ',' ',' '},  //2
+	{' ','R',' ',' ','Q',' ',' ',' '},  //3
 	{' ',' ',' ',' ',' ',' ',' ',' '},  //4
 	{' ',' ',' ',' ',' ',' ',' ',' '} , //5
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //6
-	{'R',' ',' ',' ','K',' ',' ','R'}  //7
+	{' ',' ',' ',' ','K',' ',' ',' '}  //7
 };
 
 
@@ -235,7 +235,7 @@ int main() {
 
 	functionTime();
 
-	string s = getWLegalMoves(listOfBoardParamsAndOthers, "", true, true);
+	string s = getWLegalMoves(listOfBoardParamsAndOthers, "p1131", true, true);
 
 	printBoard();
 

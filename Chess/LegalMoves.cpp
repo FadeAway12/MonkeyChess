@@ -136,24 +136,36 @@ string wPawnMoves(moveParams, string lastMove, bb* checkers, vector<bb> pinned) 
 	} //gathering en passant moves
 
 	for (int i = 0; i < 64; i++) {
+
+		bb move{};
+
+		bool pin{ false };
 		
-		if (((pawnUR >> i) & 1) == 1 && pinnedLine & WP >> 7) moves += " " + ts(i / 8 + 1) + ts(i % 8 - 1) + ts(i / 8) + ts(i % 8);
+		if (pinnedLine != allSpots) {
+			move = pow(2, i);
 
-		if (((pawnUL >> i) & 1) == 1 && pinnedLine & WP >> 9) moves += " " + ts(i / 8 + 1) + ts(i % 8 + 1) + ts(i / 8) + ts(i % 8);
+			pin = true;
+		}
 
-		if (((pawnU >> i) & 1) == 1 && pinnedLine & WP >> 8) moves += " " + ts(i / 8 + 1) + ts(i % 8) + ts(i / 8) + ts(i % 8);
+		//(WP & ~(move << 7) & move)
 
-		if (((pawnDJ >> i) & 1) == 1 && pinnedLine & WP >> 16) moves += " " + ts(i / 8 + 2) + ts(i % 8) + ts(i / 8) + ts(i % 8);
+		if (((pawnUR >> i) & 1) == 1 && ((WP & pinnedLine & ~move << 7 | move) || !pin)) moves += " " + ts(i / 8 + 1) + ts(i % 8 - 1) + ts(i / 8) + ts(i % 8);
 
-		if (((pawnPCR >> i) & 1) == 1 && pinnedLine & WP >> 7) moves+= pawnPromo(ts(i / 8 + 1) + ts(i % 8 - 1) + ts(i / 8) + ts(i % 8));
+		if (((pawnUL >> i) & 1) == 1 && ((WP & pinnedLine & ~move << 9 | move) || !pin)) moves += " " + ts(i / 8 + 1) + ts(i % 8 + 1) + ts(i / 8) + ts(i % 8);
 
-		if (((pawnPCL >> i) & 1) == 1 && pinnedLine & WP >> 9) moves+= pawnPromo(ts(i / 8 + 1) + ts(i % 8 + 1) + ts(i / 8) + ts(i % 8));
+		if (((pawnU >> i) & 1) == 1 && ((WP & pinnedLine & ~move << 8 | move) || !pin)) moves += " " + ts(i / 8 + 1) + ts(i % 8) + ts(i / 8) + ts(i % 8);
 
-		if (((pawnPU >> i) & 1) == 1 && pinnedLine & WP >> 8) moves+= pawnPromo(ts(i / 8 + 1) + ts(i % 8) + ts(i / 8) + ts(i % 8));
+		if (((pawnDJ >> i) & 1) == 1 && ((WP & pinnedLine & ~move << 16 | move) || !pin)) moves += " " + ts(i / 8 + 2) + ts(i % 8) + ts(i / 8) + ts(i % 8);
 
-		if (((enpL >> i) & 1) == 1 && pinnedLine & WP >> 9) moves += " " + (ts(i / 8) + ts(i % 8) + ts(i / 8 - 1) + ts(i % 8 - 1));
+		if (((pawnPCR >> i) & 1) == 1 && ((WP & pinnedLine & ~move << 7 | move) || !pin)) moves+= pawnPromo(ts(i / 8 + 1) + ts(i % 8 - 1) + ts(i / 8) + ts(i % 8));
 
-		if (((enpR >> i) & 1) == 1 && pinnedLine & WP >> 7) moves += " " + (ts(i / 8) + ts(i % 8) + ts(i / 8 - 1) + ts(i % 8 + 1));
+		if (((pawnPCL >> i) & 1) == 1 && ((WP & pinnedLine & ~move << 9 | move) || !pin)) moves+= pawnPromo(ts(i / 8 + 1) + ts(i % 8 + 1) + ts(i / 8) + ts(i % 8));
+
+		if (((pawnPU >> i) & 1) == 1 && ((WP & pinnedLine & ~move << 8 | move) || !pin)) moves+= pawnPromo(ts(i / 8 + 1) + ts(i % 8) + ts(i / 8) + ts(i % 8));
+
+		if (((enpL >> i) & 1) == 1 && ((WP & pinnedLine & ~move << 9 | move) || !pin)) moves += " " + (ts(i / 8) + ts(i % 8) + ts(i / 8 - 1) + ts(i % 8 - 1));
+
+		if (((enpR >> i) & 1) == 1 && ((WP & pinnedLine & ~move << 7 | move) || !pin)) moves += " " + (ts(i / 8) + ts(i % 8) + ts(i / 8 - 1) + ts(i % 8 + 1));
 
 	} //goes through and adds moves//goes through and add moves
 
@@ -167,27 +179,29 @@ string wKnightMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 	string moves{};
 
-	bb pinnedLine{ allSpots };
+	bb pinnedLine{ 0 };
 
 	for (int i = 0; i < pinned.size(); i++) {
 		if (WN & pinned[i]) pinnedLine = pinned[i];
 	}
 
-	bb knightMovesRU{ WN >> 6 & ~fileA & ~fileB & ~white }; //2 right, 1 up
+	bb knightMovesRU{ (WN & ~pinnedLine) >> 6 & ~fileA & ~fileB & ~white}; //2 right, 1 up
 
-	bb knightMovesLU{ WN >> 10 & ~fileG & ~fileH & ~white };
+	bb knightMovesLU{ (WN & ~pinnedLine) >> 10 & ~fileG & ~fileH & ~white };
 
-	bb knightMovesUR{ WN >> 15 & ~fileA & ~white };
+	bb knightMovesUR{ (WN & ~pinnedLine) >> 15 & ~fileA & ~white };
 	
-	bb knightMovesUL{ WN >> 17 & ~fileH & ~white };
+	bb knightMovesUL{ (WN & ~pinnedLine) >> 17 & ~fileH & ~white };
+	for (int i = 0; i < pinned.size(); i++) {
+		if (WN & pinned[i]) pinnedLine = pinned[i];
+	}
+	bb knightMovesLD{ (WN & ~pinnedLine) << 6 & ~fileH & ~fileG & ~white };
 
-	bb knightMovesLD{ WN << 6 & ~fileH & ~fileG & ~white };
+	bb knightMovesRD{ (WN & ~pinnedLine) << 10 & ~fileA & ~fileB & ~white };
 
-	bb knightMovesRD{ WN << 10 & ~fileA & ~fileB & ~white };
+	bb knightMovesDL{ (WN & ~pinnedLine) << 15 & ~fileH & ~white };
 
-	bb knightMovesDL{ WN << 15 & ~fileH & ~white };
-
-	bb knightMovesDR{ WN << 17 & ~fileA & ~white };
+	bb knightMovesDR{ (WN & ~pinnedLine) << 17 & ~fileA & ~white };
 
 	for (int i = 0; i < 64; i++) {
 
@@ -260,14 +274,22 @@ string wRookMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 	string moves{};
 
+	bb pinnedLine{ allSpots };
+
+	for (int i = 0; i < pinned.size(); i++) {
+		if (WR & pinned[i]) pinnedLine = pinned[i] | WK;
+	}
+
 	for (int i = 0; i < 64; i++) {
 		if (((WR >> i) & 1) == 1) {
 			bb pos = pow(2, i); //creates a bitboard of an individual white rook
 			bb WRU = pos >> 8 & ~white & ~((pos & black) >> 8);
 			int count{ 0 };
 			while (WRU) {
-				
+
 				count++;
+
+				if (!(WR >> 8 * count & pinnedLine)) break;
 
 				moves = moves + ts(i / 8) + ts(i % 8) + ts (i/8 - count) + ts(i%8) + " ";
 
@@ -282,6 +304,8 @@ string wRookMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 				count++;
 
+				if (!(WR >> 1 * count & pinnedLine)) break;
+
 				moves = moves + ts(i / 8) + ts(i % 8) + ts(i / 8) + ts(i % 8 - count) + " ";
 
 				WRL = WRL >> 1 & ~white & ~fileH & ~((WRL & black) >> 1);
@@ -295,6 +319,8 @@ string wRookMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 				count++;
 
+				if (!(WR << 1 * count & pinnedLine)) break;
+
 				moves = moves + ts(i / 8) + ts(i % 8) + ts(i / 8) + ts(i % 8 + count) + " ";
 
 				WRR = WRR << 1 & ~white & ~fileA & ~((WRR & black) << 1);
@@ -307,6 +333,8 @@ string wRookMoves(moveParams, bb* checkers, vector<bb> pinned) {
 			while (WRD) {
 
 				count++;
+
+				if (!(WR << 8 * count & pinnedLine)) break;
 
 				moves = moves + ts(i / 8) + ts(i % 8) + ts(i / 8 + count) + ts(i % 8) + " ";
 
@@ -324,6 +352,12 @@ string wBishopMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 	string moves{};
 
+	bb pinnedLine{ allSpots };
+
+	for (int i = 0; i < pinned.size(); i++) {
+		if (WB & pinned[i]) pinnedLine = pinned[i] | WK;
+	}
+
 	for (int i = 0; i < 64; i++) {
 
 		if (((WB >> i) & 1) == 1) {
@@ -340,6 +374,8 @@ string wBishopMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 				count++;
 
+				if (!(WB >> 7 * count & pinnedLine)) break;
+
 				moves = moves + ts(i / 8) + ts(i % 8) + ts(i / 8 - count) + ts(i % 8 + count) + " ";
 
 				WBUR = WBUR >> 7 & ~fileA & ~white & ~((WBUR & black) >> 7);
@@ -354,6 +390,8 @@ string wBishopMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 				count++;
 
+				if (!(WB >> 9 * count & pinnedLine)) break;
+
 				moves = moves + ts(i / 8) + ts(i % 8) + ts(i / 8 - count) + ts(i % 8 - count) + " ";
 
 				WBUL = WBUL >> 9 & ~fileH & ~white & ~((WBUL & black) >> 9);
@@ -366,8 +404,9 @@ string wBishopMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 			while (WBDL) {
 
-
 				count++;
+
+				if (!(WB << 7 * count & pinnedLine)) break;
 
 				moves = moves + ts(i / 8) + ts(i % 8) + ts(i / 8 + count) + ts(i % 8 - count) + " ";
 
@@ -381,8 +420,9 @@ string wBishopMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 			while (WBDR) {
 
-
 				count++;
+
+				if (!(WB << 9 * count & pinnedLine)) break;
 
 				moves = moves + ts(i / 8) + ts(i % 8) + ts(i / 8 + count) + ts(i % 8 + count) + " ";
 
@@ -401,6 +441,13 @@ string wBishopMoves(moveParams, bb* checkers, vector<bb> pinned) {
 string wQueenMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 	string moves{};
+
+	bb pinnedLine{ allSpots };
+
+	for (int i = 0; i < pinned.size(); i++) {
+		if (WQ & pinned[i]) pinnedLine = pinned[i] | WK;
+	}
+
 	for (int i = 0; i < 64; i++) {
 		if (((WQ >> i) & 1) == 1) {
 			bb pos = pow(2, i); //creates a bitboard of an individual white rook
@@ -409,6 +456,8 @@ string wQueenMoves(moveParams, bb* checkers, vector<bb> pinned) {
 			while (QU) {
 
 				count++;
+
+				if (!(WQ >> 8 * count & pinnedLine)) break;
 
 				moves = moves + ts(i / 8) + ts(i % 8) + ts(i / 8 - count) + ts(i % 8) + " ";
 
@@ -423,6 +472,8 @@ string wQueenMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 				count++;
 
+				if (!(WQ >> 1 * count & pinnedLine)) break;
+
 				moves = moves + ts(i / 8) + ts(i % 8) + ts(i / 8) + ts(i % 8 - count) + " ";
 
 				QL = QL >> 1 & ~white & ~fileH & ~((QL & black) >> 1);
@@ -435,6 +486,8 @@ string wQueenMoves(moveParams, bb* checkers, vector<bb> pinned) {
 			while (QR) {
 
 				count++;
+
+				if (!(WQ << 1 * count & pinnedLine)) break;
 
 				moves = moves + ts(i / 8) + ts(i % 8) + ts(i / 8) + ts(i % 8 + count) + " ";
 
@@ -449,6 +502,8 @@ string wQueenMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 				count++;
 
+				if (!(WQ << 8 * count & pinnedLine)) break;
+
 				moves = moves + ts(i / 8) + ts(i % 8) + ts(i / 8 + count) + ts(i % 8) + " ";
 
 				QD = QD << 8 & ~white & ~((QD & black) << 8);
@@ -461,6 +516,8 @@ string wQueenMoves(moveParams, bb* checkers, vector<bb> pinned) {
 			while (QUR) {
 
 				count++;
+
+				if (!(WQ >> 7 * count & pinnedLine)) break;
 
 				moves = moves + ts(i / 8) + ts(i % 8) + ts(i / 8 - count) + ts(i % 8 + count) + " ";
 
@@ -476,6 +533,8 @@ string wQueenMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 				count++;
 
+				if (!(WQ >> 9 * count & pinnedLine)) break;
+
 				moves = moves + ts(i / 8) + ts(i % 8) + ts(i / 8 - count) + ts(i % 8 - count) + " ";
 
 				QUL = QUL >> 9 & ~fileH & ~white & ~((QUL & black) >> 9);
@@ -488,8 +547,9 @@ string wQueenMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 			while (QDL) {
 
-
 				count++;
+
+				if (!(WQ << 7 * count & pinnedLine)) break;
 
 				moves = moves + ts(i / 8) + ts(i % 8) + ts(i / 8 + count) + ts(i % 8 - count) + " ";
 
@@ -503,8 +563,9 @@ string wQueenMoves(moveParams, bb* checkers, vector<bb> pinned) {
 
 			while (QDR) {
 
-
 				count++;
+
+				if (!(WQ << 9 * count & pinnedLine)) break;
 
 				moves = moves + ts(i / 8) + ts(i % 8) + ts(i / 8 + count) + ts(i % 8 + count) + " ";
 
