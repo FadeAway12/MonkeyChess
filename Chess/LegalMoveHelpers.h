@@ -18,4 +18,6 @@ extern void addCastlingMovesBlack(moveParams, bb* attackedW, std::string& moves,
 
 extern std::vector<bb> findPinnedPiecesWhite(moveParams, bb* checkers);
 
+extern std::vector<bb> findPinnedPiecesBlack(moveParams, bb* checkers);
+
 extern void functionTime();

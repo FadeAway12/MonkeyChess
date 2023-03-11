@@ -11,6 +11,8 @@
 using namespace std;
 using namespace chrono;
 
+constexpr bb allSpots{ 18'446'744'073'709'551'615 };
+
 //<< means shifted RIGHT AND DOWN visually
 //>> means shifted LEFT AND UP visually
 
@@ -48,116 +50,116 @@ bb attackedByWhite(moveParams) {
 
 				attacked |= WRU;
 
-				WRU = WRU >> 8 & ~white & ~((WRU & black) >> 8);
+				WRU = WRU >> 8 & ~white & ~((WRU & black & ~BK) >> 8);
 			}
 
-			bb WRL = pos >> 1 & ~white & ~fileH & ~((pos & black) >> 1);
+			bb WRL = pos >> 1 & ~white & ~fileH & ~((pos & black & ~BK) >> 1);
 
 			while (WRL) {
 
 				attacked |= WRL;
 
-				WRL = WRL >> 1 & ~white & ~fileH & ~((WRL & black) >> 1);
+				WRL = WRL >> 1 & ~white & ~fileH & ~((WRL & black & ~BK) >> 1);
 			}
 
-			bb WRR = pos << 1 & ~white & ~fileA & ~((pos & black) << 1);
+			bb WRR = pos << 1 & ~white & ~fileA & ~((pos & black & ~BK) << 1);
 
 			while (WRR) {
 
 				attacked |= WRR;
 
-				WRR = WRR << 1 & ~white & ~fileA & ~((WRR & black) << 1);
+				WRR = WRR << 1 & ~white & ~fileA & ~((WRR & black & ~BK) << 1);
 			}
 
-			bb WRD = pos << 8 & ~white & ~((pos & black) << 8);
+			bb WRD = pos << 8 & ~white & ~((pos & black & ~BK) << 8);
 
 			while (WRD) {
 
 				attacked |= WRD;
 
-				WRD = WRD << 8 & ~white & ~((WRD & black) << 8);
+				WRD = WRD << 8 & ~white & ~((WRD & black & ~BK) << 8);
 			}
 
 		}
 		else if (((WB >> i) & 1) == 1) {
 			bb pos = pow(2, i);
 
-			bb WBUR = pos >> 7 & ~fileA & ~white & ~((pos & black) >> 7);
+			bb WBUR = pos >> 7 & ~fileA & ~white & ~((pos & black & ~BK) >> 7);
 
 			while (WBUR) {
 
 				attacked |= WBUR;
 
-				WBUR = WBUR >> 7 & ~fileA & ~white & ~((WBUR & black) >> 7);
+				WBUR = WBUR >> 7 & ~fileA & ~white & ~((WBUR & black & ~BK) >> 7);
 
 			}
 
-			bb WBUL = pos >> 9 & ~fileH & ~white & ~((pos & black) >> 9);
+			bb WBUL = pos >> 9 & ~fileH & ~white & ~((pos & black & ~BK) >> 9);
 
 			while (WBUL) {
 
 				attacked |= WBUL;
 
-				WBUL = WBUL >> 9 & ~fileH & ~white & ~((WBUL & black) >> 9);
+				WBUL = WBUL >> 9 & ~fileH & ~white & ~((WBUL & black & ~BK) >> 9);
 
 			}
 
-			bb WBDL = pos << 7 & ~fileH & ~white & ~((pos & black) << 7);
+			bb WBDL = pos << 7 & ~fileH & ~white & ~((pos & black & ~BK) << 7);
 
 			while (WBDL) {
 
 
 				attacked |= WBDL;
 
-				WBDL = WBDL << 7 & ~fileH & ~white & ~((WBDL & black) << 7);
+				WBDL = WBDL << 7 & ~fileH & ~white & ~((WBDL & black & ~BK) << 7);
 
 			}
 
-			bb WBDR = pos << 9 & ~fileA & ~white & ~((pos & black) << 9);
+			bb WBDR = pos << 9 & ~fileA & ~white & ~((pos & black & ~BK) << 9);
 
 			while (WBDR) {
 
 
 				attacked |= WBDR;
 
-				WBDR = WBDR << 9 & ~fileA & ~white & ~((WBDR & black) << 9);
+				WBDR = WBDR << 9 & ~fileA & ~white & ~((WBDR & black & ~BK) << 9);
 
 			}
 		}
 		else if (((WQ >> i) & 1) == 1) {
 			bb pos = pow(2, i); //creates a bitboard of an individual white rook
-			bb QU = pos >> 8 & ~white & ~((pos & black) >> 8);
+			bb QU = pos >> 8 & ~white & ~((pos & black & ~BK) >> 8);
 
 			while (QU) {
 
 				attacked |= QU;
 
-				QU = QU >> 8 & ~white & ~((QU & black) >> 8);
+				QU = QU >> 8 & ~white & ~((QU & black & ~BK) >> 8);
 			}
 
 
 
-			bb QL = pos >> 1 & ~white & ~fileH & ~((pos & black) >> 1);
+			bb QL = pos >> 1 & ~white & ~fileH & ~((pos & black & ~BK) >> 1);
 
 			while (QL) {
 
 				attacked |= QL;
 
-				QL = QL >> 1 & ~white & ~fileH & ~((QL & black) >> 1);
+				QL = QL >> 1 & ~white & ~fileH & ~((QL & black & ~BK) >> 1);
 			}
 
 
 
-			bb QR = pos << 1 & ~white & ~fileA & ~((pos & black) << 1);
+			bb QR = pos << 1 & ~white & ~fileA & ~((pos & black & ~BK) << 1);
 
 			while (QR) {
 
 				attacked |= QR;
 
-				QR = QR << 1 & ~white & ~fileA & ~((QR & black) << 1);
+				QR = QR << 1 & ~white & ~fileA & ~((QR & black & ~BK) << 1);
 			}
 
-			bb QD = pos << 8 & ~white & ~((pos & black) << 8);
+			bb QD = pos << 8 & ~white & ~((pos & black & ~BK) << 8);
 
 
 
@@ -165,10 +167,10 @@ bb attackedByWhite(moveParams) {
 
 				attacked |= QD;
 
-				QD = QD << 8 & ~white & ~((QD & black) << 8);
+				QD = QD << 8 & ~white & ~((QD & black & ~BK) << 8);
 			}
 
-			bb QUR = pos >> 7 & ~fileA & ~white & ~((pos & black) >> 7);
+			bb QUR = pos >> 7 & ~fileA & ~white & ~((pos & black & ~BK) >> 7);
 
 
 
@@ -176,44 +178,44 @@ bb attackedByWhite(moveParams) {
 
 				attacked |= QUR;
 
-				QUR = QUR >> 7 & ~fileA & ~white & ~((QUR & black) >> 7);
+				QUR = QUR >> 7 & ~fileA & ~white & ~((QUR & black & ~BK) >> 7);
 
 			}
 
 
 
-			bb QUL = pos >> 9 & ~fileH & ~white & ~((pos & black) >> 9);
+			bb QUL = pos >> 9 & ~fileH & ~white & ~((pos & black & ~BK) >> 9);
 
 			while (QUL) {
 
 				attacked |= QUL;
 
-				QUL = QUL >> 9 & ~fileH & ~white & ~((QUL & black) >> 9);
+				QUL = QUL >> 9 & ~fileH & ~white & ~((QUL & black & ~BK) >> 9);
 
 			}
 
 
 
-			bb QDL = pos << 7 & ~fileH & ~white & ~((pos & black) << 7);
+			bb QDL = pos << 7 & ~fileH & ~white & ~((pos & black & ~BK) << 7);
 
 			while (QDL) {
 
 				attacked |= QDL;
 
-				QDL = QDL << 7 & ~fileH & ~white & ~((QDL & black) << 7);
+				QDL = QDL << 7 & ~fileH & ~white & ~((QDL & black & ~BK) << 7);
 
 			}
 
 
 
-			bb QDR = pos << 9 & ~fileA & ~white & ~((pos & black) << 9);
+			bb QDR = pos << 9 & ~fileA & ~white & ~((pos & black & ~BK) << 9);
 
 			while (QDR) {
 
 
 				attacked |= QDR;
 
-				QDR = QDR << 9 & ~fileA & ~white & ~((QDR & black) << 9);
+				QDR = QDR << 9 & ~fileA & ~white & ~((QDR & black & ~BK) << 9);
 			}
 		}
 	}
@@ -647,6 +649,235 @@ vector<bb> findPinnedPiecesWhite(moveParams, bb* checkers) {
 	if (i == 2) return pinned;
 
 	if (WK << 17 & ~fileA & BN) checkers[i] = WK << 17;
+
+	if (i == 0) checkers[0] = allSpots;
+
+	return pinned;
+}
+
+vector<bb> findPinnedPiecesBlack(moveParams, bb* checkers) {
+
+	vector<bb> pinned;
+
+	int count{};
+
+	int i{};
+
+	bb U = BK;
+	while (U != (U | U >> 8) && count <= 1) { //goes through to find a potential checker above the king
+
+		if ((U >> 8 & ~U) & black) ++count;
+
+		U |= U >> 8;
+		U = ~BK & U;           //nots the king (needed as pieces check if they can block the king by anding the checker line)
+		if (count == 2) break;
+		if (U & (WR | WQ)) {
+			if (count) pinned.push_back(U);
+			else {
+				checkers[i] = U;
+				++i;
+			}
+			break;
+		}
+		else if (U & white & ~(WR | WQ)) break;
+	}
+
+	count = 0;
+
+	bb R = BK;
+	while (R != (R | R << 1) && count <= 1 && (!(R & fileA) || R == BK)) {
+
+		if ((R << 1 & ~R) & black) ++count;
+
+		R |= R << 1;
+		R = ~BK & R;
+		if (count == 2) break;
+		if (R & (WR | WQ)) {
+			if (count) pinned.push_back(R);
+			else {
+				checkers[i] = R;
+				++i;
+			}
+			break;
+		}
+		else if (R & white & ~(WR | WQ)) break;
+	}
+
+	count = 0;
+
+	bb D = BK;
+	while (D != (D | D << 8) && count <= 1) {
+
+		if ((D << 8 & ~D) & black) ++count;
+
+		D |= D << 8;
+		D = ~BK & D;
+		if (count == 2) break;
+		if (D & (WR | WQ)) {
+			if (count) pinned.push_back(D);
+			else {
+				checkers[i] = D;
+				++i;
+			}
+			break;
+		}
+		else if (D & white & ~(WR | WQ)) break;
+	}
+
+	count = 0;
+
+	bb L = BK;
+	while (L != (L | L >> 1) && count <= 1 && (!(L & fileH) || L == BK)) {
+
+		if ((L >> 1 & ~L) & black) ++count;
+
+		L |= L >> 1;
+		L = ~BK & L;
+		if (count == 2) break;
+		if (L & (WR | WQ)) {
+			if (count) pinned.push_back(L);
+			else {
+				checkers[i] = L;
+				++i;
+			}
+			break;
+		}
+		else if (L & white & ~(WR | WQ)) break;
+	}
+
+	count = 0;
+
+	bb UR = BK;
+	while (UR != (UR | UR >> 7) && count <= 1 && (!(UR & fileA) || UR == BK)) {
+
+		if ((UR >> 7 & ~UR) & black) ++count;
+
+		UR |= UR >> 7;
+		UR = ~BK & UR;
+		if (count == 2) break;
+		if (UR & (WB | WQ)) {
+			if (count) pinned.push_back(UR);
+			else {
+				checkers[i] = UR;
+				++i;
+			}
+			break;
+		}
+		else if (UR & white & ~(WB | WQ)) break;
+	}
+
+	count = 0;
+
+	bb DR = BK;
+	while (DR != (DR | DR << 9) && count <= 1 && (!(DR & fileA) || DR == BK)) {
+
+		if ((DR << 9 & ~DR) & black) ++count;
+
+		DR |= DR << 9;
+		DR = ~BK & DR;
+		if (count == 2) break;
+		if (DR & (WB | WQ)) {
+			if (count) pinned.push_back(DR);
+			else {
+				checkers[i] = DR;
+				++i;
+			}
+			break;
+		}
+		else if (DR & white & ~(WB | WQ)) break;
+	}
+
+	count = 0;
+
+	bb DL = BK;
+	while (DL != (DL | DL << 7) && count <= 1 && (!(DL & fileH) || DL == BK)) {
+
+		if ((DL << 7 & ~DL) & black) ++count;
+
+		DL |= DL << 7;
+		DL = ~BK & DL;
+		if (count == 2) break;
+		if (DL & (WB | WQ)) {
+			if (count) pinned.push_back(DL);
+			else {
+				checkers[i] = DL;
+				++i;
+			}
+			break;
+		}
+		else if (DL & white & ~(WB | WQ)) break;
+	}
+
+	count = 0;
+
+	bb UL = BK;
+	while (UL != (UL | UL >> 9) && count <= 1 && (!(UL & fileH) || UL == BK)) {
+
+		if ((UL >> 9 & ~UL) & black) ++count;
+
+		UL |= UL >> 9;
+		UL = ~BK & UL;
+		if (count == 2) break;
+		if (UL & (WB | WQ)) {
+			if (count) pinned.push_back(UL);
+			else {
+				checkers[i] = UL;
+				++i;
+			}
+			break;
+		}
+		else if (UL & white & ~(WB | WQ)) break;
+	}
+
+	count = 0;
+
+	if (BK << 9 & WP) { //checks for pawns using a simple if statement
+		checkers[i] = BK << 9;
+	}
+
+	if (i == 2) return pinned;
+
+	if (BK << 7 & WP) {
+		checkers[i] = BK << 7;
+	}
+
+	if (i == 2) return pinned;
+
+	//manually checks all possible knight checks
+
+
+
+	if (BK >> 6 & WN & ~fileA & ~fileB) checkers[i] = BK >> 6;
+
+	if (i == 2) return pinned;
+
+	if (BK >> 10 & WN & ~fileG & ~fileH) checkers[i] = BK >> 10;
+
+	if (i == 2) return pinned;
+
+	if (BK >> 15 & WN & ~fileA) checkers[i] = BK >> 15;
+
+	if (i == 2) return pinned;
+
+	if (BK >> 17 & WN & ~fileH) checkers[i] = BK >> 17;
+
+	if (i == 2) return pinned;
+
+	if (BK << 6 & WN & ~fileH & ~fileG) checkers[i] = BK << 6;
+
+	if (i == 2) return pinned;
+
+	if (BK << 10 & ~fileA & ~fileB & WN) checkers[i] = BK << 10;
+
+	if (i == 2) return pinned;
+
+	if (BK << 15 & ~fileH & WN) checkers[i] = BK << 15;
+
+	if (i == 2) return pinned;
+
+	if (BK << 17 & ~fileA & WN) checkers[i] = BK << 17;
+
+	if (i == 0) checkers[0] = allSpots;
 
 	return pinned;
 }

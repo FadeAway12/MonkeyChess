@@ -23,14 +23,14 @@ extern std::string wBishopMoves(moveParams, bb* checkers, std::vector<bb> pinned
 
 extern std::string wQueenMoves(moveParams, bb* checkers, std::vector<bb> pinned);
 
-extern std::string bPawnMoves(moveParams, std::string lastMove);
+extern std::string bPawnMoves(moveParams, std::string lastMove, bb* checkers, std::vector<bb> pinned);
 
-extern std::string bKnightMoves(moveParams);
+extern std::string bKnightMoves(moveParams, bb* checkers, std::vector<bb> pinned);
 
-extern std::string bKingMoves(moveParams, bb*);
+extern std::string bKingMoves(moveParams, bb*, bb* checkers, std::vector<bb> pinned);
 
-extern std::string bRookMoves(moveParams);
+extern std::string bRookMoves(moveParams, bb* checkers, std::vector<bb> pinned);
 
-extern std::string bBishopMoves(moveParams);
+extern std::string bBishopMoves(moveParams, bb* checkers, std::vector<bb> pinned);
 
-extern std::string bQueenMoves(moveParams);
+extern std::string bQueenMoves(moveParams, bb* checkers, std::vector<bb> pinned);

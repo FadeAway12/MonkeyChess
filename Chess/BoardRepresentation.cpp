@@ -90,16 +90,17 @@ char board[8][8] = { //used for convenient viewing of the board's representation
 
 //Test board
 
+
 char board[8][8] = {
 	//0   1   2   3   4   5   6   7
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //0
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //1
-	{' ',' ',' ',' ','r',' ',' ',' '},  //2
+	{' ',' ',' ',' ','R',' ',' ',' '},  //2
 	{' ',' ',' ',' ',' ',' ',' ',' '},  //3
-	{' ',' ',' ',' ',' ',' ',' ',' '},  //4
+	{' ',' ',' ','r',' ',' ',' ',' '},  //4
 	{' ',' ',' ',' ',' ',' ',' ',' '} , //5
-	{'r',' ',' ',' ',' ',' ',' ',' '}, //6
-	{'r',' ',' ',' ','K',' ',' ',' '}  //7
+	{' ',' ',' ',' ',' ',' ',' ',' '}, //6
+	{' ',' ',' ',' ','k',' ','K',' '}  //7
 };
 
 
@@ -235,10 +236,10 @@ int main() {
 
 	//functionTime();
 
-	string s = getWLegalMoves(listOfBoardParamsAndOthers, "p1131", true, true);
+	string s = getBLegalMoves(listOfBoardParamsAndOthers, "", true, true);
 
 	printBoard();
-
+	
 	cout << rawToString(s, board);
 
 }
