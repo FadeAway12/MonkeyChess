@@ -450,7 +450,7 @@ bb* findCheckerWhite(moveParams) { //finds black piece(s) checking white king
 	}
 
 	bb R = WK;
-	while (R != (R | R << 1)) {
+	while (R != (R | R << 1) && (!(R & fileA) || R == WK)) { //check over this later
 		R |= R << 1;
 		R = ~WK & R;
 		if (R & (BR | BQ)) {
@@ -481,16 +481,16 @@ bb* findCheckerWhite(moveParams) { //finds black piece(s) checking white king
 
 	if (i == 2) return checkers;
 
-	bb E = WK;
-	while (E != (E | E >> 1)) {
-		E |= E >> 1;
-		E = ~WK & E;
-		if (E & (BR | BQ)) {
-			checkers[i] = E;
+	bb L = WK;
+	while (L != (L | L >> 1) && (!(L & fileH) || L == WK)) { //check over this later
+		L |= L >> 1;
+		L = ~WK & L;
+		if (L & (BR | BQ)) {
+			checkers[i] = L;
 			++i;
 			break;
 		}
-		if (E & ~emptySquare & ~(BR | BQ)) {
+		if (L & ~emptySquare & ~(BR | BQ)) {
 			break;
 		}
 	}
@@ -498,7 +498,7 @@ bb* findCheckerWhite(moveParams) { //finds black piece(s) checking white king
 	if (i == 2) return checkers;
 
 	bb UR = WK;
-	while (UR != (UR | UR >> 7)) {
+	while (UR != (UR | UR >> 7) && (!(UR & fileA) || UR == WK)) { //check over this later
 		UR |= UR >> 7;
 		UR = ~WK & UR;
 		if (UR & (BB | BQ)) {
@@ -514,7 +514,7 @@ bb* findCheckerWhite(moveParams) { //finds black piece(s) checking white king
 	if (i == 2) return checkers;
 
 	bb DR = WK;
-	while (DR != (DR | DR << 9)) {
+	while (DR != (DR | DR << 9) && (!(DR & fileA) || DR == WK)) { //check over this later
 		DR |= DR << 9;
 		DR = ~WK & DR;
 		if (DR & (BB | BQ)) {
@@ -530,7 +530,7 @@ bb* findCheckerWhite(moveParams) { //finds black piece(s) checking white king
 	if (i == 2) return checkers;
 
 	bb DL = WK;
-	while (DL != (DL | DL << 7)) {
+	while (DL != (DL | DL << 7) && (!(DL & fileH) || DL == WK)) { //check over this later
 		DL |= DL << 7;
 		if (DL & (BB | BQ)) {
 			checkers[i] = DR;
@@ -545,7 +545,7 @@ bb* findCheckerWhite(moveParams) { //finds black piece(s) checking white king
 	if (i == 2) return checkers;
 	
 	bb UL = WK;
-	while (UL != (UL | UL >> 9)) {
+	while (UL != (UL | UL >> 9) && (!(UL & fileH) || UL == WK)) { //check over this later
 		UL |= UL >> 9;
 		UL = ~WK & UL;
 		if (UL & (BB | BQ)) {
@@ -609,11 +609,13 @@ bb* findCheckerWhite(moveParams) { //finds black piece(s) checking white king
 	return checkers;
 }
 
-vector<bb> findPinnedPiecesWhite(moveParams) {
-
+vector<bb> findPinnedPiecesWhite(moveParams, bb* checkers) {
+	
 	vector<bb> pinned;
 
 	int count{};
+
+	int i{};
 
 	bb U = WK;
 	while (U != (U | U >> 8) && count<=1) { //goes through to find a potential checker above the king
@@ -623,10 +625,212 @@ vector<bb> findPinnedPiecesWhite(moveParams) {
 		U |= U >> 8;
 		U = ~WK & U;           //nots the king (needed as pieces check if they can block the king by anding the checker line)
 		if (count == 2) break;
-		if (U & (BR | BQ) && count) pinned.push_back(U);
+		if (U & (BR | BQ)) {
+			if (count) pinned.push_back(U);
+			else {
+				checkers[i] = U;
+				++i;
+			}
+			break;
+		}
 		else if (U & black & ~(BR | BQ)) break;
 	}
 	
+	count = 0;
+
+	bb R = WK;
+	while (R != (R | R << 1) && count <= 1 && (!(R & fileA) || R == WK)) {
+
+		if ((R << 1 & ~R) & white) ++count;
+
+		R |= R << 1;
+		R = ~WK & R;        
+		if (count == 2) break;
+		if (R & (BR | BQ)) {
+			if (count) pinned.push_back(R);
+			else {
+				checkers[i] = R;
+				++i;
+			}
+			break;
+		}
+		else if (R & black & ~(BR | BQ)) break;
+	}
+
+	count = 0;
+
+	bb D = WK;
+	while (D != (D | D << 8) && count <= 1) {
+
+		if ((D << 8 & ~D) & white) ++count;
+
+		D |= D << 8;
+		D = ~WK & D;
+		if (count == 2) break;
+		if (D & (BR | BQ)) {
+			if (count) pinned.push_back(D);
+			else {
+				checkers[i] = D;
+				++i;
+			}
+			break;
+		}
+		else if (D & black & ~(BR | BQ)) break;
+	}
+
+	count = 0;
+
+	bb L = WK;
+	while (L != (L | L >> 1) && count <= 1 && (!(L & fileH) || L == WK)) {
+
+		if ((L >> 1 & ~L) & white) ++count;
+
+		L |= L >> 1;
+		L = ~WK & L;
+		if (count == 2) break;
+		if (L & (BR | BQ)) {
+			if (count) pinned.push_back(L);
+			else {
+				checkers[i] = L;
+				++i;
+			}
+			break;
+		}
+		else if (L & black & ~(BR | BQ)) break;
+	}
+
+	count = 0;
+
+	bb UR = WK;
+	while (UR != (UR | UR >> 7) && count <= 1 && (!(UR & fileA) || UR == WK)) {
+
+		if ((UR >> 7 & ~UR) & white) ++count;
+
+		UR |= UR >> 7;
+		UR = ~WK & UR;
+		if (count == 2) break;
+		if (UR & (BB | BQ)) {
+			if (count) pinned.push_back(UR);
+			else {
+				checkers[i] = UR;
+				++i;
+			}
+			break;
+		}
+		else if (UR & black & ~(BB | BQ)) break;
+	}
+
+	count = 0;
+
+	bb DR = WK;
+	while (DR != (DR | DR << 9) && count <= 1 && (!(DR & fileA) || DR == WK)) {
+
+		if ((DR << 9 & ~DR) & white) ++count;
+
+		DR |= DR << 9;
+		DR = ~WK & DR;
+		if (count == 2) break;
+		if (DR & (BB | BQ)) {
+			if (count) pinned.push_back(DR);
+			else {
+				checkers[i] = DR;
+				++i;
+			}
+			break;
+		}
+		else if (DR & black & ~(BB | BQ)) break;
+	}
+
+	count = 0;
+
+	bb DL = WK;
+	while (DL != (DL | DL << 7) && count <= 1 && (!(DL & fileH) || DL == WK)) {
+
+		if ((DL << 7 & ~DL) & white) ++count;
+
+		DL |= DL << 7;
+		DL = ~WK & DL;
+		if (count == 2) break;
+		if (DL & (BB | BQ)) {
+			if (count) pinned.push_back(DL);
+			else {
+				checkers[i] = DL;
+				++i;
+			}
+			break;
+		}
+		else if (DL & black & ~(BB | BQ)) break;
+	}
+
+	count = 0;
+
+	bb UL = WK;
+	while (UL != (UL | UL >> 9) && count <= 1 && (!(UL & fileH) || UL == WK)) {
+
+		if ((UL >> 9 & ~UL) & white) ++count;
+
+		UL |= UL >> 9;
+		UL = ~WK & UL;
+		if (count == 2) break;
+		if (UL & (BB | BQ)) {
+			if (count) pinned.push_back(UL);
+			else {
+				checkers[i] = UL;
+				++i;
+			}
+			break;
+		}
+		else if (UL & black & ~(BB | BQ)) break;
+	}
+
+	count = 0;
+
+	if (WK >> 9 & BP) { //checks for pawns using a simple if statement
+		checkers[i] = WK >> 9;
+	}
+
+	if (i == 2) return pinned;
+
+	if (WK >> 7 & BP) {
+		checkers[i] = WK >> 7;
+	}
+
+	if (i == 2) return pinned;
+
+	//manually checks all possible knight checks
+
+
+
+	if (WK >> 6 & BN & ~fileA & ~fileB) checkers[i] = WK >> 6;
+
+	if (i == 2) return pinned;
+
+	if (WK >> 10 & BN & ~fileG & ~fileH) checkers[i] = WK >> 10;
+
+	if (i == 2) return pinned;
+
+	if (WK >> 15 & BN & ~fileA) checkers[i] = WK >> 15;
+
+	if (i == 2) return pinned;
+
+	if (WK >> 17 & BN & ~fileH) checkers[i] = WK >> 17;
+
+	if (i == 2) return pinned;
+
+	if (WK << 6 & BN & ~fileH & ~fileG) checkers[i] = WK << 6;
+
+	if (i == 2) return pinned;
+
+	if (WK << 10 & ~fileA & ~fileB & BN) checkers[i] = WK << 10;
+
+	if (i == 2) return pinned;
+
+	if (WK << 15 & ~fileH & BN) checkers[i] = WK << 15;
+
+	if (i == 2) return pinned;
+
+	if (WK << 17 & ~fileA & BN) checkers[i] = WK << 17;
+
 	return pinned;
 }
 
