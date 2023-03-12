@@ -75,7 +75,7 @@ string getBLegalMoves(moveParams, string lastMove, bool canLC, bool canSC) {
 	if (inCheck) {
 
 		if (check[1] != 0) { //in a double check, only the king can move, so we only search possible king moves
-			return wKingMoves(listOfBoardParamsAndOthers, whiteAttack, check, pinned);
+			return bKingMoves(listOfBoardParamsAndOthers, whiteAttack, check, pinned);
 		}
 
 	}
@@ -94,6 +94,8 @@ string getBLegalMoves(moveParams, string lastMove, bool canLC, bool canSC) {
 
 	return moves;
 }
+
+//helper methods
 
 string wPawnMoves(moveParams, string lastMove, bb* checkers, vector<bb> pinned) {
 

@@ -428,6 +428,10 @@ bb attackedByBlack(moveParams) {
 	return attacked;
 }
 
+/*NOTE:
+You DO NOT NEED TO NOT THE KING IN THIS METHOD. Remove later
+*/
+
 vector<bb> findPinnedPiecesWhite(moveParams, bb* checkers) {
 	
 	vector<bb> pinned;
@@ -437,9 +441,10 @@ vector<bb> findPinnedPiecesWhite(moveParams, bb* checkers) {
 	int i{};
 
 	bb U = WK;
-	while (U != (U | U >> 8) && count<=1) { //goes through to find a potential checker above the king
+	while (U != (U | U >> 8) && count<=1) { //will quit if U is same as U ord with Ushifted up 8. 
+		//this is because if they are equal, it is off the board and this prevents an inf loop
 		
-		if ((U >> 8 & ~U) & white) ++count;
+		if ((U >> 8 & ~U) & white) ++count; //if it hits a white piece, increase the count
 		
 		U |= U >> 8;
 		U = ~WK & U;           //nots the king (needed as pieces check if they can block the king by anding the checker line)
@@ -956,7 +961,7 @@ void functionTime() {
 
 	auto end = high_resolution_clock::now();
 
-	auto duration = duration_cast<microseconds>(end - start);
+	auto duration = duration_cast<nanoseconds>(end - start);
 
 	cout << duration.count() << endl;
 

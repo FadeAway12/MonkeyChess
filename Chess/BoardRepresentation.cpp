@@ -35,6 +35,8 @@ bool whiteLongCastle{ true }; //checks if white king or queenside rook has moved
 bool blackShortCastle{ true }; //checks if black king or kingside rook move
 bool blackLongCastle{ true }; //checks if black king or queenside rook moved
 
+//making bitboards for each piece that'll represent the current state of the board
+
 bb WP;
 bb WR;
 bb WN;
@@ -49,9 +51,13 @@ bb BB;
 bb BQ;
 bb BK;
 
+//self-explanatory. used for convenience in legal move generation
+
 bb black;
 bb white;
 bb emptySquare;
+
+//used in legal move generation
 
 bb fileA{ 0b00000001'00000001'00000001'00000001'00000001'00000001'00000001'00000001 };
 bb fileB{ fileA << 1 };
@@ -73,7 +79,7 @@ bb rank1{ rank2 << 8 };
 
 //Real board
 
-/*
+
 char board[8][8] = { //used for convenient viewing of the board's representation
 
 	{'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}, //0
@@ -85,23 +91,23 @@ char board[8][8] = { //used for convenient viewing of the board's representation
 	{'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'}, //6
 	{'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}  //7
 
-};*/
+};
 
 
 //Test board
 
-
+/*
 char board[8][8] = {
 	//0   1   2   3   4   5   6   7
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //0
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //1
-	{' ',' ',' ',' ','R',' ',' ',' '},  //2
+	{' ',' ',' ',' ',' ',' ',' ',' '},  //2
 	{' ',' ',' ',' ',' ',' ',' ',' '},  //3
-	{' ',' ',' ','r',' ',' ',' ',' '},  //4
+	{' ',' ',' ',' ','P','p',' ',' '},  //4
 	{' ',' ',' ',' ',' ',' ',' ',' '} , //5
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //6
-	{' ',' ',' ',' ','k',' ','K',' '}  //7
-};
+	{' ',' ',' ',' ',' ',' ',' ',' '}  //7
+};*/
 
 
 
@@ -131,11 +137,11 @@ void arrayToBitBoard(char board[8][8], bb& WP, bb& WR, bb& WN, bb& WB, bb& WQ, b
 
 		}
 
-		mask *= 0b10;
+		mask *= 0b10; //multiplying by two in binary will move the bit left one space.
 
 	}
 
-	setOtherBBs(listOfBoardParamsAndOthers);
+	setOtherBBs(listOfBoardParamsAndOthers); //sets the black, white and empty bitboards
 
 }
 
@@ -179,7 +185,7 @@ void bitboardToArray() {
 void printBoard() {
 	cout << "  A B C D E F G H" << endl;
 	for (int i = 0; i < 8; i++) {
-		cout << i;
+		cout << 8-i;
 		cout << " ";
 		for (int j = 0; j < 8; j++) {
 			std::cout <<board[i][j] << " ";
@@ -188,13 +194,13 @@ void printBoard() {
 	}
 }
 
-void setOtherBBs(constListOfBoardParamsAndOthers) {
+void setOtherBBs(constListOfBoardParamsAndOthers) { //sets empty, black and white based off bitboards
 	emptySquare = ~(WP | WR | WN | WB | WQ | WK | BP | BR | BN | BB | BQ | BK);
 	black = BP | BR | BN | BB | BQ | BK;
 	white = WP | WR | WN | WB | WQ | WK;
 }
 
-string rawToString(string s, char board[8][8]) {
+string rawToString(string s, char board[8][8]) { //converts raw notation (like 2346) to normal notation
 	
 	istringstream is{ s };
 
@@ -211,16 +217,16 @@ string rawToString(string s, char board[8][8]) {
 
 		if (move.size() < 4) continue;
 		
-		char rowF = move[0];
+		int rowF = move[0];
 		char colF = move[1];
 		
-		char rowT = move[2];
+		int rowT = 8-(move[2]-'0');
 		char colT = move[3];
 
 		char piece = board[rowF-'0'][colF-'0'];
 
-		if (piece == 'P' or piece == 'p') final = final + alph2[(int)colT - '0'] + rowT + " ";
-		else final = final + piece + alph2[colT - '0'] + rowT + " ";
+		if (piece == 'P' or piece == 'p') final = final + alph2[(int)colT - '0'] + to_string(rowT) + " ";
+		else final = final + piece + alph2[colT - '0'] + to_string(rowT) + " ";
 		 
 		
 	}
@@ -228,15 +234,16 @@ string rawToString(string s, char board[8][8]) {
 
 }
 
+
 int main() {
 
 	arrayToBitBoard();
 
 	bitboardToArray();
 
-	//functionTime();
+	functionTime();
 
-	string s = getBLegalMoves(listOfBoardParamsAndOthers, "", true, true);
+	string s = getBLegalMoves(listOfBoardParamsAndOthers, "P6444", true, true);
 
 	printBoard();
 	
