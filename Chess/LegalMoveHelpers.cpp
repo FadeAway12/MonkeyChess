@@ -961,12 +961,11 @@ void functionTime() {
 
 	//getWLegalMoves(listOfBoardParamsAndOthers, "", 1, 1);
 
-	executeMove("6444", "W", listOfBoardParamsAndOthers, whiteLongCastle, whiteShortCastle,
-		blackLongCastle, blackShortCastle);
+	getWLegalMoves(listOfBoardParamsAndOthers, "", 1, 1);
 
 	auto end = high_resolution_clock::now();
 
-	auto duration = duration_cast<nanoseconds>(end - start);
+	auto duration = duration_cast<microseconds>(end - start);
 
 	cout << duration.count() << endl;
 

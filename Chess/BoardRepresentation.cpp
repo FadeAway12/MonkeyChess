@@ -31,6 +31,8 @@ constListOfBoardParamsAndOthers const bb& WP, const bb& WR, const bb& WN, const 
 
 */
 
+
+
 bool whiteShortCastle{ true }; //checks if white king or kingside rook has moved
 bool whiteLongCastle{ true }; //checks if white king or queenside rook has moved
 bool blackShortCastle{ true }; //checks if black king or kingside rook move
@@ -80,9 +82,21 @@ bb rank3{ rank4 << 8 };
 bb rank2{ rank3 << 8 };
 bb rank1{ rank2 << 8 };
 
+bb* positions = new bb[64];
+
+void meth() {
+	positions[0] = 0b00000000'00000000'00000000'00000000'00000000'00000000'00000000'00000001;
+	bb* x = &positions[0];
+	for (int i = 0; i < 64; i++) {
+		bb k = *x;
+		k << i;
+		++x;
+	}
+}
+
 //Real board
 
-
+/*
 char board[8][8] = { //used for convenient viewing of the board's representation
 	//0    1    2    3    4    5    6    7
 	{'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}, //0
@@ -94,24 +108,24 @@ char board[8][8] = { //used for convenient viewing of the board's representation
 	{'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'}, //6
 	{'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}  //7
 	
-};
+};*/
 
 
 //Test board
 
-/*
+
 char board[8][8] = {
 	//0   1   2   3   4   5   6   7
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //0
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //1
-	{' ',' ',' ','r',' ',' ',' ',' '},  //2
+	{' ',' ',' ',' ',' ',' ',' ',' '},  //2
 	{' ',' ',' ',' ',' ',' ',' ',' '},  //3
 	{' ',' ',' ',' ',' ',' ','k',' '},  //4
-	{' ',' ',' ',' ',' ','R',' ',' '} , //5
+	{' ',' ',' ',' ',' ',' ',' ',' '} , //5
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //6
 	{' ',' ',' ','K',' ',' ',' ',' '}  //7
 };
-*/
+
 
 
 void arrayToBitBoard(char board[8][8], bb& WP, bb& WR, bb& WN, bb& WB, bb& WQ, bb& WK, bb& BP, bb& BR, bb& BN, bb& BB, bb& BQ, bb& BK) {

@@ -2,6 +2,7 @@
 
 #include <bitset>
 #include <iostream>
+#include <vector>
 #include <sstream>
 
 #define bb std::uint64_t
@@ -20,12 +21,47 @@
 
 #define constListOfBoardParamsAndOthers const bb& WP, const bb& WR, const bb& WN, const bb& WB, const bb& WQ, const bb& WK, const bb& BP, const bb& BR, const bb& BN, const bb& BB, const bb& BQ, const bb& BK, bb& emptySquare, bb& black, bb& white
 
+#ifndef RepetitionVecThingy222
+#define RepetitionVecThingy222
+
+struct Repetition { //MAKE SURE TO ADD COPY ASSIGNMENT/CONSTRUCTION LATER FOR BEING PASSED THROUGH MINIMAX
+	std::string moves;
+	int num;
+	Repetition(std::string m, int n) : moves(m), num(n) { }
+};
+
+struct RepetitionVector { //MAKE SURE TO ADD COPY ASSIGNMENT/CONSTRUCTION LATER FOR BEING PASSED THROUGH MINIMAX
+
+	std::vector<Repetition> repetitions;
+	bool update(std::string moves) { //returns true if threefold draw repitition is met
+		
+		bool found{};
+		for (int i = 0; i < repetitions.size(); i++) {
+			if (repetitions[i].moves == moves) {
+				repetitions[i].num++;
+				found = true;
+			}
+			
+			if (repetitions[i].num >= 3) return true;
+		}
+		if (!found) {
+			repetitions.push_back(Repetition(moves, 1));
+		}
+		return false;
+	}
+
+};
+
+
+
+#endif
+
 extern bool whiteShortCastle;
 extern bool whiteLongCastle;
 extern bool blackShortCastle;
 extern bool blackLongCastle;
 
-extern int numsTilDraw;
+extern int numsTilDraw; //if over 50, game is a draw. increment if executeMove returns true
 
 extern bb WP;
 extern bb WR;

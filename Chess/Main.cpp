@@ -14,6 +14,8 @@ int main() {
 
 	bitboardToArray();
 
+	functionTime();
+
 	startGame(cin);
 
 	printBoard();
@@ -31,13 +33,28 @@ int main() {
 }
 
 void startGame(istream& is) {
+
+	RepetitionVector vWhite;
+	RepetitionVector vBlack;
+	
 	numsTilDraw = 0;
-	int moveNum{0};
+	int moveNum{};
 	string lastMove{};
+	
 	while (true) {
+
+		string s = getWLegalMoves(listOfBoardParamsAndOthers, "P6444", true, true);
+		cout << endl << "WHITE: " << rawToString(s, board) << endl;
+		s = getBLegalMoves(listOfBoardParamsAndOthers, "P6444", true, true);
+		cout << "BLACK: " << rawToString(s, board) << endl;
+		cout << endl << "EVAL: " << evaluation(listOfBoardParamsAndOthers) << endl;
+
 		string move{};
 		bitboardToArray();
 		printBoardRaw();
+		cout << endl;
+		printBoard();
+		
 		if (moveNum % 2 == 0) { //whites turn
 			moveNum++;
 			while (!isLegal(listOfBoardParamsAndOthers, move, lastMove, "W", whiteShortCastle, whiteLongCastle, blackShortCastle, blackLongCastle)) {
@@ -46,7 +63,12 @@ void startGame(istream& is) {
 			lastMove = move;
 			if (executeMove(move, "W", listOfBoardParamsAndOthers, whiteLongCastle, whiteShortCastle,
 				blackLongCastle, blackShortCastle)) ++numsTilDraw;
+			else numsTilDraw = 0;
+			if (vWhite.update(getBLegalMoves(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle))) {
+				break;
+			}
 		}
+		
 		else { //blacks turn
 			moveNum++;
 			while (!isLegal(listOfBoardParamsAndOthers, move, lastMove, "B", whiteShortCastle, whiteLongCastle, blackShortCastle, blackLongCastle)) {
@@ -55,6 +77,14 @@ void startGame(istream& is) {
 			lastMove = move;
 			if (executeMove(move, "B", listOfBoardParamsAndOthers, whiteLongCastle, whiteShortCastle,
 				blackLongCastle, blackShortCastle)) ++numsTilDraw;
+			else numsTilDraw = 0;
+			if (vBlack.update(getBLegalMoves(listOfBoardParamsAndOthers, lastMove, blackLongCastle, blackShortCastle))) {
+				break;
+			}
+			
 		}
+	
+		if (numsTilDraw >= 50) break;
+	
 	}
 }
