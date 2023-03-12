@@ -20,6 +20,13 @@
 
 #define constListOfBoardParamsAndOthers const bb& WP, const bb& WR, const bb& WN, const bb& WB, const bb& WQ, const bb& WK, const bb& BP, const bb& BR, const bb& BN, const bb& BB, const bb& BQ, const bb& BK, bb& emptySquare, bb& black, bb& white
 
+extern bool whiteShortCastle;
+extern bool whiteLongCastle;
+extern bool blackShortCastle;
+extern bool blackLongCastle;
+
+extern int numsTilDraw;
+
 extern bb WP;
 extern bb WR;
 extern bb WN;
@@ -69,3 +76,7 @@ extern void bitboardToArray();
 extern void setOtherBBs(constListOfBoardParamsAndOthers);
 
 extern void printBoard();
+
+extern void printBoardRaw();
+
+extern std::string rawToString(std::string s, char board[8][8]);

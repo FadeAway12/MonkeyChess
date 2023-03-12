@@ -24,6 +24,18 @@
     <ClCompile Include="LegalMoveHelpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MoveExecution.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Evaluation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Search.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoardRepresentation.h">
@@ -35,9 +47,18 @@
     <ClInclude Include="LegalMoveHelpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MoveExecution.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Evaluation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="FormerlyUsedMethods.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="FormerLegalMoves.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

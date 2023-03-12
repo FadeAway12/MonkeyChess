@@ -7,6 +7,7 @@
 #include "BoardRepresentation.h"
 #include "LegalMoveHelpers.h"
 #include "LegalMoves.h"
+#include "MoveExecution.h"
 
 using namespace std;
 using namespace chrono;
@@ -916,29 +917,30 @@ void addCastlingMovesWhite(moveParams, bb* attackedB, string& moves, bool SC, bo
 }
 
 void addCastlingMovesBlack(moveParams, bb* attackedW, string& moves, bool SC, bool LC, bool inCheck) {
+	
+	constexpr bb kingPos{  0b0000000000000000000000000000000000000000000000000000000000010000 }; //2^4. pow isnt constexpr so cant use
+	constexpr bb kingBis{  0b0000000000000000000000000000000000000000000000000000000000100000 }; //2^3
+	constexpr bb kingKni{  0b0000000000000000000000000000000000000000000000000000000001000000 };
+	constexpr bb kingRook{ 0b0000000000000000000000000000000000000000000000000000000100000000 };
 
-	constexpr bb kingPos{ (int)16 }; //2^4. pow isnt constexpr so cant use
-	constexpr bb kingBis{ (int)32}; //2^3
-	constexpr bb kingKni{ (int)64};
-	constexpr bb kingRook{ (int)128};
-
-	constexpr bb queenPos{ (int)4 };
-	constexpr bb queenBis{ (int)2};
-	constexpr bb queenKni{ (int)1};
-	constexpr bb queenRook(0);
+	constexpr bb queenPos{ 0b0000000000000000000000000000000000000000000000000000000000001000 };
+	constexpr bb queenBis{ 0b0000000000000000000000000000000000000000000000000000000000000100 };
+	constexpr bb queenKni{ 0b0000000000000000000000000000000000000000000000000000000000000010 };
+	constexpr bb queenRook(0b0000000000000000000000000000000000000000000000000000000000000001);
 
 	//50 is natural king position at start of game
 
 	if (inCheck) return;
 
 	if (SC && (BK & kingPos && emptySquare & kingBis && emptySquare & kingKni && BR & kingRook)) {
-		if (*attackedW & kingBis || *attackedW & kingKni) {
+		if (!(*attackedW & kingBis || *attackedW & kingKni)) {
 			moves += " O-O ";
 		}
 	}
+
 	if (LC && BK & kingPos && emptySquare & queenPos && emptySquare & queenBis
 		&& emptySquare & queenKni && BR & queenRook) {
-		if (*attackedW & queenPos || *attackedW & queenBis || *attackedW & queenKni) {
+		if (!(*attackedW & queenPos || *attackedW & queenBis || *attackedW & queenKni)) {
 			moves += " O-O-O ";
 		}
 	}
@@ -957,7 +959,10 @@ void functionTime() {
 
 	auto start = high_resolution_clock::now();
 
-	getWLegalMoves(listOfBoardParamsAndOthers, "", 1, 1);
+	//getWLegalMoves(listOfBoardParamsAndOthers, "", 1, 1);
+
+	executeMove("6444", "W", listOfBoardParamsAndOthers, whiteLongCastle, whiteShortCastle,
+		blackLongCastle, blackShortCastle);
 
 	auto end = high_resolution_clock::now();
 

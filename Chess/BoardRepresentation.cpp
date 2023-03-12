@@ -5,6 +5,7 @@
 #include "BoardRepresentation.h"
 #include "LegalMoves.h"
 #include "LegalMoveHelpers.h"
+#include "MoveExecution.h"
 
 using namespace std;
 
@@ -36,6 +37,8 @@ bool blackShortCastle{ true }; //checks if black king or kingside rook move
 bool blackLongCastle{ true }; //checks if black king or queenside rook moved
 
 //making bitboards for each piece that'll represent the current state of the board
+
+int numsTilDraw;
 
 bb WP;
 bb WR;
@@ -81,7 +84,7 @@ bb rank1{ rank2 << 8 };
 
 
 char board[8][8] = { //used for convenient viewing of the board's representation
-
+	//0    1    2    3    4    5    6    7
 	{'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}, //0
 	{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'}, //1
 	{' ', ' ', ' ', ' ', ' ',' ', ' ', ' '},  //2
@@ -90,7 +93,7 @@ char board[8][8] = { //used for convenient viewing of the board's representation
 	{' ', ' ', ' ', ' ', ' ',' ', ' ', ' '} , //5
 	{'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'}, //6
 	{'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}  //7
-
+	
 };
 
 
@@ -101,14 +104,14 @@ char board[8][8] = {
 	//0   1   2   3   4   5   6   7
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //0
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //1
-	{' ',' ',' ',' ',' ',' ',' ',' '},  //2
+	{' ',' ',' ','r',' ',' ',' ',' '},  //2
 	{' ',' ',' ',' ',' ',' ',' ',' '},  //3
-	{' ',' ',' ',' ','P','p',' ',' '},  //4
-	{' ',' ',' ',' ',' ',' ',' ',' '} , //5
+	{' ',' ',' ',' ',' ',' ','k',' '},  //4
+	{' ',' ',' ',' ',' ','R',' ',' '} , //5
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //6
-	{' ',' ',' ',' ',' ',' ',' ',' '}  //7
-};*/
-
+	{' ',' ',' ','K',' ',' ',' ',' '}  //7
+};
+*/
 
 
 void arrayToBitBoard(char board[8][8], bb& WP, bb& WR, bb& WN, bb& WB, bb& WQ, bb& WK, bb& BP, bb& BR, bb& BN, bb& BB, bb& BQ, bb& BK) {
@@ -182,6 +185,7 @@ void bitboardToArray() {
 
 }
 
+
 void printBoard() {
 	cout << "  A B C D E F G H" << endl;
 	for (int i = 0; i < 8; i++) {
@@ -189,6 +193,19 @@ void printBoard() {
 		cout << " ";
 		for (int j = 0; j < 8; j++) {
 			std::cout <<board[i][j] << " ";
+		}
+		std::cout << endl;
+	}
+}
+
+
+void printBoardRaw() {
+	cout << "  0 1 2 3 4 5 6 7" << endl;
+	for (int i = 0; i < 8; i++) {
+		cout << i;
+		cout << " ";
+		for (int j = 0; j < 8; j++) {
+			std::cout << board[i][j] << " ";
 		}
 		std::cout << endl;
 	}
@@ -231,22 +248,5 @@ string rawToString(string s, char board[8][8]) { //converts raw notation (like 2
 		
 	}
 	return final;
-
-}
-
-
-int main() {
-
-	arrayToBitBoard();
-
-	bitboardToArray();
-
-	functionTime();
-
-	string s = getBLegalMoves(listOfBoardParamsAndOthers, "P6444", true, true);
-
-	printBoard();
-	
-	cout << rawToString(s, board);
 
 }
