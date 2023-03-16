@@ -8,6 +8,7 @@
 #include "LegalMoveHelpers.h"
 #include "LegalMoves.h"
 #include "MoveExecution.h"
+#include "Search.h"
 
 using namespace std;
 using namespace chrono;
@@ -1074,8 +1075,6 @@ string pawnPromoB(string s) {
 void functionTime() {
 
 	auto start = high_resolution_clock::now();
-
-	//getWLegalMoves(listOfBoardParamsAndOthers, "", 1, 1);
 
 	getWLegalMoves(listOfBoardParamsAndOthers, "", 1, 1);
 

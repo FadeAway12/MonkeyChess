@@ -6,6 +6,7 @@
 #include "LegalMoveHelpers.h"
 #include "LegalMoves.h"
 #include "Evaluation.h"
+#include "MoveExecution.h"
 
 using namespace std;
 
@@ -58,6 +59,9 @@ double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 			string moveLast = lastMove;
 			bool WCLC = WLC; bool WCSC = WSC; bool BCLC = BLC; bool BCSC = BSC;
 
+			executeMove(s, "W", WP2, WR2, WN2, WB2, WQ2, WK2, BP2, BR2, BN2, BB2, BQ2, BK2,
+				emptySquare2, black2, white2, WCLC, WCSC, BCLC, BCSC);
+
 			double eval = minimax(WP2, WR2, WN2, WB2, WQ2, WK2, BP2, BR2, BN2, BB2, BQ2, BK2,
 				emptySquare2, black2, white2, moveLast, WCLC, WCSC, BCLC, BCSC, depth - 1, false
 			, alpha, beta);
@@ -76,17 +80,24 @@ double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 		string s;
 
 		while (is >> s) {
+
 			bb WP2 = WP; bb WN2 = WN; bb WB2 = WB; bb WK2 = WK; bb WQ2 = WQ; bb WR2 = WR;
 			bb BP2 = BP; bb BN2 = BN; bb BB2 = BB; bb BK2 = BK; bb BQ2 = BQ; bb BR2 = BR;
 			bb black2 = black; bb white2 = white; bb emptySquare2 = emptySquare;
 			string moveLast = lastMove;
 			bool WCLC = WLC; bool WCSC = WSC; bool BCLC = BLC; bool BCSC = BSC;
+
+			executeMove(s, "W", WP2, WR2, WN2, WB2, WQ2, WK2, BP2, BR2, BN2, BB2, BQ2, BK2,
+				emptySquare2, black2, white2, WCLC, WCSC, BCLC, BCSC);
+
 			double eval = minimax(WP2, WR2, WN2, WB2, WQ2, WK2, BP2, BR2, BN2, BB2, BQ2, BK2,
 				emptySquare2, black2, white2, moveLast, WCLC, WCSC, BCLC, BCSC, depth - 1, false,
 				alpha, beta);
+
 			minEval = min(eval, minEval);
 			beta = min(beta, eval);
 			if (beta <= alpha) break;
+
 		}
 		
 		return minEval;
