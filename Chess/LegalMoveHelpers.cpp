@@ -23,200 +23,159 @@ bb attackedByWhite(moveParams) {
 	bb attacked = WP >> 7 & ~fileA;
 	attacked |= WP >> 9 & ~fileH;
 	//attacked by knight
-	attacked |= WN >> 6 & ~fileA & ~fileB & ~white;
-	attacked |= WN >> 10 & ~fileG & ~fileH & ~white;
-	attacked |= WN >> 15 & ~fileA & ~white;
-	attacked |= WN >> 17 & ~fileH & ~white;
-	attacked |= WN << 6 & ~fileH & ~fileG & ~white;
-	attacked |= WN << 10 & ~fileA & ~fileB & ~white;
-	attacked |= WN << 15 & ~fileH & ~white;
-	attacked |= WN << 17 & ~fileA & ~white;
+	attacked |= WN >> 6 & ~fileA & ~fileB;
+	attacked |= WN >> 10 & ~fileG & ~fileH;
+	attacked |= WN >> 15 & ~fileA;
+	attacked |= WN >> 17 & ~fileH;
+	attacked |= WN << 6 & ~fileH & ~fileG;
+	attacked |= WN << 10 & ~fileA & ~fileB;
+	attacked |= WN << 15 & ~fileH;
+	attacked |= WN << 17 & ~fileA;
 	//attacked by king
-	attacked |= WK >> 7 & ~white & ~fileA;
-	attacked |= WK >> 8 & ~white;
-	attacked |= WK >> 9 & ~white & ~fileH;
-	attacked |= WK >> 1 & ~white & ~fileH;
-	attacked |= WK << 1 & ~white & ~fileA;
-	attacked |= WK << 7 & ~white & ~fileH;
-	attacked |= WK << 8 & ~white;
-	attacked |= WK << 9 & ~white & ~fileA;
+	attacked |= WK >> 7 & ~fileA;
+	attacked |= WK >> 8;
+	attacked |= WK >> 9 & ~fileH;
+	attacked |= WK >> 1 & ~fileH;
+	attacked |= WK << 1 & ~fileA;
+	attacked |= WK << 7 & ~fileH;
+	attacked |= WK << 8;
+	attacked |= WK << 9 & ~fileA;
 	//attacked by rook/bishop/queen
 
 	for (int i = 0; i < 64; i++) {
 		if (((WR >> i) & 1) == 1) {
-			bb pos = pow(2, i); //creates a bitboard of an individual white rook
-			bb WRU = pos >> 8 & ~white & ~((pos & black) >> 8);
+			bb pos = pow(2, i);
+			bb WRU = pos;
 
 			while (WRU) {
-
+				WRU = WRU >> 8 & ~(WRU & black) >> 8;
 				attacked |= WRU;
-
-				WRU = WRU >> 8 & ~white & ~((WRU & black & ~BK) >> 8);
+				if ((WRU & ~pos) & white) break;
 			}
 
-			bb WRL = pos >> 1 & ~white & ~fileH & ~((pos & black & ~BK) >> 1);
+			bb WRL = pos;
 
 			while (WRL) {
-
+				WRL = WRL >> 1 & ~(WRL & black) >> 1 & ~fileH;
 				attacked |= WRL;
-
-				WRL = WRL >> 1 & ~white & ~fileH & ~((WRL & black & ~BK) >> 1);
+				if ((WRL & ~pos) & white) break;
 			}
 
-			bb WRR = pos << 1 & ~white & ~fileA & ~((pos & black & ~BK) << 1);
+			bb WRR = pos;
 
 			while (WRR) {
-
-				attacked |= WRR;
-
-				WRR = WRR << 1 & ~white & ~fileA & ~((WRR & black & ~BK) << 1);
+				WRR = WRR << 1 & ~(WRR & black) << 1 & ~fileA;
+				attacked || WRR;
+				if ((WRR & ~pos) & white) break;
 			}
 
-			bb WRD = pos << 8 & ~white & ~((pos & black & ~BK) << 8);
+			bb WRD = pos;
 
 			while (WRD) {
-
+				WRD = WRD << 8 & ~(WRD & black) << 8;
 				attacked |= WRD;
-
-				WRD = WRD << 8 & ~white & ~((WRD & black & ~BK) << 8);
+				if ((WRD & ~pos) & white) break;
 			}
 
 		}
-		else if (((WB >> i) & 1) == 1) {
+		if (((WB >> i) & 1) == 1) {
 			bb pos = pow(2, i);
+			bb UR = pos;
 
-			bb WBUR = pos >> 7 & ~fileA & ~white & ~((pos & black & ~BK) >> 7);
-
-			while (WBUR) {
-
-				attacked |= WBUR;
-
-				WBUR = WBUR >> 7 & ~fileA & ~white & ~((WBUR & black & ~BK) >> 7);
-
+			while (UR) {
+				UR = UR >> 7 & ~(UR & black) >> 7 & ~fileA;
+				attacked |= UR;
+				if ((UR & ~pos) & white) break;
 			}
 
-			bb WBUL = pos >> 9 & ~fileH & ~white & ~((pos & black & ~BK) >> 9);
+			bb UL = pos;
 
-			while (WBUL) {
-
-				attacked |= WBUL;
-
-				WBUL = WBUL >> 9 & ~fileH & ~white & ~((WBUL & black & ~BK) >> 9);
-
+			while(UL) {
+				UL = UL >> 9 & ~(UL & black) >> 9 & ~fileH;
+				attacked |= UL;
+				if ((UL & ~pos) & white) break;
 			}
 
-			bb WBDL = pos << 7 & ~fileH & ~white & ~((pos & black & ~BK) << 7);
+			bb DR = pos;
 
-			while (WBDL) {
-
-
-				attacked |= WBDL;
-
-				WBDL = WBDL << 7 & ~fileH & ~white & ~((WBDL & black & ~BK) << 7);
-
+			while (DR) {
+				DR = DR << 9 & ~(DR & black) << 9 & ~fileA;
+				attacked |= DR;
+				if ((DR & ~pos) & white) break;
 			}
 
-			bb WBDR = pos << 9 & ~fileA & ~white & ~((pos & black & ~BK) << 9);
+			bb DL = pos;
 
-			while (WBDR) {
-
-
-				attacked |= WBDR;
-
-				WBDR = WBDR << 9 & ~fileA & ~white & ~((WBDR & black & ~BK) << 9);
-
+			while (DL) {
+				DL = DL << 7 & ~(DL & black) << 7 & ~fileH;
+				attacked |= DL;
+				if ((DL & ~pos) & white) break;
 			}
 		}
-		else if (((WQ >> i) & 1) == 1) {
-			bb pos = pow(2, i); //creates a bitboard of an individual white rook
-			bb QU = pos >> 8 & ~white & ~((pos & black & ~BK) >> 8);
+		if (((WQ >> i) & 1) == 1) {
+			bb pos = pow(2, i);
+			bb U = pos;
 
-			while (QU) {
-
-				attacked |= QU;
-
-				QU = QU >> 8 & ~white & ~((QU & black & ~BK) >> 8);
+			while (U) {
+				U = U >> 8 & ~(U & black) >> 8;
+				attacked |= U;
+				if ((U & ~pos) & white) break;
 			}
 
+			bb L = pos;
 
-
-			bb QL = pos >> 1 & ~white & ~fileH & ~((pos & black & ~BK) >> 1);
-
-			while (QL) {
-
-				attacked |= QL;
-
-				QL = QL >> 1 & ~white & ~fileH & ~((QL & black & ~BK) >> 1);
+			while (L) {
+				L = L >> 1 & ~(L & black) >> 1 & ~fileH;
+				attacked |= L;
+				if ((L & ~pos) & white) break;
 			}
 
+			bb R = pos;
 
-
-			bb QR = pos << 1 & ~white & ~fileA & ~((pos & black & ~BK) << 1);
-
-			while (QR) {
-
-				attacked |= QR;
-
-				QR = QR << 1 & ~white & ~fileA & ~((QR & black & ~BK) << 1);
+			while (R) {
+				R = R << 1 & ~(R & black) << 1 & ~fileA;
+				attacked || R;
+				if ((R & ~pos) & white) break;
 			}
 
-			bb QD = pos << 8 & ~white & ~((pos & black & ~BK) << 8);
+			bb D = pos;
 
-
-
-			while (QD) {
-
-				attacked |= QD;
-
-				QD = QD << 8 & ~white & ~((QD & black & ~BK) << 8);
+			while (D) {
+				D = D << 8 & ~(D & black) << 8;
+				attacked |= D;
+				if ((D & ~pos) & white) break;
 			}
 
-			bb QUR = pos >> 7 & ~fileA & ~white & ~((pos & black & ~BK) >> 7);
+			bb UR = pos;
 
-
-
-			while (QUR) {
-
-				attacked |= QUR;
-
-				QUR = QUR >> 7 & ~fileA & ~white & ~((QUR & black & ~BK) >> 7);
-
+			while (UR) {
+				UR = UR >> 7 & ~(UR & black) >> 7 & ~fileA;
+				attacked |= UR;
+				if ((UR & ~pos) & white) break;
 			}
 
+			bb UL = pos;
 
-
-			bb QUL = pos >> 9 & ~fileH & ~white & ~((pos & black & ~BK) >> 9);
-
-			while (QUL) {
-
-				attacked |= QUL;
-
-				QUL = QUL >> 9 & ~fileH & ~white & ~((QUL & black & ~BK) >> 9);
-
+			while (UL) {
+				UL = UL >> 9 & ~(UL & black) >> 9 & ~fileH;
+				attacked |= UL;
+				if ((UL & ~pos) & white) break;
 			}
 
+			bb DR = pos;
 
-
-			bb QDL = pos << 7 & ~fileH & ~white & ~((pos & black & ~BK) << 7);
-
-			while (QDL) {
-
-				attacked |= QDL;
-
-				QDL = QDL << 7 & ~fileH & ~white & ~((QDL & black & ~BK) << 7);
-
+			while (DR) {
+				DR = DR << 9 & ~(DR & black) << 9 & ~fileA;
+				attacked |= DR;
+				if ((DR & ~pos) & white) break;
 			}
 
+			bb DL = pos;
 
-
-			bb QDR = pos << 9 & ~fileA & ~white & ~((pos & black & ~BK) << 9);
-
-			while (QDR) {
-
-
-				attacked |= QDR;
-
-				QDR = QDR << 9 & ~fileA & ~white & ~((QDR & black & ~BK) << 9);
+			while (DL) {
+				DL = DL << 7 & ~(DL & black) << 7 & ~fileH;
+				attacked |= DL;
+				if ((DL & ~pos) & white) break;
 			}
 		}
 	}
@@ -229,23 +188,181 @@ bb attackedByBlack(moveParams) {
 	bb attacked = BP << 7 & ~fileH;
 	attacked |= BP << 9 & ~fileA;
 	//attacked by knight
-	attacked |= BN >> 6 & ~fileA & ~fileB & ~black;
-	attacked |= BN >> 10 & ~fileG & ~fileH & ~black;
-	attacked |= BN >> 15 & ~fileA & ~black;
-	attacked |= BN >> 17 & ~fileH & ~black;
-	attacked |= BN << 6 & ~fileH & ~fileG & ~black;
-	attacked |= BN << 10 & ~fileA & ~fileB & ~black;
-	attacked |= BN << 15 & ~fileH & ~black;
-	attacked |= BN << 17 & ~fileA & ~black;
+	attacked |= BN >> 6 & ~fileA & ~fileB;
+	attacked |= BN >> 10 & ~fileG & ~fileH;
+	attacked |= BN >> 15 & ~fileA;
+	attacked |= BN >> 17 & ~fileH;
+	attacked |= BN << 6 & ~fileH & ~fileG;
+	attacked |= BN << 10 & ~fileA & ~fileB;
+	attacked |= BN << 15 & ~fileH;
+	attacked |= BN << 17 & ~fileA;
 	//attacked by king
-	attacked |= BK >> 7 & ~black & ~fileA;
-	attacked |= BK >> 8 & ~black;
-	attacked |= BK >> 9 & ~black & ~fileH;
-	attacked |= BK >> 1 & ~black & ~fileH;
-	attacked |= BK << 1 & ~black & ~fileA;
-	attacked |= BK << 7 & ~black & ~fileH;
-	attacked |= BK << 8 & ~black;
-	attacked |= BK << 9 & ~black & ~fileA;
+	attacked |= BK >> 7 & ~fileA;
+	attacked |= BK >> 8;
+	attacked |= BK >> 9 & ~fileH;
+	attacked |= BK >> 1 & ~fileH;
+	attacked |= BK << 1 & ~fileA;
+	attacked |= BK << 7 & ~fileH;
+	attacked |= BK << 8;
+	attacked |= BK << 9 & ~fileA;
+	//attacked by rook/bishop/queen
+	for (int i = 0; i < 64; i++) {
+		if (((BR >> i) & 1) == 1) {
+			bb pos = pow(2, i);
+			bb BRU = pos;
+
+			while (BRU) {
+				BRU = BRU >> 8 & ~(BRU & white) >> 8;
+				attacked |= BRU;
+				if ((BRU & ~pos) & black) break;
+			}
+
+			bb BRL = pos;
+
+			while (BRL) {
+				BRL = BRL >> 1 & ~(BRL & white) >> 1 & ~fileH;
+				attacked |= BRL;
+				if ((BRL & ~pos) & black) break;
+			}
+
+			bb BRR = pos;
+
+			while (BRR) {
+				BRR = BRR << 1 & ~(BRR & white) << 1 & ~fileA;
+				attacked |= BRR;
+				if ((BRR & ~pos) & black) break;
+			}
+
+			bb BRD = pos;
+
+			while (BRD) {
+				BRD = BRD << 8 & ~(BRD & white) << 8;
+				attacked |= BRD;
+				if ((BRD & ~pos) & black) break;
+			}
+
+		}
+		if (((BB >> i) & 1) == 1) {
+			bb pos = pow(2, i);
+			bb BUR = pos;
+
+			while (BUR) {
+				BUR = BUR >> 7 & ~(BUR & white) >> 7 & ~fileA;
+				attacked |= BUR;
+				if ((BUR & ~pos) & black) break;
+			}
+
+			bb BUL = pos;
+
+			while (BUL) {
+				BUL = BUL >> 9 & ~(BUL & white) >> 9 & ~fileH;
+				attacked |= BUL;
+				if ((BUL & ~pos) & black) break;
+			}
+
+			bb BDR = pos;
+
+			while (BDR) {
+				BDR = BDR << 9 & ~(BDR & white) << 9 & ~fileA;
+				attacked |= BDR;
+				if ((BDR & ~pos) & black) break;
+			}
+
+			bb BDL = pos;
+
+			while (BDL) {
+				BDL = BDL << 7 & ~(BDL & white) << 7 & ~fileH;
+				attacked |= BDL;
+				if ((BDL & ~pos) & black) break;
+			}
+
+		}
+		if (((BQ >> i) & 1) == 1) {
+			bb pos = pow(2, i);
+			bb QU = pos;
+
+			while (QU) {
+				QU = QU >> 8 & ~(QU & white) >> 8;
+				attacked |= QU;
+				if ((QU & ~pos) & black) break;
+			}
+
+			bb QL = pos;
+
+			while (QL) {
+				QL = QL >> 1 & ~(QL & white) >> 1 & ~fileH;
+				attacked |= QL;
+				if ((QL & ~pos) & black) break;
+			}
+
+			bb QD = pos;
+
+			while (QD) {
+				QD = QD << 8 & ~(QD & white) << 8;
+				attacked |= QD;
+				if ((QD & ~pos) & black) break;
+			}
+
+			bb QUR = pos;
+
+			while (QUR) {
+				QUR = QUR >> 7 & ~(QUR & white) >> 7 & ~fileA;
+				attacked |= QUR;
+				if ((QUR & ~pos) & black) break;
+			}
+
+			bb QUL = pos;
+
+			while (QUL) {
+				QUL = QUL >> 9 & ~(QUL & white) >> 9 & ~fileH;
+				attacked |= QUL;
+				if ((QUL & ~pos) & black) break;
+			}
+
+			bb QDR = pos;
+
+			while (QDR) {
+				QDR = QDR << 9 & ~(QDR & white) << 9 & ~fileA;
+				attacked |= QDR;
+				if ((QDR & ~pos) & black) break;
+			}
+
+			bb QDL = pos;
+
+			while (QDL) {
+				QDL = QDL << 7 & ~(QDL & white) << 7 & ~fileH;
+				attacked |= QDL;
+				if ((QDL & ~pos) & black) break;
+			}
+
+		}
+	}
+	return attacked;
+}
+
+/*bb attackedByBlack(moveParams) {
+
+	//attacked by pawn
+	bb attacked = BP << 7 & ~fileH;
+	attacked |= BP << 9 & ~fileA;
+	//attacked by knight
+	attacked |= BN >> 6 & ~fileA & ~fileB;
+	attacked |= BN >> 10 & ~fileG & ~fileH;
+	attacked |= BN >> 15 & ~fileA;
+	attacked |= BN >> 17 & ~fileH;
+	attacked |= BN << 6 & ~fileH & ~fileG;
+	attacked |= BN << 10 & ~fileA & ~fileB;
+	attacked |= BN << 15 & ~fileH;
+	attacked |= BN << 17 & ~fileA;
+	//attacked by king
+	attacked |= BK >> 7 & ~fileA;
+	attacked |= BK >> 8;
+	attacked |= BK >> 9 & ~fileH;
+	attacked |= BK >> 1 & ~fileH;
+	attacked |= BK << 1 & ~fileA;
+	attacked |= BK << 7 & ~fileH;
+	attacked |= BK << 8;
+	attacked |= BK << 9 & ~fileA;
 	//attacked by rook/bishop/queen
 
 	for (int i = 0; i < 64; i++) {
@@ -254,7 +371,6 @@ bb attackedByBlack(moveParams) {
 			bb BRU = pos >> 8 & ~black & ~((pos & white & ~WK) >> 8);
 
 			while (BRU) {
-
 				attacked |= BRU;
 
 				BRU = BRU >> 8 & ~black & ~((BRU & white & ~WK) >> 8);
@@ -427,7 +543,7 @@ bb attackedByBlack(moveParams) {
 		}
 	}
 	return attacked;
-}
+}*/
 
 /*NOTE:
 You DO NOT NEED TO NOT THE KING IN THIS METHOD. Remove later

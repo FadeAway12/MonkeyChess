@@ -147,6 +147,7 @@
     <ClInclude Include="LegalMoveHelpers.h" />
     <ClInclude Include="LegalMoves.h" />
     <ClInclude Include="MoveExecution.h" />
+    <ClInclude Include="PieceSquareTables.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="FormerLegalMoves.txt" />

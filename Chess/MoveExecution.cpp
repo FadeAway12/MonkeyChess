@@ -43,11 +43,11 @@ bool executeMove(const string& move, const string& turn, moveParams, bool& WLC,
 		
 		cap = true;
 
-		char piece = move[0];
-		int rowF = move[1] - '0';
-		int colF = move[2] - '0';
-		int rowT = move[3] - '0';
-		int colT = move[4] - '0';
+		char piece = move[4];
+		int rowF = move[0] - '0';
+		int colF = move[1] - '0';
+		int rowT = move[2] - '0';
+		int colT = move[3] - '0';
 
 		bb from = pow(2, rowF * 8 + colF);
 		bb to = pow(2, rowT * 8 + colT);
