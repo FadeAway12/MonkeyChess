@@ -248,21 +248,21 @@ string wKingMoves(moveParams, bb* unsafe, bb* checkers, vector<bb> pinned) {
 
 	string moves{};
 	
-	bb kingUR{ WK >> 7 & ~white & ~fileA & (WK >> 7 & ~WK & *unsafe) };
+	bb kingUR{ WK >> 7 & ~white & ~fileA & (WK >> 7 & ~WK & ~*unsafe) };
 
-	bb kingU { WK >> 8 & ~white & (WK >> 8 & ~WK & *unsafe) };
+	bb kingU { WK >> 8 & ~white & (WK >> 8 & ~WK & ~*unsafe) };
 
-	bb kingUL{ WK >> 9 & ~white & ~fileH & (WK >> 9 & ~WK & *unsafe) };
+	bb kingUL{ WK >> 9 & ~white & ~fileH & (WK >> 9 & ~WK & ~*unsafe) };
 
-	bb kingL { WK >> 1 & ~white & ~fileH & (WK >> 1 & ~WK & *unsafe) };
+	bb kingL { WK >> 1 & ~white & ~fileH & (WK >> 1 & ~WK & ~*unsafe) };
 
-	bb kingR { WK << 1 & ~white & ~fileA & (WK << 1 & ~WK & *unsafe) };
+	bb kingR { WK << 1 & ~white & ~fileA & (WK << 1 & ~WK & ~*unsafe) };
 
-	bb kingDL{ WK << 7 & ~white & ~fileH & (WK << 7 & ~WK & *unsafe) };
+	bb kingDL{ WK << 7 & ~white & ~fileH & (WK << 7 & ~WK & ~*unsafe) };
 
-	bb kingD { WK << 8 & ~white & (WK << 8 & ~WK & *unsafe) };
+	bb kingD { WK << 8 & ~white & (WK << 8 & ~WK & ~*unsafe) };
 
-	bb kingDR{ WK << 9 & ~white & ~fileA & (WK << 9 & ~WK & *unsafe) };
+	bb kingDR{ WK << 9 & ~white & ~fileA & (WK << 9 & ~WK & ~*unsafe) };
 
 	for (int i = 0; i < 64; i++) {
 
@@ -751,21 +751,21 @@ string bKingMoves(moveParams, bb* unsafe, bb* checkers, vector<bb> pinned) {
 
 	string moves{};
 
-	bb kingUR{ BK >> 7 & ~black & ~fileA & (BK >> 7 & ~BK & *unsafe) };
+	bb kingUR{ BK >> 7 & ~black & ~fileA & (BK >> 7 & ~BK & ~*unsafe) };
 
-	bb kingU{ BK >> 8 & ~black & (BK >> 8 & ~BK & *unsafe) };
+	bb kingU{ BK >> 8 & ~black & (BK >> 8 & ~BK & ~*unsafe) };
 
-	bb kingUL{ BK >> 9 & ~black & ~fileH & (BK >> 9 & ~BK & *unsafe) };
+	bb kingUL{ BK >> 9 & ~black & ~fileH & (BK >> 9 & ~BK & ~*unsafe) };
 
-	bb kingL{ BK >> 1 & ~black & ~fileH & (BK >> 1 & ~BK & *unsafe) };
+	bb kingL{ BK >> 1 & ~black & ~fileH & (BK >> 1 & ~BK & ~*unsafe) };
 
-	bb kingR{ BK << 1 & ~black & ~fileA & (BK << 1 & ~BK & *unsafe) };
+	bb kingR{ BK << 1 & ~black & ~fileA & (BK << 1 & ~BK & ~*unsafe) };
 
-	bb kingDL{ BK << 7 & ~black & ~fileH & (BK << 7 & ~BK & *unsafe) };
+	bb kingDL{ BK << 7 & ~black & ~fileH & (BK << 7 & ~BK & ~*unsafe) };
 
-	bb kingD{ BK << 8 & ~black & (BK << 8 & ~BK & *unsafe) };
+	bb kingD{ BK << 8 & ~black & (BK << 8 & ~BK & ~*unsafe) };
 
-	bb kingDR{ BK << 9 & ~black & ~fileA & (BK << 9 & ~BK & *unsafe) };
+	bb kingDR{ BK << 9 & ~black & ~fileA & (BK << 9 & ~BK & ~*unsafe) };
 
 	for (int i = 0; i < 64; i++) {
 
