@@ -3,6 +3,7 @@
 #include "LegalMoves.h"
 #include "MoveExecution.h"
 #include "Evaluation.h"
+#include "Search.h"
 
 using namespace std;
 
@@ -47,7 +48,10 @@ void startGame(istream& is) {
 		cout << endl << "WHITE: " << rawToString(s, board) << endl;
 		s = getBLegalMoves(listOfBoardParamsAndOthers, "P6444", true, true);
 		cout << "BLACK: " << rawToString(s, board) << endl;
-		cout << endl << "EVAL: " << evaluation(listOfBoardParamsAndOthers) << endl;
+		//cout << endl << "EVAL: " << evaluation(listOfBoardParamsAndOthers) << endl;
+		cout << endl << "EVAL: " << minimax(listOfBoardParamsAndOthers, lastMove, whiteLongCastle,
+			whiteShortCastle, blackLongCastle, blackShortCastle, 10, moveNum % 2 == 0, -INFINITY, +INFINITY);
+		cout << endl;
 
 		string move{};
 		bitboardToArray();

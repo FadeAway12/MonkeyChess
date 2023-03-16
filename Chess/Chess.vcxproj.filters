@@ -56,6 +56,9 @@
     <ClInclude Include="PieceSquareTables.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Search.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="FormerlyUsedMethods.txt">
