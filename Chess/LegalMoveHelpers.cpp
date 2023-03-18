@@ -19,7 +19,7 @@ constexpr bb allSpots{ 18'446'744'073'709'551'615 };
 //>> means shifted LEFT AND UP visually
 
 bb attackedByWhite(moveParams) {
-
+	
 	//attacked by pawn
 	bb attacked = WP >> 7 & ~fileA;
 	attacked |= WP >> 9 & ~fileH;
@@ -49,7 +49,7 @@ bb attackedByWhite(moveParams) {
 			bb WRU = pos;
 
 			while (WRU) {
-				WRU = WRU >> 8 & ~(WRU & black) >> 8;
+				WRU = WRU >> 8 & ~(WRU & black & ~BK) >> 8;
 				attacked |= WRU;
 				if ((WRU & ~pos) & white) break;
 			}
@@ -57,7 +57,7 @@ bb attackedByWhite(moveParams) {
 			bb WRL = pos;
 
 			while (WRL) {
-				WRL = WRL >> 1 & ~(WRL & black) >> 1 & ~fileH;
+				WRL = WRL >> 1 & ~(WRL & black & ~BK) >> 1 & ~fileH;
 				attacked |= WRL;
 				if ((WRL & ~pos) & white) break;
 			}
@@ -65,7 +65,7 @@ bb attackedByWhite(moveParams) {
 			bb WRR = pos;
 
 			while (WRR) {
-				WRR = WRR << 1 & ~(WRR & black) << 1 & ~fileA;
+				WRR = WRR << 1 & ~(WRR & black & ~BK) << 1 & ~fileA;
 				attacked || WRR;
 				if ((WRR & ~pos) & white) break;
 			}
@@ -73,7 +73,7 @@ bb attackedByWhite(moveParams) {
 			bb WRD = pos;
 
 			while (WRD) {
-				WRD = WRD << 8 & ~(WRD & black) << 8;
+				WRD = WRD << 8 & ~(WRD & black & ~BK) << 8;
 				attacked |= WRD;
 				if ((WRD & ~pos) & white) break;
 			}
@@ -84,7 +84,7 @@ bb attackedByWhite(moveParams) {
 			bb UR = pos;
 
 			while (UR) {
-				UR = UR >> 7 & ~(UR & black) >> 7 & ~fileA;
+				UR = UR >> 7 & ~(UR & black & ~BK) >> 7 & ~fileA;
 				attacked |= UR;
 				if ((UR & ~pos) & white) break;
 			}
@@ -92,7 +92,7 @@ bb attackedByWhite(moveParams) {
 			bb UL = pos;
 
 			while(UL) {
-				UL = UL >> 9 & ~(UL & black) >> 9 & ~fileH;
+				UL = UL >> 9 & ~(UL & black & ~BK) >> 9 & ~fileH;
 				attacked |= UL;
 				if ((UL & ~pos) & white) break;
 			}
@@ -100,7 +100,7 @@ bb attackedByWhite(moveParams) {
 			bb DR = pos;
 
 			while (DR) {
-				DR = DR << 9 & ~(DR & black) << 9 & ~fileA;
+				DR = DR << 9 & ~(DR & black & ~BK) << 9 & ~fileA;
 				attacked |= DR;
 				if ((DR & ~pos) & white) break;
 			}
@@ -108,7 +108,7 @@ bb attackedByWhite(moveParams) {
 			bb DL = pos;
 
 			while (DL) {
-				DL = DL << 7 & ~(DL & black) << 7 & ~fileH;
+				DL = DL << 7 & ~(DL & black & ~BK) << 7 & ~fileH;
 				attacked |= DL;
 				if ((DL & ~pos) & white) break;
 			}
@@ -118,7 +118,7 @@ bb attackedByWhite(moveParams) {
 			bb U = pos;
 
 			while (U) {
-				U = U >> 8 & ~(U & black) >> 8;
+				U = U >> 8 & ~(U & black & ~BK) >> 8;
 				attacked |= U;
 				if ((U & ~pos) & white) break;
 			}
@@ -126,7 +126,7 @@ bb attackedByWhite(moveParams) {
 			bb L = pos;
 
 			while (L) {
-				L = L >> 1 & ~(L & black) >> 1 & ~fileH;
+				L = L >> 1 & ~(L & black & ~BK) >> 1 & ~fileH;
 				attacked |= L;
 				if ((L & ~pos) & white) break;
 			}
@@ -134,7 +134,7 @@ bb attackedByWhite(moveParams) {
 			bb R = pos;
 
 			while (R) {
-				R = R << 1 & ~(R & black) << 1 & ~fileA;
+				R = R << 1 & ~(R & black & ~BK) << 1 & ~fileA;
 				attacked || R;
 				if ((R & ~pos) & white) break;
 			}
@@ -142,7 +142,7 @@ bb attackedByWhite(moveParams) {
 			bb D = pos;
 
 			while (D) {
-				D = D << 8 & ~(D & black) << 8;
+				D = D << 8 & ~(D & black & ~BK) << 8;
 				attacked |= D;
 				if ((D & ~pos) & white) break;
 			}
@@ -150,7 +150,7 @@ bb attackedByWhite(moveParams) {
 			bb UR = pos;
 
 			while (UR) {
-				UR = UR >> 7 & ~(UR & black) >> 7 & ~fileA;
+				UR = UR >> 7 & ~(UR & black & ~BK) >> 7 & ~fileA;
 				attacked |= UR;
 				if ((UR & ~pos) & white) break;
 			}
@@ -158,7 +158,7 @@ bb attackedByWhite(moveParams) {
 			bb UL = pos;
 
 			while (UL) {
-				UL = UL >> 9 & ~(UL & black) >> 9 & ~fileH;
+				UL = UL >> 9 & ~(UL & black & ~BK) >> 9 & ~fileH;
 				attacked |= UL;
 				if ((UL & ~pos) & white) break;
 			}
@@ -166,7 +166,7 @@ bb attackedByWhite(moveParams) {
 			bb DR = pos;
 
 			while (DR) {
-				DR = DR << 9 & ~(DR & black) << 9 & ~fileA;
+				DR = DR << 9 & ~(DR & black & ~BK) << 9 & ~fileA;
 				attacked |= DR;
 				if ((DR & ~pos) & white) break;
 			}
@@ -174,7 +174,7 @@ bb attackedByWhite(moveParams) {
 			bb DL = pos;
 
 			while (DL) {
-				DL = DL << 7 & ~(DL & black) << 7 & ~fileH;
+				DL = DL << 7 & ~(DL & black & ~BK) << 7 & ~fileH;
 				attacked |= DL;
 				if ((DL & ~pos) & white) break;
 			}
@@ -213,7 +213,7 @@ bb attackedByBlack(moveParams) {
 			bb BRU = pos;
 
 			while (BRU) {
-				BRU = BRU >> 8 & ~(BRU & white) >> 8;
+				BRU = BRU >> 8 & ~(BRU & white & ~WK) >> 8;
 				attacked |= BRU;
 				if ((BRU & ~pos) & black) break;
 			}
@@ -221,7 +221,7 @@ bb attackedByBlack(moveParams) {
 			bb BRL = pos;
 
 			while (BRL) {
-				BRL = BRL >> 1 & ~(BRL & white) >> 1 & ~fileH;
+				BRL = BRL >> 1 & ~(BRL & white & ~WK) >> 1 & ~fileH;
 				attacked |= BRL;
 				if ((BRL & ~pos) & black) break;
 			}
@@ -229,7 +229,7 @@ bb attackedByBlack(moveParams) {
 			bb BRR = pos;
 
 			while (BRR) {
-				BRR = BRR << 1 & ~(BRR & white) << 1 & ~fileA;
+				BRR = BRR << 1 & ~(BRR & white & ~WK) << 1 & ~fileA;
 				attacked |= BRR;
 				if ((BRR & ~pos) & black) break;
 			}
@@ -237,7 +237,7 @@ bb attackedByBlack(moveParams) {
 			bb BRD = pos;
 
 			while (BRD) {
-				BRD = BRD << 8 & ~(BRD & white) << 8;
+				BRD = BRD << 8 & ~(BRD & white & ~WK) << 8;
 				attacked |= BRD;
 				if ((BRD & ~pos) & black) break;
 			}
@@ -248,7 +248,7 @@ bb attackedByBlack(moveParams) {
 			bb BUR = pos;
 
 			while (BUR) {
-				BUR = BUR >> 7 & ~(BUR & white) >> 7 & ~fileA;
+				BUR = BUR >> 7 & ~(BUR & white & ~WK) >> 7 & ~fileA;
 				attacked |= BUR;
 				if ((BUR & ~pos) & black) break;
 			}
@@ -256,7 +256,7 @@ bb attackedByBlack(moveParams) {
 			bb BUL = pos;
 
 			while (BUL) {
-				BUL = BUL >> 9 & ~(BUL & white) >> 9 & ~fileH;
+				BUL = BUL >> 9 & ~(BUL & white & ~WK) >> 9 & ~fileH;
 				attacked |= BUL;
 				if ((BUL & ~pos) & black) break;
 			}
@@ -264,7 +264,7 @@ bb attackedByBlack(moveParams) {
 			bb BDR = pos;
 
 			while (BDR) {
-				BDR = BDR << 9 & ~(BDR & white) << 9 & ~fileA;
+				BDR = BDR << 9 & ~(BDR & white & ~WK) << 9 & ~fileA;
 				attacked |= BDR;
 				if ((BDR & ~pos) & black) break;
 			}
@@ -272,7 +272,7 @@ bb attackedByBlack(moveParams) {
 			bb BDL = pos;
 
 			while (BDL) {
-				BDL = BDL << 7 & ~(BDL & white) << 7 & ~fileH;
+				BDL = BDL << 7 & ~(BDL & white & ~WK) << 7 & ~fileH;
 				attacked |= BDL;
 				if ((BDL & ~pos) & black) break;
 			}
@@ -283,7 +283,7 @@ bb attackedByBlack(moveParams) {
 			bb QU = pos;
 
 			while (QU) {
-				QU = QU >> 8 & ~(QU & white) >> 8;
+				QU = QU >> 8 & ~(QU & white & ~WK) >> 8;
 				attacked |= QU;
 				if ((QU & ~pos) & black) break;
 			}
@@ -291,7 +291,7 @@ bb attackedByBlack(moveParams) {
 			bb QL = pos;
 
 			while (QL) {
-				QL = QL >> 1 & ~(QL & white) >> 1 & ~fileH;
+				QL = QL >> 1 & ~(QL & white & ~WK) >> 1 & ~fileH;
 				attacked |= QL;
 				if ((QL & ~pos) & black) break;
 			}
@@ -299,7 +299,7 @@ bb attackedByBlack(moveParams) {
 			bb QD = pos;
 
 			while (QD) {
-				QD = QD << 8 & ~(QD & white) << 8;
+				QD = QD << 8 & ~(QD & white & ~WK) << 8;
 				attacked |= QD;
 				if ((QD & ~pos) & black) break;
 			}
@@ -307,7 +307,7 @@ bb attackedByBlack(moveParams) {
 			bb QUR = pos;
 
 			while (QUR) {
-				QUR = QUR >> 7 & ~(QUR & white) >> 7 & ~fileA;
+				QUR = QUR >> 7 & ~(QUR & white & ~WK) >> 7 & ~fileA;
 				attacked |= QUR;
 				if ((QUR & ~pos) & black) break;
 			}
@@ -315,7 +315,7 @@ bb attackedByBlack(moveParams) {
 			bb QUL = pos;
 
 			while (QUL) {
-				QUL = QUL >> 9 & ~(QUL & white) >> 9 & ~fileH;
+				QUL = QUL >> 9 & ~(QUL & white & ~WK) >> 9 & ~fileH;
 				attacked |= QUL;
 				if ((QUL & ~pos) & black) break;
 			}
@@ -323,7 +323,7 @@ bb attackedByBlack(moveParams) {
 			bb QDR = pos;
 
 			while (QDR) {
-				QDR = QDR << 9 & ~(QDR & white) << 9 & ~fileA;
+				QDR = QDR << 9 & ~(QDR & white & ~WK) << 9 & ~fileA;
 				attacked |= QDR;
 				if ((QDR & ~pos) & black) break;
 			}
@@ -331,7 +331,7 @@ bb attackedByBlack(moveParams) {
 			bb QDL = pos;
 
 			while (QDL) {
-				QDL = QDL << 7 & ~(QDL & white) << 7 & ~fileH;
+				QDL = QDL << 7 & ~(QDL & white & ~WK) << 7 & ~fileH;
 				attacked |= QDL;
 				if ((QDL & ~pos) & black) break;
 			}
