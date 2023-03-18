@@ -50,7 +50,7 @@ void startGame(istream& is) {
 		cout << "BLACK: " << rawToString(s, board) << endl;
 		//cout << endl << "EVAL: " << evaluation(listOfBoardParamsAndOthers) << endl;
 		cout << endl << "EVAL: " << minimax(listOfBoardParamsAndOthers, lastMove, whiteLongCastle,
-			whiteShortCastle, blackLongCastle, blackShortCastle, 4, moveNum % 2 == 0, -INFINITY, +INFINITY);
+			whiteShortCastle, blackLongCastle, blackShortCastle, 6, moveNum % 2 == 0, -INFINITY, +INFINITY);
 		cout << endl;
 
 		string move{};
