@@ -96,7 +96,7 @@ void meth() {
 
 //Real board
 
-/*
+
 char board[8][8] = { //used for convenient viewing of the board's representation
 	//0    1    2    3    4    5    6    7
 	{'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}, //0
@@ -108,12 +108,11 @@ char board[8][8] = { //used for convenient viewing of the board's representation
 	{'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'}, //6
 	{'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}  //7
 	
-};*/
-
+};
 
 //Test board
 
-
+/*
 char board[8][8] = {
 	//0   1   2   3   4   5   6   7
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //0
@@ -124,7 +123,8 @@ char board[8][8] = {
 	{' ','K',' ',' ',' ',' ',' ',' '} , //5
 	{' ',' ',' ',' ','R',' ',' ',' '}, //6
 	{' ','k',' ',' ',' ',' ',' ',' '}  //7
-};
+};*/
+
 
 
 

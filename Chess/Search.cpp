@@ -13,8 +13,22 @@ using namespace std;
 #define params bb WP, bb WR, bb WN, bb WB, bb WQ, bb WK, bb BP, bb BR, bb BN, bb BB, bb BQ, bb BK, bb emptySquare, bb black, bb white
 #define paramsVal WP, WR, WN, WB, WQ, WK, BP, BR, BN, BB, BQ, BK, emptySquare, black, white
 
+string bestMove{};
+
 string search() {
 	return "";
+}
+
+string getWhiteMove(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
+	int depth) {
+	minimax(paramsVal, lastMove, WLC, WSC, BLC, BSC, depth, depth, true, -INFINITY, +INFINITY);
+	return bestMove;
+}
+
+string getBlackMove(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
+	int depth) {
+	minimax(paramsVal, lastMove, WLC, WSC, BLC, BSC, depth, depth, false, -INFINITY, +INFINITY);
+	return bestMove;
 }
 
 bool gameOverWhite(params, bool WSC, bool WLC, string lastMove) {
@@ -22,7 +36,7 @@ bool gameOverWhite(params, bool WSC, bool WLC, string lastMove) {
 }
 
 double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
-	int depth, bool maximizingWhite, double alpha, double beta) {
+	int depth, int dMax, bool maximizingWhite, double alpha, double beta) {
 
 	string moves;
 
@@ -32,15 +46,15 @@ double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 
 	if (depth == 0) return evaluation(paramsVal);
 
-	if (maximizingWhite && moves.size() == 0) {
+	if (maximizingWhite && moves.size() < 4) {
 		bb attack = attackedByBlack(paramsVal);
-		if (attack & WK) return -300; //checkmate
+		if (attack & WK) return -300-depth; //checkmate
 		else return 0; //stalemate
 	}
 
-	else if (!maximizingWhite && moves.size() == 0) {
+	else if (!maximizingWhite && moves.size() < 4) {
 		bb attack = attackedByWhite(paramsVal);
-		if (attack & BK) return 300;//checkmate
+		if (attack & BK) return 300+depth;//checkmate
 		else return 0; //stalemate
 	}
 
@@ -56,15 +70,17 @@ double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 			bb WP2 = WP; bb WN2 = WN; bb WB2 = WB; bb WK2 = WK; bb WQ2 = WQ; bb WR2 = WR;
 			bb BP2 = BP; bb BN2 = BN; bb BB2 = BB; bb BK2 = BK; bb BQ2 = BQ; bb BR2 = BR;
 			bb black2 = black; bb white2 = white; bb emptySquare2 = emptySquare;
-			string moveLast = lastMove;
+
 			bool WCLC = WLC; bool WCSC = WSC; bool BCLC = BLC; bool BCSC = BSC;
 
 			executeMove(s, "W", WP2, WR2, WN2, WB2, WQ2, WK2, BP2, BR2, BN2, BB2, BQ2, BK2,
 				emptySquare2, black2, white2, WCLC, WCSC, BCLC, BCSC);
 
 			double eval = minimax(WP2, WR2, WN2, WB2, WQ2, WK2, BP2, BR2, BN2, BB2, BQ2, BK2,
-				emptySquare2, black2, white2, moveLast, WCLC, WCSC, BCLC, BCSC, depth - 1, false
+				emptySquare2, black2, white2, s, WCLC, WCSC, BCLC, BCSC, depth - 1, dMax, false
 			, alpha, beta);
+
+			if (depth == dMax && eval > maxEval) bestMove = s;
 
 			maxEval = max(eval, maxEval);
 			alpha = max(alpha, eval);
@@ -84,15 +100,17 @@ double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 			bb WP2 = WP; bb WN2 = WN; bb WB2 = WB; bb WK2 = WK; bb WQ2 = WQ; bb WR2 = WR;
 			bb BP2 = BP; bb BN2 = BN; bb BB2 = BB; bb BK2 = BK; bb BQ2 = BQ; bb BR2 = BR;
 			bb black2 = black; bb white2 = white; bb emptySquare2 = emptySquare;
-			string moveLast = lastMove;
+
 			bool WCLC = WLC; bool WCSC = WSC; bool BCLC = BLC; bool BCSC = BSC;
 
 			executeMove(s, "B", WP2, WR2, WN2, WB2, WQ2, WK2, BP2, BR2, BN2, BB2, BQ2, BK2,
 				emptySquare2, black2, white2, WCLC, WCSC, BCLC, BCSC);
 
 			double eval = minimax(WP2, WR2, WN2, WB2, WQ2, WK2, BP2, BR2, BN2, BB2, BQ2, BK2,
-				emptySquare2, black2, white2, moveLast, WCLC, WCSC, BCLC, BCSC, depth - 1, true,
+				emptySquare2, black2, white2, s, WCLC, WCSC, BCLC, BCSC, depth - 1, dMax, true,
 				alpha, beta);
+
+			if (depth == dMax && eval < minEval) bestMove = s;
 
 			minEval = min(eval, minEval);
 			beta = min(beta, eval);

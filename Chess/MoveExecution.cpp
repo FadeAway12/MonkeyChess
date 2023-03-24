@@ -62,7 +62,7 @@ bool executeMove(const string& move, const string& turn, moveParams, bool& WLC,
 			case 'N': WN |= to; break;
 			}
 			//if ((black & ~to) != black) cap = true;
-			BP &= ~to, BN &= ~to, BB &= ~to, BR &= ~to, BK &= ~to;
+			BP &= ~to, BN &= ~to, BB &= ~to, BR &= ~to, BK &= ~to, BQ &= ~to;
 			return cap;
 
 		}
@@ -78,7 +78,7 @@ bool executeMove(const string& move, const string& turn, moveParams, bool& WLC,
 			case 'N': BN |= to; break;
 			}
 			//if ((white & ~to) != white) cap = true;
-			WP &= ~to, WN &= ~to, WB &= ~to, WR &= ~to, WK &= ~to;
+			WP &= ~to, WN &= ~to, WB &= ~to, WR &= ~to, WK &= ~to, WQ &= ~to;
 			return cap;
 		}
 		//throw error here
@@ -120,7 +120,7 @@ bool executeMove(const string& move, const string& turn, moveParams, bool& WLC,
 			//error
 		}
 		if ((black & ~to) != black) cap = true;
-		BP &= ~to, BN &= ~to, BB &= ~to, BR &= ~to, BK &= ~to;
+		BP &= ~to, BN &= ~to, BB &= ~to, BR &= ~to, BK &= ~to, BQ &= ~to;
 		return cap;
 	}
 	if (turn == "B") {
@@ -149,7 +149,7 @@ bool executeMove(const string& move, const string& turn, moveParams, bool& WLC,
 			//error
 		}
 		if ((white & ~to) != white) cap = true;
-		WP &= ~to, WN &= ~to, WB &= ~to, WR &= ~to, WK &= ~to;
+		WP &= ~to, WN &= ~to, WB &= ~to, WR &= ~to, WK &= ~to, WQ &= ~to;
 		return cap;
 	}
 	return cap; //error

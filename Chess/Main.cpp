@@ -44,15 +44,17 @@ void startGame(istream& is) {
 	
 	while (true) {
 
-		string s = getWLegalMoves(listOfBoardParamsAndOthers, "P6444", true, true);
+		string s = getWLegalMoves(listOfBoardParamsAndOthers, "P6444", whiteLongCastle, whiteShortCastle);
 		cout << endl << "WHITE: " << rawToString(s, board) << endl;
-		s = getBLegalMoves(listOfBoardParamsAndOthers, "P6444", true, true);
+		s = getBLegalMoves(listOfBoardParamsAndOthers, "P6444", blackLongCastle, blackShortCastle);
 		cout << "BLACK: " << rawToString(s, board) << endl;
 		//cout << endl << "EVAL: " << evaluation(listOfBoardParamsAndOthers) << endl;
-		cout << endl << "EVAL: " << minimax(listOfBoardParamsAndOthers, lastMove, whiteLongCastle,
-			whiteShortCastle, blackLongCastle, blackShortCastle, 6, moveNum % 2 == 0, -INFINITY, +INFINITY);
-		cout << endl;
-
+		//cout << endl << "EVAL: " << minimax(listOfBoardParamsAndOthers, lastMove, whiteLongCastle,
+			//whiteShortCastle, blackLongCastle, blackShortCastle, 4,4, moveNum % 2 == 0, -INFINITY, +INFINITY);
+		if (moveNum%2 == 0)
+			cout << endl << "BEST MOVE:" << getWhiteMove(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle, 5) << endl;
+		else 
+			cout << endl << "BEST MOVE:" << getBlackMove(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle, 5) << endl;
 		string move{};
 		bitboardToArray();
 		printBoardRaw();

@@ -7,8 +7,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Chess", "Chess\Chess.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChessTest", "ChessTest\ChessTest.vcxproj", "{EC162F8B-D9FC-4763-BFC5-90C80D00DDCA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "poop", "poop\poop.vcxproj", "{BE253C63-5903-4904-A0D4-CEBE71F207D7}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -33,14 +31,6 @@ Global
 		{EC162F8B-D9FC-4763-BFC5-90C80D00DDCA}.Release|x64.Build.0 = Release|x64
 		{EC162F8B-D9FC-4763-BFC5-90C80D00DDCA}.Release|x86.ActiveCfg = Release|Win32
 		{EC162F8B-D9FC-4763-BFC5-90C80D00DDCA}.Release|x86.Build.0 = Release|Win32
-		{BE253C63-5903-4904-A0D4-CEBE71F207D7}.Debug|x64.ActiveCfg = Debug|x64
-		{BE253C63-5903-4904-A0D4-CEBE71F207D7}.Debug|x64.Build.0 = Debug|x64
-		{BE253C63-5903-4904-A0D4-CEBE71F207D7}.Debug|x86.ActiveCfg = Debug|Win32
-		{BE253C63-5903-4904-A0D4-CEBE71F207D7}.Debug|x86.Build.0 = Debug|Win32
-		{BE253C63-5903-4904-A0D4-CEBE71F207D7}.Release|x64.ActiveCfg = Release|x64
-		{BE253C63-5903-4904-A0D4-CEBE71F207D7}.Release|x64.Build.0 = Release|x64
-		{BE253C63-5903-4904-A0D4-CEBE71F207D7}.Release|x86.ActiveCfg = Release|Win32
-		{BE253C63-5903-4904-A0D4-CEBE71F207D7}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
