@@ -140,6 +140,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MoveExecution.cpp" />
     <ClCompile Include="Search.cpp" />
+    <ClCompile Include="UCI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoardRepresentation.h" />
@@ -149,6 +150,7 @@
     <ClInclude Include="MoveExecution.h" />
     <ClInclude Include="PieceSquareTables.h" />
     <ClInclude Include="Search.h" />
+    <ClInclude Include="UCI.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="FormerLegalMoves.txt" />

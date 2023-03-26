@@ -38,9 +38,15 @@ bool whiteLongCastle{ true }; //checks if white king or queenside rook has moved
 bool blackShortCastle{ true }; //checks if black king or kingside rook move
 bool blackLongCastle{ true }; //checks if black king or queenside rook moved
 
+bool whiteTurn{true};
+
 //making bitboards for each piece that'll represent the current state of the board
 
-int numsTilDraw;
+int numsTilDraw{ 0 };
+int moveNum{ 1 };
+
+RepetitionVector vWhite;
+RepetitionVector vBlack;
 
 bb WP;
 bb WR;
@@ -84,19 +90,11 @@ bb rank1{ rank2 << 8 };
 
 bb* positions = new bb[64];
 
-void meth() {
-	positions[0] = 0b00000000'00000000'00000000'00000000'00000000'00000000'00000000'00000001;
-	bb* x = &positions[0];
-	for (int i = 0; i < 64; i++) {
-		bb k = *x;
-		k << i;
-		++x;
-	}
-}
+string lastMove = "";
 
 //Real board
 
-
+/*
 char board[8][8] = { //used for convenient viewing of the board's representation
 	//0    1    2    3    4    5    6    7
 	{'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}, //0
@@ -108,11 +106,11 @@ char board[8][8] = { //used for convenient viewing of the board's representation
 	{'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'}, //6
 	{'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}  //7
 	
-};
+};*/
 
 //Test board
 
-/*
+
 char board[8][8] = {
 	//0   1   2   3   4   5   6   7
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //0
@@ -123,10 +121,113 @@ char board[8][8] = {
 	{' ','K',' ',' ',' ',' ',' ',' '} , //5
 	{' ',' ',' ',' ','R',' ',' ',' '}, //6
 	{' ','k',' ',' ',' ',' ',' ',' '}  //7
-};*/
+};
 
+namespace FENHelper {
+	int findCharIndex(const string& s, char c) {
+		for (int i = 0; i < s.size(); i++) {
+			if (s[i] == c) {
+				return i;
+			}
+		}
+		return 0;
+	}
+}
 
+void importFEN(string s) {
 
+	//positions
+
+	//making board blank
+	for (int i = 0; i < 64; i++) board[i / 8][i % 8] = ' ';
+
+	int row = 0;
+	while (row < 8) {
+		int index = FENHelper::findCharIndex(s, '/');
+		string l = s.substr(0, index);
+		if (row == 7) {
+			istringstream i{ s };
+			i >> l;
+		}
+		
+		int strInd{ 0 };
+
+		for (int i = row * 8; i < (row + 1) * 8; i++) {
+			
+			char piece = l[strInd];
+
+			//digit means empty consecutive places
+			if (isdigit(piece)) {
+				i += piece - '0'-1;
+			}
+			else board[i / 8][i % 8] = piece;
+
+			strInd++;
+
+		}
+
+		s = s.substr(index + 1);
+		row++;
+	}
+
+	//setting turns
+
+	istringstream i2{ s };
+	
+	string l;
+
+	i2 >> l >> l;
+
+	if (l == "b") whiteTurn = false;
+
+	//castling
+
+	i2 >> l;
+
+	whiteLongCastle = false, whiteShortCastle = false, blackShortCastle = false, blackLongCastle = false;
+
+	for (int i = 0; i < l.size(); i++) {
+		switch (l[i]) {
+		case 'K': whiteShortCastle = true; break;
+		case 'Q': whiteLongCastle = true; break;
+		case 'k': blackShortCastle = true; break;
+		case 'q': blackLongCastle = true; break;
+		}
+	}
+
+	//en passant
+
+	i2 >> l;
+
+	if (l != "-") {
+		int col = l[0] - 'a';
+		int row = l[1]-'0';
+		int rowFrom{};
+		if (whiteTurn) rowFrom = row - 2;
+		else rowFrom = row + 2;
+		string move = to_string(row) + to_string(col) + to_string(rowFrom) + to_string(col);
+		lastMove = move;
+	}
+
+	//draw moves
+
+	int n;
+
+	i2 >> n;
+
+	numsTilDraw = n;
+
+	//fullMoves
+
+	int fullMoves{};
+
+	i2 >> fullMoves;
+
+	moveNum = fullMoves;
+
+	arrayToBitBoard();
+
+}
 
 void arrayToBitBoard(char board[8][8], bb& WP, bb& WR, bb& WN, bb& WB, bb& WQ, bb& WK, bb& BP, bb& BR, bb& BN, bb& BB, bb& BQ, bb& BK) {
 	

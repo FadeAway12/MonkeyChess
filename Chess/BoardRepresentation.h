@@ -56,12 +56,18 @@ struct RepetitionVector { //MAKE SURE TO ADD COPY ASSIGNMENT/CONSTRUCTION LATER 
 
 #endif
 
+extern bool whiteTurn;
+
 extern bool whiteShortCastle;
 extern bool whiteLongCastle;
 extern bool blackShortCastle;
 extern bool blackLongCastle;
 
 extern int numsTilDraw; //if over 50, game is a draw. increment if executeMove returns true
+extern int moveNum;
+
+extern RepetitionVector vWhite;
+extern RepetitionVector vBlack;
 
 extern bb WP;
 extern bb WR;
@@ -101,7 +107,11 @@ extern bb rank1;
 
 extern char board[8][8];
 
+extern std::string lastMove;
+
 extern void arrayToBitBoard(char board[8][8], bb& WP, bb& WR, bb& WN, bb& WB, bb& WQ, bb& WK, bb& BP, bb& BR, bb& BN, bb& BB, bb& BQ, bb& BK);
+
+extern void importFEN(std::string s);
 
 extern void arrayToBitBoard();
 

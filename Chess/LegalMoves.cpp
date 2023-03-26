@@ -17,7 +17,7 @@ constexpr bb allSpots{ 18'446'744'073'709'551'615 };
 
 using namespace std;
 
-string lastMove; //formatted as piece, rowF, colF, rowT, colT
+ //formatted as piece, rowF, colF, rowT, colT
 
 #define ts std::to_string
 

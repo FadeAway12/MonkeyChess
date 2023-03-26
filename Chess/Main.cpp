@@ -35,12 +35,7 @@ int main() {
 
 void startGame(istream& is) {
 
-	RepetitionVector vWhite;
-	RepetitionVector vBlack;
-	
-	numsTilDraw = 0;
-	int moveNum{};
-	string lastMove{};
+	importFEN("8/pp2p3/2p1k2P/4P3/1R2R1P1/8/PPPq1r2/2KN4 w - - 3 34");
 	
 	while (true) {
 
@@ -51,7 +46,7 @@ void startGame(istream& is) {
 		//cout << endl << "EVAL: " << evaluation(listOfBoardParamsAndOthers) << endl;
 		//cout << endl << "EVAL: " << minimax(listOfBoardParamsAndOthers, lastMove, whiteLongCastle,
 			//whiteShortCastle, blackLongCastle, blackShortCastle, 4,4, moveNum % 2 == 0, -INFINITY, +INFINITY);
-		if (moveNum%2 == 0)
+		if (whiteTurn)
 			cout << endl << "BEST MOVE:" << getWhiteMove(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle, 5) << endl;
 		else 
 			cout << endl << "BEST MOVE:" << getBlackMove(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle, 5) << endl;
@@ -61,7 +56,7 @@ void startGame(istream& is) {
 		cout << endl;
 		printBoard();
 		
-		if (moveNum % 2 == 0) { //whites turn
+		if (whiteTurn) { //whites turn
 			moveNum++;
 			while (!isLegal(listOfBoardParamsAndOthers, move, lastMove, "W", whiteShortCastle, whiteLongCastle, blackShortCastle, blackLongCastle)) {
 				is >> move;
