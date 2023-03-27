@@ -2,16 +2,22 @@
 
 #include <iostream>
 
-void inputUCI();
+extern std::string algebraToMove(std::string move);
 
-void inputSetOption(std::string inputString);
+extern std::string moveToAlgebra(std::string move);
 
-void inputIsReady();
+extern void UCICommunication();
 
-void inputUCINewGame();
+extern void inputUCI();
 
-void inputPosition(std::string input);
+extern void inputSetOption(std::string inputString);
 
-void inputGo();
+extern void inputIsReady();
 
-void inputPrint();
+extern void inputUCINewGame();
+
+extern void inputPosition(std::string input);
+
+extern void inputGo();
+
+extern void inputPrint();

@@ -13,6 +13,10 @@ using namespace std;
 #define params bb WP, bb WR, bb WN, bb WB, bb WQ, bb WK, bb BP, bb BR, bb BN, bb BB, bb BQ, bb BK, bb emptySquare, bb black, bb white
 #define paramsVal WP, WR, WN, WB, WQ, WK, BP, BR, BN, BB, BQ, BK, emptySquare, black, white
 
+namespace Search {
+	int evalScore{};
+}
+
 string bestMove{};
 
 string search() {
@@ -21,13 +25,13 @@ string search() {
 
 string getWhiteMove(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 	int depth) {
-	minimax(paramsVal, lastMove, WLC, WSC, BLC, BSC, depth, depth, true, -INFINITY, +INFINITY);
+	Search::evalScore = minimax(paramsVal, lastMove, WLC, WSC, BLC, BSC, depth, depth, true, -INFINITY, +INFINITY);
 	return bestMove;
 }
 
 string getBlackMove(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 	int depth) {
-	minimax(paramsVal, lastMove, WLC, WSC, BLC, BSC, depth, depth, false, -INFINITY, +INFINITY);
+	Search::evalScore = minimax(paramsVal, lastMove, WLC, WSC, BLC, BSC, depth, depth, false, -INFINITY, +INFINITY);
 	return bestMove;
 }
 

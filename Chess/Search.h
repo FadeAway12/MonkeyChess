@@ -5,6 +5,12 @@
 
 extern std::string bestMove;
 
+namespace Search {
+
+	extern int evalScore;
+
+}
+
 double minimax(params, std::string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 	int depth, int dMax, bool maximizingWhite, double alpha, double beta);
 

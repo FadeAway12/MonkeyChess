@@ -135,7 +135,7 @@ bb attackedByWhite(moveParams) {
 
 			while (R) {
 				R = R << 1 & ~(R & black & ~BK) << 1 & ~fileA;
-				attacked || R;
+				attacked |= R;
 				if ((R & ~pos) & white) break;
 			}
 
@@ -294,6 +294,14 @@ bb attackedByBlack(moveParams) {
 				QL = QL >> 1 & ~(QL & white & ~WK) >> 1 & ~fileH;
 				attacked |= QL;
 				if ((QL & ~pos) & black) break;
+			}
+
+			bb R = pos;
+
+			while (R) {
+				R = R << 1 & ~(R & white & ~WK) << 1 & ~fileA;
+				attacked |= R;
+				if ((R & ~pos) & black) break;
 			}
 
 			bb QD = pos;

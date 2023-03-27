@@ -94,7 +94,7 @@ string lastMove = "";
 
 //Real board
 
-/*
+
 char board[8][8] = { //used for convenient viewing of the board's representation
 	//0    1    2    3    4    5    6    7
 	{'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'}, //0
@@ -106,11 +106,11 @@ char board[8][8] = { //used for convenient viewing of the board's representation
 	{'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'}, //6
 	{'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}  //7
 	
-};*/
+};
 
 //Test board
 
-
+/*
 char board[8][8] = {
 	//0   1   2   3   4   5   6   7
 	{' ',' ',' ',' ',' ',' ',' ',' '}, //0
@@ -121,7 +121,7 @@ char board[8][8] = {
 	{' ','K',' ',' ',' ',' ',' ',' '} , //5
 	{' ',' ',' ',' ','R',' ',' ',' '}, //6
 	{' ','k',' ',' ',' ',' ',' ',' '}  //7
-};
+};*/
 
 namespace FENHelper {
 	int findCharIndex(const string& s, char c) {
@@ -179,6 +179,7 @@ void importFEN(string s) {
 	i2 >> l >> l;
 
 	if (l == "b") whiteTurn = false;
+	else whiteTurn = true;
 
 	//castling
 
@@ -201,12 +202,21 @@ void importFEN(string s) {
 
 	if (l != "-") {
 		int col = l[0] - 'a';
-		int row = l[1]-'0';
+		int row = 8-(l[1]-'0');
 		int rowFrom{};
-		if (whiteTurn) rowFrom = row - 2;
-		else rowFrom = row + 2;
-		string move = to_string(row) + to_string(col) + to_string(rowFrom) + to_string(col);
+		if (whiteTurn) {
+			row++;
+			rowFrom = row - 2;
+		}
+		else {
+			row--;
+			rowFrom = row + 2;
+		}
+		string move{};
+		if (whiteTurn) move = "p" + to_string(rowFrom) + to_string(col) + to_string(row) + to_string(col);
+		else move = "P" + to_string(rowFrom) + to_string(col) + to_string(row) + to_string(col);
 		lastMove = move;
+		cout << lastMove;
 	}
 
 	//draw moves

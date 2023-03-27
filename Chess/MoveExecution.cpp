@@ -94,7 +94,11 @@ bool executeMove(const string& move, const string& turn, moveParams, bool& WLC,
 
 	if (turn == "W") {
 		if (from & WP) {
-			cap = true;
+			cap = true; 
+			//en passant
+			if (colF != colT) {
+				BP = BP & ~(to << 8);
+			}
 			WP = (WP | to) & ~from;
 		}
 		else if (from & WN) {
@@ -126,6 +130,9 @@ bool executeMove(const string& move, const string& turn, moveParams, bool& WLC,
 	if (turn == "B") {
 		if (from & BP) {
 			cap = true;
+			if (colF != colT) {
+				WP = WP & ~(to >> 8);
+			}
 			BP = (BP | to) & ~from;
 		}
 		else if (from & BN) {

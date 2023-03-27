@@ -13,14 +13,17 @@ void UCICommunication() {
 
 	while (true) {
 		
+		bitboardToArray();
+
+
 		string s;
-		cin >> s;
+		getline(cin, s);
 
 		if (s == "uci") {
 			inputUCI();
 		}
 
-		else if (s.find("setoption")) {
+		else if (s.find("setoption") != string::npos) {
 			inputSetOption(s);
 		}
 
@@ -32,14 +35,16 @@ void UCICommunication() {
 			inputUCINewGame();
 		}
 
-		else if (s == "position") {
+		else if (s.find("position") != string::npos) {
 			inputPosition(s);
 		}
 
-		else if (s == "go") {
-
+		else if (s.substr(0, 2) == "go") {
+			inputGo();
 		}
-
+		else if (s == "print") {
+			printBoard();
+		}
 
 
 	}
@@ -65,11 +70,68 @@ void inputUCINewGame() {
 }
 
 void inputPosition(string input) {
+	input = input.substr(9);
+	if (input.find("startpos") != string::npos) {
+		
+		importFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+	}
+	else if (input.find("fen") != string::npos) {
+		importFEN(input);
+	}
+	if (input.find("moves") != string::npos) {
+		input = input.substr(input.find("moves") + 6);
+		int moveNumInt{};
+		istringstream ist{ input };
+		
+		string move;
+		
+		while (ist >> move) {
+			
+			move = algebraToMove(move);
+			
+			if (whiteTurn) { //white
+				executeMove(move, "W", listOfBoardParamsAndOthers, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle);
+			}
+			else {
+				executeMove(move, "B", listOfBoardParamsAndOthers, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle);
+			}
+			whiteTurn = !whiteTurn;
+		}
+	}
+}
 
+string algebraToMove(string move) {
+	if (move == "O-O" || move == "O-O-O") return move;
+	int fromRow = 8 - (move[1] - '0');
+	int fromCol = move[0] - 'a';
+	int toRow = 8 - (move[3] - '0');
+	int toCol = move[2] - 'a';
+	if (move.size() == 5) {
+		return to_string(fromRow) + to_string(fromCol) + to_string(toRow) + to_string(toCol) + "=" + move[4];
+	}
+	return to_string(fromRow) + to_string(fromCol) + to_string(toRow) + to_string(toCol);
+}
+
+string moveToAlgebra(string move) {
+	if (move == "O-O" || move == "O-O-O") return move;
+	char fromCol = (move[1]-'0') + 'a';
+	int fromRow = 8 - (move[0] - '0');
+	char toCol = (move[3]-'0') + 'a';
+	int toRow = 8 - (move[2] - '0');
+	
+	if (move.size() == 6) {
+		return fromCol + to_string(fromRow) + toCol + to_string(toRow) + move[5];
+	}
+	return fromCol + to_string(fromRow) + toCol + to_string(toRow);
 }
 
 void inputGo() {
-
+	string move;
+	if (whiteTurn) {
+		move = getWhiteMove(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle, 5);
+	}
+	else move = getBlackMove(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle, 5);
+	cout << "bestmove " << moveToAlgebra(move) << endl;
 }
 
 void inputPrint() {
