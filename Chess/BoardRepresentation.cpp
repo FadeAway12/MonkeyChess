@@ -137,7 +137,7 @@ namespace FENHelper {
 void importFEN(string s) {
 
 	//positions
-
+	
 	//making board blank
 	for (int i = 0; i < 64; i++) board[i / 8][i % 8] = ' ';
 
@@ -155,7 +155,7 @@ void importFEN(string s) {
 		for (int i = row * 8; i < (row + 1) * 8; i++) {
 			
 			char piece = l[strInd];
-
+			
 			//digit means empty consecutive places
 			if (isdigit(piece)) {
 				i += piece - '0'-1;

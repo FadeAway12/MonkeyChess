@@ -76,7 +76,7 @@ void inputPosition(string input) {
 		importFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	}
 	else if (input.find("fen") != string::npos) {
-		importFEN(input);
+		importFEN(input.substr(4));
 	}
 	if (input.find("moves") != string::npos) {
 		input = input.substr(input.find("moves") + 6);
@@ -132,6 +132,7 @@ void inputGo() {
 	}
 	else move = getBlackMove(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle, 5);
 	cout << "bestmove " << moveToAlgebra(move) << endl;
+	whiteTurn = !whiteTurn;
 }
 
 void inputPrint() {
