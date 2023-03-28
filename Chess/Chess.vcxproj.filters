@@ -39,6 +39,9 @@
     <ClCompile Include="UCI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OpeningBook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoardRepresentation.h">
@@ -63,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UCI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OpeningBook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

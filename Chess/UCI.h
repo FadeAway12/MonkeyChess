@@ -21,3 +21,5 @@ extern void inputPosition(std::string input);
 extern void inputGo();
 
 extern void inputPrint();
+
+extern void readMoveList(std::string input);

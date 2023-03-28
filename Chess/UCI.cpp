@@ -6,13 +6,14 @@
 #include "MoveExecution.h"
 #include "Search.h"
 #include "UCI.h"
+#include "OpeningBook.h"
 
 using namespace std;
 
 void UCICommunication() {
 
 	while (true) {
-		
+
 		bitboardToArray();
 
 
@@ -42,8 +43,13 @@ void UCICommunication() {
 		else if (s.substr(0, 2) == "go") {
 			inputGo();
 		}
-		else if (s == "print") {
+		else if (s == "print") { //below are user implemented commands
 			printBoard();
+		}
+		else if (s == "getMoves") {
+			if (whiteTurn) cout << rawToString(getWLegalMoves(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle), board);
+			else cout << rawToString(getBLegalMoves(listOfBoardParamsAndOthers, lastMove, blackLongCastle, blackShortCastle), board);
+			cout << endl;
 		}
 
 
@@ -66,37 +72,62 @@ void inputIsReady() {
 }
 
 void inputUCINewGame() {
+	
+	vBlack.repetitions.clear();
+	vWhite.repetitions.clear();
+	numsTilDraw = 0;
+	WP = 0, WN = 0, WR = 0, WQ = 0, WK = 0, WB = 0, BP = 0, BN = 0, BR = 0, BQ = 0, BK = 0, BB = 0;
+	bitboardToArray();
+	whiteLongCastle = true, whiteShortCastle = true, blackLongCastle = true, blackShortCastle = true;
+	whiteTurn = true;
+	lastMove = "";
+	inOpening = true;
+	moveNum = 1;
+	cout << "readyok\n";
 
 }
 
 void inputPosition(string input) {
 	input = input.substr(9);
 	if (input.find("startpos") != string::npos) {
-		
+
 		importFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	}
 	else if (input.find("fen") != string::npos) {
 		importFEN(input.substr(4));
 	}
 	if (input.find("moves") != string::npos) {
+		
 		input = input.substr(input.find("moves") + 6);
-		int moveNumInt{};
-		istringstream ist{ input };
-		
-		string move;
-		
-		while (ist >> move) {
-			
-			move = algebraToMove(move);
-			
-			if (whiteTurn) { //white
-				executeMove(move, "W", listOfBoardParamsAndOthers, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle);
-			}
-			else {
-				executeMove(move, "B", listOfBoardParamsAndOthers, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle);
-			}
-			whiteTurn = !whiteTurn;
+
+		readMoveList(input);
+
+	}
+}
+
+void readMoveList(string input) {
+	istringstream ist{ input };
+
+	string move;
+
+	while (ist >> move) {
+
+		if (whiteTurn) vWhite.update(getWLegalMoves(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle));
+		else vBlack.update(getWLegalMoves(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle));
+
+		move = algebraToMove(move);
+
+		moveNum++;
+
+		if (whiteTurn) { //white
+			executeMove(move, "W", listOfBoardParamsAndOthers, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle);
 		}
+		else {
+			executeMove(move, "B", listOfBoardParamsAndOthers, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle);
+		}
+		whiteTurn = !whiteTurn;
+
+		lastMove = move;
 	}
 }
 
@@ -114,11 +145,11 @@ string algebraToMove(string move) {
 
 string moveToAlgebra(string move) {
 	if (move == "O-O" || move == "O-O-O") return move;
-	char fromCol = (move[1]-'0') + 'a';
+	char fromCol = (move[1] - '0') + 'a';
 	int fromRow = 8 - (move[0] - '0');
-	char toCol = (move[3]-'0') + 'a';
+	char toCol = (move[3] - '0') + 'a';
 	int toRow = 8 - (move[2] - '0');
-	
+
 	if (move.size() == 6) {
 		return fromCol + to_string(fromRow) + toCol + to_string(toRow) + move[5];
 	}
@@ -126,13 +157,31 @@ string moveToAlgebra(string move) {
 }
 
 void inputGo() {
+
 	string move;
+
+	string op = getOpeningMove();
+
+	string turn;
+	if (whiteTurn) turn = "W";
+	else turn = "B";
+
+	if (inOpening && isLegal(listOfBoardParamsAndOthers, algebraToMove(op), lastMove, turn, whiteShortCastle,
+		whiteLongCastle, blackShortCastle, blackLongCastle)) {
+		cout << "bestmove " << op << endl;
+		return;
+	}
+
 	if (whiteTurn) {
 		move = getWhiteMove(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle, 5);
 	}
+
 	else move = getBlackMove(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle, 5);
+
+	
+
 	cout << "bestmove " << moveToAlgebra(move) << endl;
-	whiteTurn = !whiteTurn;
+
 }
 
 void inputPrint() {
