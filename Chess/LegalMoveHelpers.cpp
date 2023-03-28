@@ -560,11 +560,22 @@ You DO NOT NEED TO NOT THE KING IN THIS METHOD. Remove later
 
 vector<bb> findPinnedPiecesWhite(moveParams, bb* checkers) {
 	
+	checkers[0] = allSpots;
+
 	vector<bb> pinned;
 
 	int count{};
 
 	int i{};
+
+	if (WK >> 7 & BP & ~fileA) {
+		checkers[i] = WK >> 7;
+		i++;
+	}
+	else if (WK >> 9 & BP & ~fileH) {
+		checkers[i] = WK >> 9;
+		i++;
+	}
 
 	bb U = WK;
 	while (U != (U | U >> 8) && count<=1) { //will quit if U is same as U ord with Ushifted up 8. 
@@ -781,18 +792,27 @@ vector<bb> findPinnedPiecesWhite(moveParams, bb* checkers) {
 
 	if (WK << 17 & ~fileA & BN) checkers[i] = WK << 17;
 
-	if (i == 0) checkers[0] = allSpots;
-
 	return pinned;
 }
 
 vector<bb> findPinnedPiecesBlack(moveParams, bb* checkers) {
+
+	checkers[0] = allSpots;
 
 	vector<bb> pinned;
 
 	int count{};
 
 	int i{};
+
+	if (BK << 7 & WP & ~fileH) {
+		checkers[i] = BK << 7;
+		i++;
+	}
+	else if (BK << 9 & WP & ~fileA) {
+		checkers[i] = BK << 9;
+		i++;
+	}
 
 	bb U = BK;
 	while (U != (U | U >> 8) && count <= 1) { //goes through to find a potential checker above the king
@@ -1007,8 +1027,6 @@ vector<bb> findPinnedPiecesBlack(moveParams, bb* checkers) {
 	if (i == 2) return pinned;
 
 	if (BK << 17 & ~fileA & WN) checkers[i] = BK << 17;
-
-	if (i == 0) checkers[0] = allSpots;
 
 	return pinned;
 }

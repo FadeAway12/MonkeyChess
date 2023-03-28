@@ -10,6 +10,8 @@
 
 using namespace std;
 
+int depthEval{ 5 }; //value to evaluate depth at
+
 void UCICommunication() {
 
 	while (true) {
@@ -47,14 +49,36 @@ void UCICommunication() {
 			printBoard();
 		}
 		else if (s == "getMoves") {
-			if (whiteTurn) cout << rawToString(getWLegalMoves(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle), board);
-			else cout << rawToString(getBLegalMoves(listOfBoardParamsAndOthers, lastMove, blackLongCastle, blackShortCastle), board);
+			string moves;
+			if (whiteTurn) moves = getWLegalMoves(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle);
+			else  moves = getBLegalMoves(listOfBoardParamsAndOthers, lastMove, blackLongCastle, blackShortCastle);
+			cout << moves << endl << rawToString(moves, board);
 			cout << endl;
 		}
-
+		else if (s == "getEval") {
+			getEval();
+		}
 
 	}
 
+}
+
+void getMoves() {
+	string moves;
+	if (whiteTurn) moves = getWLegalMoves(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle);
+	else  moves = getBLegalMoves(listOfBoardParamsAndOthers, lastMove, blackLongCastle, blackShortCastle);
+	cout << moves << endl << rawToString(moves, board);
+	cout << endl;
+}
+
+void getEval() {
+	if (whiteTurn) {
+		getWhiteMove(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle, depthEval);
+	}
+	else getBlackMove(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle, depthEval);
+
+	cout << Search::evalScore;
+	cout << endl;
 }
 
 void inputUCI() {
@@ -94,6 +118,7 @@ void inputPosition(string input) {
 		importFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	}
 	else if (input.find("fen") != string::npos) {
+		inOpening = false;
 		importFEN(input.substr(4));
 	}
 	if (input.find("moves") != string::npos) {
@@ -125,6 +150,7 @@ void readMoveList(string input) {
 		else {
 			executeMove(move, "B", listOfBoardParamsAndOthers, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle);
 		}
+
 		whiteTurn = !whiteTurn;
 
 		lastMove = move;
@@ -132,26 +158,32 @@ void readMoveList(string input) {
 }
 
 string algebraToMove(string move) {
-	if (move == "O-O" || move == "O-O-O") return move;
+	if (move == "e1g1" || move == "e8g8") return "O-O";
+	else if (move == "e1c1" || move == "e8c8") return "O-O-O";
 	int fromRow = 8 - (move[1] - '0');
 	int fromCol = move[0] - 'a';
 	int toRow = 8 - (move[3] - '0');
 	int toCol = move[2] - 'a';
 	if (move.size() == 5) {
-		return to_string(fromRow) + to_string(fromCol) + to_string(toRow) + to_string(toCol) + "=" + move[4];
+		string m = to_string(fromRow) + to_string(fromCol) + to_string(toRow) + to_string(toCol) + ((char)toupper(move[4]));
+		return m;
 	}
 	return to_string(fromRow) + to_string(fromCol) + to_string(toRow) + to_string(toCol);
 }
 
 string moveToAlgebra(string move) {
-	if (move == "O-O" || move == "O-O-O") return move;
+
+	if (move == "O-O" && whiteTurn) return "e1g1";
+	if (move == "O-O-O" && whiteTurn) return "e1c1";
+	if (move == "O-O") return "e8g8";
+	if (move == "O-O-O") return "e8c8";
 	char fromCol = (move[1] - '0') + 'a';
 	int fromRow = 8 - (move[0] - '0');
 	char toCol = (move[3] - '0') + 'a';
 	int toRow = 8 - (move[2] - '0');
 
-	if (move.size() == 6) {
-		return fromCol + to_string(fromRow) + toCol + to_string(toRow) + move[5];
+	if (move.size() == 5) {
+		return fromCol + to_string(fromRow) + toCol + to_string(toRow) + (char)move[4];
 	}
 	return fromCol + to_string(fromRow) + toCol + to_string(toRow);
 }
@@ -173,10 +205,10 @@ void inputGo() {
 	}
 
 	if (whiteTurn) {
-		move = getWhiteMove(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle, 5);
+		move = getWhiteMove(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle, depthEval);
 	}
 
-	else move = getBlackMove(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle, 5);
+	else move = getBlackMove(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle, depthEval);
 
 	
 

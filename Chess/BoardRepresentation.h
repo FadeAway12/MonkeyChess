@@ -33,6 +33,15 @@ struct Repetition { //MAKE SURE TO ADD COPY ASSIGNMENT/CONSTRUCTION LATER FOR BE
 struct RepetitionVector { //MAKE SURE TO ADD COPY ASSIGNMENT/CONSTRUCTION LATER FOR BEING PASSED THROUGH MINIMAX
 
 	std::vector<Repetition> repetitions;
+
+	RepetitionVector() {
+		
+	}
+
+	RepetitionVector(RepetitionVector& v) {
+		repetitions = v.repetitions;
+	}
+
 	bool update(std::string moves) { //returns true if threefold draw repitition is met
 		
 		bool found{};

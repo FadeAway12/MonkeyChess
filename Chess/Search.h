@@ -12,7 +12,7 @@ namespace Search {
 }
 
 double minimax(params, std::string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
-	int depth, int dMax, bool maximizingWhite, double alpha, double beta);
+	int depth, bool firstCall, bool maximizingWhite, double alpha, double beta);
 
 std::string getWhiteMove(params, std::string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 	int depth);

@@ -8,6 +8,10 @@ extern std::string moveToAlgebra(std::string move);
 
 extern void UCICommunication();
 
+extern void getMoves();
+
+extern void getEval();
+
 extern void inputUCI();
 
 extern void inputSetOption(std::string inputString);
