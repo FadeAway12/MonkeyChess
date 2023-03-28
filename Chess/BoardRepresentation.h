@@ -34,6 +34,8 @@ struct RepetitionVector { //MAKE SURE TO ADD COPY ASSIGNMENT/CONSTRUCTION LATER 
 
 	std::vector<Repetition> repetitions;
 
+	std::string lastModified{};
+
 	RepetitionVector() {
 		
 	}
@@ -44,6 +46,7 @@ struct RepetitionVector { //MAKE SURE TO ADD COPY ASSIGNMENT/CONSTRUCTION LATER 
 
 	bool update(std::string moves) { //returns true if threefold draw repitition is met
 		
+		lastModified = moves; 
 		bool found{};
 		for (int i = 0; i < repetitions.size(); i++) {
 			if (repetitions[i].moves == moves) {
@@ -57,6 +60,25 @@ struct RepetitionVector { //MAKE SURE TO ADD COPY ASSIGNMENT/CONSTRUCTION LATER 
 			repetitions.push_back(Repetition(moves, 1));
 		}
 		return false;
+	}
+
+	void undo() {
+		for (int i = 0; i < repetitions.size(); i++) {
+			if (repetitions[i].moves == lastModified) {
+				if (repetitions[i].num > 1) repetitions[i].num--;
+				else repetitions.pop_back();
+			}
+		}
+	}
+
+	int maxRep() {
+		int max = 0;
+		for (int i = 0; i < repetitions.size(); i++) {
+			if (repetitions[i].num>max) {
+				max = repetitions[i].num;
+			}
+		}
+		return max;
 	}
 
 };

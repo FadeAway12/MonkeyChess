@@ -15,6 +15,7 @@ using namespace std;
 
 namespace Search {
 	int evalScore{};
+	int startingDepth;
 }
 
 string bestMove{};
@@ -58,6 +59,23 @@ double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 	else moves = getBLegalMoves(paramsVal, lastMove, BLC, BSC);
 
 	if (depth == 0) return evaluation(paramsVal);
+
+	/* THREEFOLD REPETITION FIX LATER
+	if (firstCall) Search::startingDepth = depth;
+	
+	if (Search::startingDepth - 1 == depth) {
+		if (maximizingWhite && vWhite.update(moves)) {
+			cout << vWhite.maxRep();
+			vWhite.undo();
+			cout << endl << vWhite.maxRep() << endl;
+			return 0;
+		}
+		else if (!maximizingWhite && vBlack.update(moves)) {
+			vBlack.undo();
+			return 0;
+		}
+	}
+	*/
 
 	istringstream is{ moves };
 

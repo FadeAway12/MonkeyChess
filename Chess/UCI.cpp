@@ -107,6 +107,8 @@ void inputUCINewGame() {
 	lastMove = "";
 	inOpening = true;
 	moveNum = 1;
+	vWhite.repetitions.clear();
+	vBlack.repetitions.clear();
 	cout << "readyok\n";
 
 }
@@ -114,10 +116,11 @@ void inputUCINewGame() {
 void inputPosition(string input) {
 	input = input.substr(9);
 	if (input.find("startpos") != string::npos) {
-
+		vWhite.repetitions.clear(), vBlack.repetitions.clear();
 		importFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	}
 	else if (input.find("fen") != string::npos) {
+		vWhite.repetitions.clear(), vBlack.repetitions.clear();
 		inOpening = false;
 		importFEN(input.substr(4));
 	}
