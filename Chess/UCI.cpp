@@ -49,11 +49,7 @@ void UCICommunication() {
 			printBoard();
 		}
 		else if (s == "getMoves") {
-			string moves;
-			if (whiteTurn) moves = getWLegalMoves(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle);
-			else  moves = getBLegalMoves(listOfBoardParamsAndOthers, lastMove, blackLongCastle, blackShortCastle);
-			cout << moves << endl << rawToString(moves, board);
-			cout << endl;
+			getMoves();
 		}
 		else if (s == "getEval") {
 			getEval();
@@ -117,6 +113,7 @@ void inputPosition(string input) {
 	input = input.substr(9);
 	if (input.find("startpos") != string::npos) {
 		vWhite.repetitions.clear(), vBlack.repetitions.clear();
+		vWhite.update(getWLegalMoves(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle));
 		importFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	}
 	else if (input.find("fen") != string::npos) {
@@ -140,8 +137,7 @@ void readMoveList(string input) {
 
 	while (ist >> move) {
 
-		if (whiteTurn) vWhite.update(getWLegalMoves(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle));
-		else vBlack.update(getWLegalMoves(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle));
+		
 
 		move = algebraToMove(move);
 
@@ -155,6 +151,9 @@ void readMoveList(string input) {
 		}
 
 		whiteTurn = !whiteTurn;
+
+		if (whiteTurn) vWhite.update(getWLegalMoves(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle));
+		else vBlack.update(getBLegalMoves(listOfBoardParamsAndOthers, lastMove, blackLongCastle, blackShortCastle));
 
 		lastMove = move;
 	}
@@ -175,7 +174,7 @@ string algebraToMove(string move) {
 }
 
 string moveToAlgebra(string move) {
-
+	
 	if (move == "O-O" && whiteTurn) return "e1g1";
 	if (move == "O-O-O" && whiteTurn) return "e1c1";
 	if (move == "O-O") return "e8g8";

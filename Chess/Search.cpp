@@ -33,6 +33,7 @@ vector<Move> moveList;
 
 string getWhiteMove(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 	int depth) {
+	Search::startingDepth = depth;
 	bestMove = "";
 	Search::evalScore = minimax(paramsVal, lastMove, WLC, WSC, BLC, BSC, depth, true, true, -INFINITY, +INFINITY);
 	return bestMove;
@@ -40,7 +41,8 @@ string getWhiteMove(params, string lastMove, bool WLC, bool WSC, bool BLC, bool 
 
 string getBlackMove(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 	int depth) {
-	bestMove == "";
+	Search::startingDepth = depth;
+	bestMove = "";
 	Search::evalScore = minimax(paramsVal, lastMove, WLC, WSC, BLC, BSC, depth, true, false, -INFINITY, +INFINITY);
 	return bestMove;
 }
@@ -60,35 +62,38 @@ double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 
 	if (depth == 0) return evaluation(paramsVal);
 
-	/* THREEFOLD REPETITION FIX LATER
-	if (firstCall) Search::startingDepth = depth;
-	
+	//THREEFOLD REPETITION MAY BE BUGGY (CHECK IF ANYTHING SEEMS BROKEN)
+	/*
 	if (Search::startingDepth - 1 == depth) {
-		if (maximizingWhite && vWhite.update(moves)) {
-			cout << vWhite.maxRep();
-			vWhite.undo();
-			cout << endl << vWhite.maxRep() << endl;
+		RepetitionVector vW2{ vWhite };
+		RepetitionVector vB2{ vBlack };
+		cout << vWhite.maxRep();
+		if (maximizingWhite && vW2.update(moves)) {
+			cout << lastMove << endl;
 			return 0;
 		}
-		else if (!maximizingWhite && vBlack.update(moves)) {
-			vBlack.undo();
+		else if (!maximizingWhite && vB2.update(moves)) {
+			cout << lastMove << endl;
 			return 0;
 		}
-	}
-	*/
+	}*/
 
 	istringstream is{ moves };
 
-	if (maximizingWhite && 0 == moves.length()) {
-		bb attack = attackedByBlack(paramsVal);
-		if (attack & WK) return -300 - depth; //checkmate
-		else return 0; //stalemate
-	}
+	if (0 == moves.length()) {
 
-	else if (!maximizingWhite && 0 == moves.length()) {
-		bb attack = attackedByWhite(paramsVal);
-		if (attack & BK) return 300 + depth;//checkmate
-		else return 0; //stalemate
+		if (maximizingWhite) {
+			bb attack = attackedByBlack(paramsVal);
+			if (attack & WK) return -300 - depth; //checkmate
+			else return 0; //stalemate
+		}
+
+		else if (!maximizingWhite) {
+			bb attack = attackedByWhite(paramsVal);
+			if (attack & BK) return 300 + depth;//checkmate
+			else return 0; //stalemate
+		}
+
 	}
 
 	if (maximizingWhite) {

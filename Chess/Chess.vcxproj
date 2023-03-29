@@ -141,6 +141,7 @@
     <ClCompile Include="MoveExecution.cpp" />
     <ClCompile Include="OpeningBook.cpp" />
     <ClCompile Include="Search.cpp" />
+    <ClCompile Include="TranspositionTables.cpp" />
     <ClCompile Include="UCI.cpp" />
   </ItemGroup>
   <ItemGroup>
