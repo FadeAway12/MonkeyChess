@@ -62,21 +62,22 @@ double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 
 	if (depth == 0) return evaluation(paramsVal);
 
-	//THREEFOLD REPETITION MAY BE BUGGY (CHECK IF ANYTHING SEEMS BROKEN)
 	/*
+	//THREEFOLD REPETITION MAY BE BUGGY (CHECK IF ANYTHING SEEMS BROKEN)
+	
 	if (Search::startingDepth - 1 == depth) {
-		RepetitionVector vW2{ vWhite };
-		RepetitionVector vB2{ vBlack };
-		cout << vWhite.maxRep();
+		RepetitionVector vW2;
+		RepetitionVector vB2;
+		vW2.repetitions = vWhite.repetitions;
+		vB2.repetitions = vBlack.repetitions;
 		if (maximizingWhite && vW2.update(moves)) {
-			cout << lastMove << endl;
 			return 0;
 		}
 		else if (!maximizingWhite && vB2.update(moves)) {
-			cout << lastMove << endl;
 			return 0;
 		}
-	}*/
+	}
+	*/
 
 	istringstream is{ moves };
 
