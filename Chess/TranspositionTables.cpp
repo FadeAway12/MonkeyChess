@@ -87,33 +87,33 @@ int positionValue(const bb& WP, const bb& WR, const bb& WN, const bb& WB, const 
 	
 	//positions
 	for (int i = 0; i < 64; ++i) {
-		if (((WP >> i) & 1) == 1) value += nums[i];
-		else if (((BP >> i) & 1) == 1) value += nums[i + 64 * 6];
-		else if (((WN >> i) & 1) == 1) value += nums[i + 64 * 1];
-		else if (((BN >> i) & 1) == 1) value += nums[i + 64 * 8];
-		else if (((WB >> i) & 1) == 1) value += nums[i + 64 * 2];
-		else if (((BB >> i) & 1) == 1) value += nums[i + 64 * 7];
-		else if (((WR >> i) & 1) == 1) value += nums[i + 64 * 3];
-		else if (((BR >> i) & 1) == 1) value += nums[i + 64 * 9];
-		else if (((WQ >> i) & 1) == 1) value += nums[i + 64 * 4];
-		else if (((BQ >> i) & 1) == 1) value += nums[i + 64 * 10];
-		else if (((WK >> i) & 1) == 1) value += nums[i + 64 * 5]; 
-		else if (((BK >> i) & 1) == 1) value += nums[i + 64 * 11];
+		if (((WP >> i) & 1) == 1) value ^= nums[i];
+		else if (((BP >> i) & 1) == 1) value ^= nums[i + 64 * 6];
+		else if (((WN >> i) & 1) == 1) value ^= nums[i + 64 * 1];
+		else if (((BN >> i) & 1) == 1) value ^= nums[i + 64 * 8];
+		else if (((WB >> i) & 1) == 1) value ^= nums[i + 64 * 2];
+		else if (((BB >> i) & 1) == 1) value ^= nums[i + 64 * 7];
+		else if (((WR >> i) & 1) == 1) value ^= nums[i + 64 * 3];
+		else if (((BR >> i) & 1) == 1) value ^= nums[i + 64 * 9];
+		else if (((WQ >> i) & 1) == 1) value ^= nums[i + 64 * 4];
+		else if (((BQ >> i) & 1) == 1) value ^= nums[i + 64 * 10];
+		else if (((WK >> i) & 1) == 1) value ^= nums[i + 64 * 5]; 
+		else if (((BK >> i) & 1) == 1) value ^= nums[i + 64 * 11];
 	}
 
 	//white to move
-	if (whiteTurn) value += nums[768];
+	if (whiteTurn) value ^= nums[768];
 
 	//castling
-	if (WSC) value += nums[769];
-	if (WLC) value += nums[770];
-	if (BSC) value += nums[771];
-	if (BLC) value += nums[772];
+	if (WSC) value ^= nums[769];
+	if (WLC) value ^= nums[770];
+	if (BSC) value ^= nums[771];
+	if (BLC) value ^= nums[772];
 
 	//en passant
 	if (lastMove[0] == 'P' || lastMove[0] == 'p') {
-		if (lastMove[0] == 'P' && lastMove[1] - '0' == (lastMove[3] - '0') - 2) value += nums[773 + (lastMove[2] - '0')];
-		else if (lastMove[0] == 'p' && lastMove[1]-'0' == (lastMove[3]-'0')+2) value += nums[773 + (lastMove[2] - '0')];
+		if (lastMove[0] == 'P' && lastMove[1] - '0' == (lastMove[3] - '0') - 2) value ^= nums[773 + (lastMove[2] - '0')];
+		else if (lastMove[0] == 'p' && lastMove[1]-'0' == (lastMove[3]-'0')+2) value ^= nums[773 + (lastMove[2] - '0')];
 	}
 
 	return value;

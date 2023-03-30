@@ -74,12 +74,12 @@
     <ClInclude Include="OpeningBook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TranspositionTables.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="FormerlyUsedMethods.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="FormerLegalMoves.txt">
+    <Text Include="TransposTableInfo.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
