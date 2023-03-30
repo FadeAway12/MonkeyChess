@@ -153,6 +153,7 @@
     <ClInclude Include="OpeningBook.h" />
     <ClInclude Include="PieceSquareTables.h" />
     <ClInclude Include="Search.h" />
+    <ClInclude Include="TranspositionTables.h" />
     <ClInclude Include="UCI.h" />
   </ItemGroup>
   <ItemGroup>

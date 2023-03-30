@@ -155,7 +155,12 @@ void readMoveList(string input) {
 		if (whiteTurn) vWhite.update(getWLegalMoves(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle));
 		else vBlack.update(getBLegalMoves(listOfBoardParamsAndOthers, lastMove, blackLongCastle, blackShortCastle));
 
-		lastMove = move;
+		bitboardToArray();
+
+		int rowT = move[2] - '0';
+		int colT = move[3] - '0';
+
+		lastMove = board[rowT][colT] + move;
 	}
 }
 

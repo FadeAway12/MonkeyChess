@@ -1097,17 +1097,3 @@ string pawnPromo(string s) {
 string pawnPromoB(string s) {
 	return " " + s + "q " + s + "n " + s + "b " + s + "r ";
 }
-
-void functionTime() {
-
-	auto start = high_resolution_clock::now();
-
-	getWLegalMoves(listOfBoardParamsAndOthers, "", 1, 1);
-
-	auto end = high_resolution_clock::now();
-
-	auto duration = duration_cast<microseconds>(end - start);
-
-	cout << duration.count() << endl;
-
-}

@@ -132,6 +132,7 @@ string wPawnMoves(moveParams, string lastMove, bb* checkers, vector<bb> pinned) 
 	bb enpR{ 0 };
 
 	if (lastMove.size()) {
+
 		if (lastMove[0] == 'p') {
 			try {
 				int rowF = lastMove[1] - '0';

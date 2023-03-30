@@ -7,6 +7,7 @@
 #include "LegalMoves.h"
 #include "Evaluation.h"
 #include "MoveExecution.h"
+#include "TranspositionTables.h"
 
 using namespace std;
 
