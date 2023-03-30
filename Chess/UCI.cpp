@@ -7,6 +7,7 @@
 #include "Search.h"
 #include "UCI.h"
 #include "OpeningBook.h"
+#include "TranspositionTables.h"
 
 using namespace std;
 
@@ -18,6 +19,9 @@ void UCICommunication() {
 
 		bitboardToArray();
 
+		//int xx = positionValue(WP, WR, WN, WB, WQ, WK, BP, BR, BN, BB, BQ, BK, lastMove, whiteTurn, whiteShortCastle, whiteLongCastle, blackShortCastle, blackLongCastle);
+
+		//cout << xx << endl << hasHash(xx) << endl;
 
 		string s;
 		getline(cin, s);
@@ -114,6 +118,7 @@ void inputPosition(string input) {
 	if (input.find("startpos") != string::npos) {
 		vWhite.repetitions.clear(), vBlack.repetitions.clear();
 		vWhite.update(getWLegalMoves(listOfBoardParamsAndOthers, lastMove, whiteLongCastle, whiteShortCastle));
+
 		importFEN("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 	}
 	else if (input.find("fen") != string::npos) {

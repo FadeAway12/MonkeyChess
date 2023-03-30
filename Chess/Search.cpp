@@ -36,16 +36,20 @@ string getWhiteMove(params, string lastMove, bool WLC, bool WSC, bool BLC, bool 
 	int depth) {
 	Search::startingDepth = depth;
 	bestMove = "";
-	Search::evalScore = minimax(paramsVal, lastMove, WLC, WSC, BLC, BSC, depth, true, true, -INFINITY, +INFINITY);
-	return bestMove;
+	Search::evalScore = minimax(paramsVal, lastMove, WLC, WSC, BLC, BSC, depth, true, true, -3000, +3000);
+	int hash = positionValue(WP, WR, WN, WB, WQ, WK, BP, BR, BN, BB, BQ, BK, lastMove, whiteTurn, whiteShortCastle, whiteLongCastle, blackShortCastle, blackLongCastle);
+	moveInfo mi = getHashInfo(hash);
+	return mi.bestMove;
 }
 
 string getBlackMove(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 	int depth) {
 	Search::startingDepth = depth;
 	bestMove = "";
-	Search::evalScore = minimax(paramsVal, lastMove, WLC, WSC, BLC, BSC, depth, true, false, -INFINITY, +INFINITY);
-	return bestMove;
+	Search::evalScore = minimax(paramsVal, lastMove, WLC, WSC, BLC, BSC, depth, true, false, -3000, +3000);
+	int hash = positionValue(WP, WR, WN, WB, WQ, WK, BP, BR, BN, BB, BQ, BK, lastMove, whiteTurn, whiteShortCastle, whiteLongCastle, blackShortCastle, blackLongCastle);
+	moveInfo mi = getHashInfo(hash);
+	return mi.bestMove;
 }
 
 bool gameOverWhite(params, bool WSC, bool WLC, string lastMove) {
@@ -55,30 +59,25 @@ bool gameOverWhite(params, bool WSC, bool WLC, string lastMove) {
 double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 	int depth, bool firstCall, bool maximizingWhite, double alpha, double beta) {
 
+	int hash = positionValue(WP, WR, WN, WB, WQ, WK, BP, BR, BN, BB, BQ, BK, lastMove, whiteTurn, WSC, WLC, BSC, BLC);
+	/*
+	if (hasHash(hash)) {
+		
+		moveInfo mi = getHashInfo(hash);
+		if (mi.depth >= depth) {
+			if (mi.type == 0) return mi.value;
+		}
+	}*/
+
 	string moves;
 
 	if (maximizingWhite) moves = getWLegalMoves(paramsVal, lastMove, WLC, WSC);
 
 	else moves = getBLegalMoves(paramsVal, lastMove, BLC, BSC);
 
-	if (depth == 0) return evaluation(paramsVal);
-
-	/*
-	//THREEFOLD REPETITION MAY BE BUGGY (CHECK IF ANYTHING SEEMS BROKEN)
-	
-	if (Search::startingDepth - 1 == depth) {
-		RepetitionVector vW2;
-		RepetitionVector vB2;
-		vW2.repetitions = vWhite.repetitions;
-		vB2.repetitions = vBlack.repetitions;
-		if (maximizingWhite && vW2.update(moves)) {
-			return 0;
-		}
-		else if (!maximizingWhite && vB2.update(moves)) {
-			return 0;
-		}
+	if (depth == 0) {
+		return evaluation(paramsVal);
 	}
-	*/
 
 	istringstream is{ moves };
 
@@ -97,6 +96,8 @@ double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 		}
 
 	}
+
+	string moveTop;
 
 	if (maximizingWhite) {
 
@@ -118,12 +119,20 @@ double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 				emptySquare2, black2, white2, s, WCLC, WCSC, BCLC, BCSC, depth - 1, false, false
 				, alpha, beta);
 
-			if ((firstCall && eval > maxEval) || (firstCall && bestMove == "")) bestMove = s;
+			
+			//if ((firstCall && eval > maxEval) || (firstCall && bestMove == "")) bestMove = s;
 
-			maxEval = max(eval, maxEval);
+			if (eval > maxEval) {
+				maxEval = eval;
+				moveTop = s;
+				
+			}
+
 			alpha = max(alpha, eval);
 			if (beta <= alpha) break;
 		}
+
+		addEval(hash, 3, depth, maxEval, moveTop);
 
 		return maxEval;
 
@@ -148,13 +157,20 @@ double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 				emptySquare2, black2, white2, s, WCLC, WCSC, BCLC, BCSC, depth - 1, false, true,
 				alpha, beta);
 
-			if ((firstCall && eval < minEval) || (firstCall && bestMove == "")) bestMove = s;
+			//if ((firstCall && eval < minEval) || (firstCall && bestMove == "")) bestMove = s;
 
-			minEval = min(eval, minEval);
+			if (eval < minEval) {
+				minEval = eval;
+				moveTop = s;
+				
+			}
+
 			beta = min(beta, eval);
 			if (beta <= alpha) break;
 
 		}
+
+		addEval(hash, 3, depth, minEval, moveTop);
 
 		return minEval;
 

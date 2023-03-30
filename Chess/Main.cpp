@@ -16,8 +16,6 @@ int main() {
 
 	initialize();
 
-	functionTime();
-
 	UCICommunication();
 
 }

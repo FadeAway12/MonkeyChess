@@ -3,6 +3,8 @@
 #include <map>
 #include <unordered_map>
 
+#include "TranspositionTables.h"
+
 using namespace std;
 
 #define bb std::uint64_t
@@ -65,15 +67,18 @@ and so on
 
 */
 
-int nums[781];
+uint64_t nums[781];
 
-unordered_map<int, int> transposTable; //first integer is hash of position, second is eval
+unordered_map<int, moveInfo> transposTable; //first integer is hash of position, second is eval
 
 void initialize() {
 	
 	srand((unsigned) time(NULL));
 	for (int i = 0; i < 781; i++) {
-		nums[i] = rand();
+		std::random_device dev;
+		std::mt19937 rng(dev());
+		std::uniform_int_distribution<std::mt19937::result_type> dist(1, 18446744073709551615);
+		nums[i] = dist(rng);
 	}
 }
 
@@ -119,31 +124,29 @@ int positionValue(const bb& WP, const bb& WR, const bb& WN, const bb& WB, const 
 	return value;
 }
 
-void addEval(const bb& WP, const bb& WR, const bb& WN, const bb& WB, const bb& WQ, const bb& WK, const bb& BP, const bb& BR, const bb& BN, const bb& BB, const bb& BQ, const bb& BK,
-	const string& lastMove, const bool& whiteTurn, const bool& WSC, const bool& WLC, const bool& BSC, const bool& BLC, int eval) {
-	
-	int hash = positionValue(WP, WR, WN, WB, WQ, WK, BP, BR, BN, BB, BQ, BK, lastMove, whiteTurn, WSC, WLC, BSC, BLC);
+void addEval(int hash, int type, int depth, int val) {
 
-	transposTable[hash] = eval;
+	transposTable[hash] = moveInfo(type, depth, val);
 
 }
 
-int getHashEval(const bb& WP, const bb& WR, const bb& WN, const bb& WB, const bb& WQ, const bb& WK, const bb& BP, const bb& BR, const bb& BN, const bb& BB, const bb& BQ, const bb& BK,
-	const string& lastMove, const bool& whiteTurn, const bool& WSC, const bool& WLC, const bool& BSC, const bool& BLC) {
-	
-	int hash = positionValue(WP, WR, WN, WB, WQ, WK, BP, BR, BN, BB, BQ, BK, lastMove, whiteTurn, WSC, WLC, BSC, BLC);
+void addEval(int hash, int type, int depth, int val, string s) {
 
-	return transposTable[hash];
+	transposTable[hash] = moveInfo(type, depth, val, s);
 
 }
 
-bool hasHash(const bb& WP, const bb& WR, const bb& WN, const bb& WB, const bb& WQ, const bb& WK, const bb& BP, const bb& BR, const bb& BN, const bb& BB, const bb& BQ, const bb& BK,
-	const string& lastMove, const bool& whiteTurn, const bool& WSC, const bool& WLC, const bool& BSC, const bool& BLC) {
+moveInfo getHashInfo(int hash) {
 
-	int hash = positionValue(WP, WR, WN, WB, WQ, WK, BP, BR, BN, BB, BQ, BK, lastMove, whiteTurn, WSC, WLC, BSC, BLC);
+	return transposTable.at(hash);
 
-	if (transposTable.find(hash) == transposTable.end()) return false;
+}
 
-	return true;
+
+bool hasHash (int hash) {
+
+	if (transposTable.count(hash) != 0) return true;
+
+	return false;
 
 }
