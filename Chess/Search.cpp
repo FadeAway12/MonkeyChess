@@ -34,20 +34,30 @@ vector<Move> moveList;
 
 string getWhiteMove(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 	int depth) {
+	
+	int hash = positionValue(WP, WR, WN, WB, WQ, WK, BP, BR, BN, BB, BQ, BK, lastMove, whiteTurn, whiteShortCastle, whiteLongCastle, blackShortCastle, blackLongCastle);
+	
+	if (hasHash(hash) && getHashInfo(hash).depth >= depth) return getHashInfo(hash).bestMove;
+
 	Search::startingDepth = depth;
 	bestMove = "";
 	Search::evalScore = minimax(paramsVal, lastMove, WLC, WSC, BLC, BSC, depth, true, true, -3000, +3000);
-	int hash = positionValue(WP, WR, WN, WB, WQ, WK, BP, BR, BN, BB, BQ, BK, lastMove, whiteTurn, whiteShortCastle, whiteLongCastle, blackShortCastle, blackLongCastle);
+	
 	moveInfo mi = getHashInfo(hash);
 	return mi.bestMove;
 }
 
 string getBlackMove(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 	int depth) {
+
+	int hash = positionValue(WP, WR, WN, WB, WQ, WK, BP, BR, BN, BB, BQ, BK, lastMove, whiteTurn, whiteShortCastle, whiteLongCastle, blackShortCastle, blackLongCastle);
+
+	if (hasHash(hash) && getHashInfo(hash).depth>=depth) return getHashInfo(hash).bestMove;
+
 	Search::startingDepth = depth;
 	bestMove = "";
 	Search::evalScore = minimax(paramsVal, lastMove, WLC, WSC, BLC, BSC, depth, true, false, -3000, +3000);
-	int hash = positionValue(WP, WR, WN, WB, WQ, WK, BP, BR, BN, BB, BQ, BK, lastMove, whiteTurn, whiteShortCastle, whiteLongCastle, blackShortCastle, blackLongCastle);
+	
 	moveInfo mi = getHashInfo(hash);
 	return mi.bestMove;
 }
@@ -60,14 +70,16 @@ double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 	int depth, bool firstCall, bool maximizingWhite, double alpha, double beta) {
 
 	int hash = positionValue(WP, WR, WN, WB, WQ, WK, BP, BR, BN, BB, BQ, BK, lastMove, whiteTurn, WSC, WLC, BSC, BLC);
-	/*
+	
 	if (hasHash(hash)) {
 		
 		moveInfo mi = getHashInfo(hash);
 		if (mi.depth >= depth) {
 			if (mi.type == 0) return mi.value;
+			if (mi.type == 1) beta = mi.value;
+			if (mi.type == 2) alpha = mi.value;
 		}
-	}*/
+	}
 
 	string moves;
 
@@ -132,7 +144,7 @@ double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 			if (beta <= alpha) break;
 		}
 
-		addEval(hash, 3, depth, maxEval, moveTop);
+		if (firstCall) addEval(hash, 0, depth, maxEval, moveTop);
 
 		return maxEval;
 
@@ -170,7 +182,7 @@ double minimax(params, string lastMove, bool WLC, bool WSC, bool BLC, bool BSC,
 
 		}
 
-		addEval(hash, 3, depth, minEval, moveTop);
+		if (firstCall) addEval(hash, 0, depth, minEval, moveTop);
 
 		return minEval;
 
