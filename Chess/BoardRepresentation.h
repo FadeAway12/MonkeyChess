@@ -107,6 +107,8 @@ extern int moveNum;
 extern RepetitionVector vWhite;
 extern RepetitionVector vBlack;
 
+extern bb positions[64];
+
 extern bb WP;
 extern bb WR;
 extern bb WN;

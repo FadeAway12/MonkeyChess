@@ -149,10 +149,12 @@ void readMoveList(string input) {
 		moveNum++;
 
 		if (whiteTurn) { //white
-			executeMove(move, "W", listOfBoardParamsAndOthers, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle);
+			//executeMove(move, "W", listOfBoardParamsAndOthers, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle);
+			executeMove(move, true);
 		}
 		else {
-			executeMove(move, "B", listOfBoardParamsAndOthers, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle);
+			//executeMove(move, "B", listOfBoardParamsAndOthers, whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle);
+			executeMove(move, false);
 		}
 
 		whiteTurn = !whiteTurn;

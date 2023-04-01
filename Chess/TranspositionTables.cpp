@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 #include "TranspositionTables.h"
+#include "BoardRepresentation.h"
 
 using namespace std;
 
@@ -72,6 +73,10 @@ uint64_t nums[781];
 unordered_map<int, moveInfo> transposTable; //first integer is hash of position, second is eval
 
 void initialize() {
+
+	for (int i = 0; i < 64; i++) {
+		positions[i] = pow(2, i);
+	}
 	
 	srand((unsigned) time(NULL));
 	for (int i = 0; i < 781; i++) {

@@ -9,4 +9,6 @@
 extern bool executeMove(const std::string& move, const std::string& turn, moveParams, bool& WLC, bool& WSC, bool &BLC,
 	bool& BSC); //returns true if move is capture
 
+extern void executeMove(const std::string& move, bool whiteTurn);
+
 extern bool isLegal(moveParams, const std::string& move, std::string& lastMove, const std::string& turn, bool SCW, bool LCW, bool SCB, bool LCB);

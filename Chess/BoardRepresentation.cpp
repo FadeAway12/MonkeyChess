@@ -88,7 +88,7 @@ bb rank3{ rank4 << 8 };
 bb rank2{ rank3 << 8 };
 bb rank1{ rank2 << 8 };
 
-bb* positions = new bb[64];
+bb positions[64];
 
 string lastMove = "";
 
